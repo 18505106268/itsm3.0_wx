@@ -1,0 +1,86 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?ghya35');
+  src:  url('fonts/icomoon.eot?ghya35#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ghya35') format('truetype'),
+    url('fonts/icomoon.woff?ghya35') format('woff'),
+    url('fonts/icomoon.svg?ghya35#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check-square:before {
+  content: "\e900";
+}
+.icon-CI:before {
+  content: "\e901";
+}
+.icon-close-circle:before {
+  content: "\e902";
+}
+.icon-compass:before {
+  content: "\e903";
+}
+.icon-copyright:before {
+  content: "\e904";
+}
+.icon-Dollar:before {
+  content: "\e905";
+}
+.icon-down-circle:before {
+  content: "\e906";
+}
+.icon-frown:before {
+  content: "\e907";
+}
+.icon-info-circle:before {
+  content: "\e908";
+}
+.icon-left-circle:before {
+  content: "\e909";
+}
+.icon-meh:before {
+  content: "\e90a";
+}
+.icon-minus-circle:before {
+  content: "\e90b";
+}
+.icon-play-circle:before {
+  content: "\e90c";
+}
+.icon-plus-circle:before {
+  content: "\e90d";
+}
+.icon-Pound:before {
+  content: "\e90e";
+}
+.icon-project:before {
+  content: "\e90f";
+}
+.icon-question-circle:before {
+  content: "\e910";
+}
+.icon-right-circle:before {
+  content: "\e911";
+}
+.icon-up-square:before {
+  content: "\e912";
+}
+.icon-wallet:before {
+  content: "\e913";
+}

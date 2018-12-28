@@ -1,5 +1,8 @@
 [*.{js,jsx,ts,tsx,vue}]
 indent_style = space
 indent_size = 2
+charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+spaces_around_operators = true
+indent_brace_style = 1tbs
