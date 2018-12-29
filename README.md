@@ -15,7 +15,7 @@
  登录 		    |  			            | 				| http://localhost:8080/#/login
  首页 		    |  			            | 				| http://localhost:8080/#/home
 
-## 编辑备忘录
+### 编辑备忘录
 
 1. 公用scss文件
 	+ src/assets/styles/global.scss
@@ -56,7 +56,7 @@
 
 	<input type="text" placeholder=""> =＞ <input type="text">
 
-## 網站地圖
+### 网站地图
 
 + 📦 登录 `login`
 
@@ -68,33 +68,33 @@
 + 📦 我的 `my`
 	+ 个人信息 `info`
 	
-## 变量命名
+### 变量命名
+
 
 + 小写开头
 + 驼峰式命名
 + 尽量减少使用下划线
 
-## JS 规范
-
-📦 使用 === 和 !== 包含类别判断
-
-...
-
-## HTML 规范
+### JS 规范
 
 📦 
+使用 === 和 !== 包含类别判断
 
-...
 
 
-## Router
+### HTML 规范
 
 📦 
-
 ...
 
 
-## 指令說明
+### Router
+
+📦 
+...
+
+
+### 指令說明
 
 + 安装环境：`npm insatll`
 
@@ -102,6 +102,24 @@
 
 + dist 生成：`npm run build`
 
-## 樣式說明
+### 技术栈说明
+
++ vue：`^2.5.17`
+
++ vue-router：`^3.0.1`
+
++ vuex：`^3.0.1`
+
++ vant：`^1.5.0`
+
++ axios：`^0.18.0`
+
++ vue-meta：`^1.5.8`
+
+### 运行环境
+
++ node.js 10+
+
+### 樣式說明
 
 ...
