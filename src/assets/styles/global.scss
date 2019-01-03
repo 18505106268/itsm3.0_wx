@@ -1,7 +1,7 @@
+/*
+ *  全局引入
+ */
 @import "./reset";
-
-$ratio: 375 / 10;
-
-@function px2rex($px) {
-  @return $px / $ratio + rem;
-}
+@import "./fun";
+@import "./mixin";
+@import "./var";

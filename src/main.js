@@ -8,7 +8,6 @@ import store from './store/store'
 import bus from './util/bus'
 import App from './App.vue'
 
-import './assets/styles/demo.css'
 import './assets/styles/global.scss'
 
 Vue.config.productionTip = false

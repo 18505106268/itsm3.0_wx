@@ -1,0 +1,28 @@
+/*
+ *  全局混合器
+ */
+
+@mixin center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@mixin left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@mixin text-overflow() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,9 @@
+/*
+ *  公用函数
+ */
+
+$ratio: 375 / 10;
+
+@function px2rex($px) {
+  @return $px / $ratio + rem;
+}

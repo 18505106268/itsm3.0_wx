@@ -29,11 +29,13 @@ export default {
     }
   }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   const html = document.querySelector('html')
   let fontSize = window.innerWidth / 10
   html.style.fontSize = `${fontSize}px`
 })
+
 </script>
 <style lang="scss" scoped>
   @import "./assets/styles/global";
