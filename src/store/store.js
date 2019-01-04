@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import vuexRouterInterceptor from '../config/vuexRouterInterceptor'
 
 // 用户
+import userAction from './actions/userAction/userAction'
 
 const isDev = process.env.NODE_ENV === 'development'
 Vue.use(Vuex)
@@ -34,13 +34,10 @@ const store = new Vuex.Store({
   ],
   modules: {
     // 用户
-    // user: {
-    //   namespaced: true,
-    //   state: userState,
-    //   mutations: userMutation,
-    //   getters: userGetter,
-    //   actions: userAction
-    // }
+    user: {
+      namespaced: true,
+      actions: userAction
+    }
   }
 })
 

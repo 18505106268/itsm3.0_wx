@@ -15,5 +15,14 @@ module.exports = {
         ]
       }
     }
+  },
+  devServer: {
+    proxy: {
+      '/ITSM3.0': {
+        target: 'http://itss-china.cn',
+        ws: true,
+        changeOrigin: true
+      }
+    }
   }
 }

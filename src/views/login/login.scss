@@ -1,9 +1,11 @@
-#login {
-  padding: ($space * 7) ($space * 4) 0 ($space * 4);
-}
-
 #login, .title {
   box-sizing: border-box;
+}
+
+#login {
+  padding: ($space * 7) ($space * 4) 0 ($space * 4);
+  overflow: hidden;
+  position: relative;
 }
 
 .title {
@@ -42,4 +44,16 @@
 .van-button--primary {
   background-color: $color-blue;
   border: 1px solid $color-blue;
+}
+
+.foot {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  img {
+    width: 100%;
+    height: auto;
+    vertical-align: bottom;
+  }
 }

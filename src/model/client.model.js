@@ -1,6 +1,5 @@
 // 全局 api
 import URL from '../util/parameters'
-import bus from '../util/bus'
 
 const qs = require('qs')
 const axios = require('axios')
@@ -33,7 +32,7 @@ const handleRequest = (request) => {
   return new Promise((resolve, reject) => {
     request.then(resp => {
       if (resp.data) {
-        if (resp.data.loginTimeOut) return bus.$emit('goLogin')
+        // if (resp.data.loginTimeOut) return bus.$emit('goLogin')
         resolve(resp.data)
       }
     })
@@ -45,8 +44,15 @@ const handleRequest = (request) => {
 
 // api
 export default {
-  // 测试接口
-  getTestApi (data) {
+  /*
+  * 用户
+  * */
+  // 判断用户是否存在
+  loginNameExist (data) {
     return handleRequest($http.post('/admin/loginName-exist', data))
+  },
+  // 登录
+  login (data) {
+    return handleRequest($http.post('/admin/login', data))
   }
 }
