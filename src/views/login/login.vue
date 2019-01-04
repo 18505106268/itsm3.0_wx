@@ -1,4 +1,4 @@
-<!--登录-->
+<!-- 登录 -->
 <template>
   <div id="login" :style="{height: `${height}px`}">
     <!--Title Start-->
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { Field, Button } from 'vant'
+import { Field, Button, Toast, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 
 import {
@@ -57,7 +57,9 @@ export default {
   mixins: [Mixin],
   components: {
     [Field.name]: Field,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]: Toast,
+    [Notify.name]: Notify
   },
   data () {
     return {
@@ -74,11 +76,11 @@ export default {
     async goSub () {
       console.log('goSub')
       try {
-        if (!this.loginName) return console.log('平台账号不能为空')
-        if (!this.password) return console.log('密码不能为空')
+        if (!this.loginName) return Toast('平台账号不能为空')
+        if (!this.password) return Toast('密码不能为空')
         let existRes = await this['user/loginNameExist']({ loginName: this.loginName })
-        if (existRes.flag) return console.log('用户名不存在')
-        if (existRes.stop) return console.log('账号已停用')
+        if (existRes.flag) return Notify('用户名不存在')
+        if (existRes.stop) return Toast('账号已停用')
         let json = {
           loginName: this.loginName,
           password: this.password,
