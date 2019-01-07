@@ -100,6 +100,8 @@
 
 + 环境启动：`npm run dev`
 
++ 调试工具：`vue-devtools`
+
 + dist 生成：`npm run build`
 
 ### 技术栈说明

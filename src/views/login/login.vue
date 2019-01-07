@@ -12,24 +12,24 @@
       <div>
         <span>+86</span>
         <span>
-          <van-field v-model="loginName" type="tel" placeholder="请输入手机号"/>
+          <van-field v-model="loginName" type="tel" placeholder="请输入手机号" :disabled="isLoading"/>
         </span>
       </div>
       <div>
-        <van-field v-model="password" type="password" placeholder="请输入密码"/>
+        <van-field v-model="password" type="password" placeholder="请输入密码" :disabled="isLoading"/>
       </div>
     </div>
     <!--Form End-->
 
     <!-- FindPwd Start-->
     <div class="find">
-      <span>忘记密码</span>
+      <span @click="find">忘记密码</span>
     </div>
     <!-- Find End-->
 
     <!--Button Start-->
     <div class="sign-in">
-      <van-button type="primary" size="large" :loading="false" @click="goSub">登录</van-button>
+      <van-button type="primary" size="large" :loading="isLoading" @click="goSub">登录</van-button>
     </div>
     <!-- Button End-->
 
@@ -68,19 +68,27 @@ export default {
       // 手机号
       loginName: '18505016268',
       // 密码
-      password: 'nct123456'
+      password: 'nct123456',
+      // 按钮加载
+      isLoading: false
     }
   },
   methods: {
     ...mapActions(['user/loginNameExist', 'user/login']),
+    // 登录
     async goSub () {
       console.log('goSub')
       try {
-        if (!this.loginName) return Toast('平台账号不能为空')
-        if (!this.password) return Toast('密码不能为空')
+        // 非空判断
+        if (!this.loginName) return Notify('平台账号不能为空')
+        if (!this.password) return Notify('密码不能为空')
+        // 阻止多次提交
+        this.isLoading = true
+        // y
         let existRes = await this['user/loginNameExist']({ loginName: this.loginName })
+        this.isLoading = false
         if (existRes.flag) return Notify('用户名不存在')
-        if (existRes.stop) return Toast('账号已停用')
+        if (existRes.stop) return Notify('账号已停用')
         let json = {
           loginName: this.loginName,
           password: this.password,
@@ -93,6 +101,10 @@ export default {
       } catch (e) {
         console.log('catch')
       }
+    },
+    // 忘记密码
+    find () {
+      this.$router.push(`/find`)
     }
   },
   mounted () {
