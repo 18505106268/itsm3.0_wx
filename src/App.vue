@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition :name="transitionName">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
@@ -16,6 +18,11 @@ export default {
     }
   },
   methods: {},
+  watch: {
+    '$route' (to, from) {
+      this.transitionName = this.$store.state.interlude.direction !== 'forward' ? 'pop-out' : 'pop-in'
+    }
+  },
   computed: {},
   mounted () {
     console.log(window.location.hash)
@@ -33,6 +40,7 @@ export default {
 document.addEventListener('DOMContentLoaded', () => {
   const html = document.querySelector('html')
   let fontSize = window.innerWidth / 10
+  fontSize = fontSize > 50 ? 50 : fontSize
   html.style.fontSize = `${fontSize}px`
 })
 

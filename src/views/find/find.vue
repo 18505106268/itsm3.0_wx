@@ -1,13 +1,23 @@
 <!-- 找回密码 -->
 <template>
-  <div id="find">
+  <div id="find" :style="{height: `${height}px`}">
     find
   </div>
 </template>
 
 <script>
 export default {
-  name: 'find'
+  name: 'find',
+  data () {
+    return {
+      // 容器高度
+      height: 0
+    }
+  },
+  mounted () {
+    this.height = window.innerHeight
+  },
+  computed: {}
 }
 </script>
 

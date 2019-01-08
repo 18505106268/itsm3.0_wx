@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// 用户
-import userAction from './actions/userAction/userAction'
+// 底层状态
+import common from './common/common'
 
-const isDev = process.env.NODE_ENV === 'development'
 Vue.use(Vuex)
+const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
   // strict 开发环境设置为true将无法从外部修改Store数据
-  strict: isDev,
+  strict: debug,
   plugins: [
     // (store) => {
     // 监听store某个数据变化后的回调
@@ -28,16 +28,10 @@ const store = new Vuex.Store({
     //   console.log('action.type === >', action.type)
     //   console.log('action.payload === >', action.payload)
     // })
-    // },
-    // 路由全局加载
-    // vuexRouterInterceptor()
+    // }
   ],
   modules: {
-    // 用户
-    user: {
-      namespaced: true,
-      actions: userAction
-    }
+    common: common
   }
 })
 

@@ -23,7 +23,7 @@
 
     <!-- FindPwd Start-->
     <div class="find">
-      <span @click="find">忘记密码</span>
+      <!--<span @click="find">忘记密码</span>-->
     </div>
     <!-- Find End-->
 
@@ -101,10 +101,6 @@ export default {
       } catch (e) {
         console.log('catch')
       }
-    },
-    // 忘记密码
-    find () {
-      this.$router.push(`/find`)
     }
   },
   mounted () {
