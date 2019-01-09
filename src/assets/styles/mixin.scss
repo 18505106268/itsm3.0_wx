@@ -8,7 +8,6 @@
   justify-content: center;
 }
 
-
 @mixin left {
   display: flex;
   align-items: center;
@@ -25,4 +24,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin background-image($url,$width:100%,$height:100%) {
+  background-image: url($url);
+  background-size: $width $height;
+  background-repeat: no-repeat;
 }

@@ -45,7 +45,7 @@ const handleRequest = (request) => {
 // api
 export default {
   /*
-  * 用户
+  * 账户相关
   * */
   // 判断用户是否存在
   loginNameExist (data) {
@@ -54,5 +54,9 @@ export default {
   // 登录
   login (data) {
     return handleRequest($http.post('/admin/login', data))
+  },
+  // 获取短信验证码
+  sendVerifyCode (data) {
+    return handleRequest($http.post('/admin/send-verify-code', data))
   }
 }

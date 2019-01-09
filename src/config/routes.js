@@ -14,5 +14,11 @@ export default [
     name: '忘记密码',
     path: '/find',
     component: () => import('../views/find/find.vue')
+  },
+  {
+    name: '验证并重置密码',
+    props: true,
+    path: '/check/:loginName',
+    component: () => import('../views/check/check.vue')
   }
 ]

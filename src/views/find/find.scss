@@ -1,0 +1,42 @@
+#find, .title {
+  box-sizing: border-box;
+}
+
+#find {
+  width: 100%;
+  padding: ($space * 7) ($space * 4) 0 ($space * 4);
+  overflow: hidden;
+  @include background-image('../../assets/imgs/bg.jpg', auto)
+}
+
+.title {
+  font-size: $font-size * 1.8;
+  color: $color-black;
+  margin-bottom: $space * 3;
+}
+
+.form {
+  font-size: $font-size;
+  margin-bottom: $space * 3;
+  > div {
+    padding-top: $space * 2.5;
+    padding-bottom: $space * 1.2;
+    display: flex;
+    border-bottom: 1px solid gainsboro;
+  }
+  > div:nth-child(1) {
+    span:nth-child(1) {
+      @include center;
+      color: $color-grey;
+      margin-right: $space;
+    }
+    span:nth-child(2) {
+      width: 80%;
+    }
+  }
+}
+
+.van-button--primary {
+  background-color: $color-blue;
+  border: 1px solid $color-blue;
+}

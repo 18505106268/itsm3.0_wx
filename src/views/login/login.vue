@@ -23,7 +23,7 @@
 
     <!-- FindPwd Start-->
     <div class="find">
-      <!--<span @click="find">忘记密码</span>-->
+      <span @click="find">忘记密码</span>
     </div>
     <!-- Find End-->
 
@@ -32,22 +32,13 @@
       <van-button type="primary" size="large" :loading="isLoading" @click="goSub">登录</van-button>
     </div>
     <!-- Button End-->
-
-    <!-- Foot Start-->
-    <div class="foot">
-      <img src="../../assets/imgs/foot.png"/>
-    </div>
-    <!-- Foot End-->
   </div>
 </template>
 
 <script>
-import { Field, Button, Toast, Notify } from 'vant'
+import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
-
-import {
-  mapActions
-} from 'vuex'
+import model from '../../model/client.model'
 
 export default {
   name: 'login',
@@ -58,7 +49,6 @@ export default {
   components: {
     [Field.name]: Field,
     [Button.name]: Button,
-    [Toast.name]: Toast,
     [Notify.name]: Notify
   },
   data () {
@@ -74,18 +64,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['user/loginNameExist', 'user/login']),
     // 登录
     async goSub () {
-      console.log('goSub')
       try {
         // 非空判断
         if (!this.loginName) return Notify('平台账号不能为空')
         if (!this.password) return Notify('密码不能为空')
         // 阻止多次提交
         this.isLoading = true
-        // y
-        let existRes = await this['user/loginNameExist']({ loginName: this.loginName })
+        // 验证用户是否存在
+        let existRes = await model.loginNameExist({ loginName: this.loginName })
         this.isLoading = false
         if (existRes.flag) return Notify('用户名不存在')
         if (existRes.stop) return Notify('账号已停用')
@@ -101,6 +89,10 @@ export default {
       } catch (e) {
         console.log('catch')
       }
+    },
+    // 忘记密码
+    find () {
+      this.$router.push(`/find`)
     }
   },
   mounted () {
