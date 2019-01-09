@@ -13,7 +13,6 @@
  第一层 			| 第二层 				| 第三层 		| 网址
 ----------------|-----------------------|---------------|-------------
  登录 		    |  			            | 				| http://localhost:8080/#/login
- 首页 		    |  			            | 				| http://localhost:8080/#/home
  忘记密码 		|  			            | 				| http://localhost:8080/#/find
  验证并重置 		|  			            | 				| http://localhost:8080/#/check
 
@@ -39,37 +38,28 @@
 📦 HTML 区块注解
 
 	<!-- Menu Start -->
-	...
+	    ...
 	<!-- Menu End -->
 	
 	<!-- Search Start -->
-	...
+	    ...
 	<!-- Search End -->
 
 	<!-- Edit Start -->
-	...
+	    ...
 	<!-- Edit End -->
 
 	<!-- Popup Start -->
-	...
+	    ...
 	<!-- Popup End -->
-
-📦 placeholder 如果为空值，移除属性
-
-	<input type="text" placeholder=""> =＞ <input type="text">
 
 ### 网站地图
 
 + 📦 登录 `login`
 
-+ 📦 首页 `home`
++ 📦 忘记密码 `find`
+    + 📦 验证并重置 `check`
 
-+ 📦 服务台 `desk`
-	+ 服务请求 `send`
-	
-+ 📦 我的 `my`
-	+ 个人信息 `info`
-	
 ### 变量命名
 
 + 小写开头
@@ -83,17 +73,42 @@
 
 
 
-### HTML 规范
+### HTML 格式參考
 
-📦 
-...
+    <div id="login" :style="{height: `${height}px`}">
+        <!--Title Start-->
+        <div class="title">
+          欢迎来到云惠ITSM
+        </div>
+        <!--Title End-->
+    
+        <!--Form Start-->
+        <div class="form">
+          
+        </div>
+        <!--Form End-->
+    
+        <!--Button Start-->
+        <div class="sign-in">
+        
+        </div>
+        <!-- Button End-->
+    </div>
 
+### Router 格式參考
 
-### Router
-
-📦 
-...
-
+      // 登录
+      {
+        name: 'login',
+        path: '/login',
+        component: () => import('../views/login/login.vue')
+      },
+      // 忘记密码
+      {
+        name: 'find',
+        path: '/find',
+        component: () => import('../views/find/find.vue')
+      }
 
 ### 指令說明
 

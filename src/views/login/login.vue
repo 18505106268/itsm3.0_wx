@@ -56,7 +56,7 @@ export default {
       // 容器高度
       height: 0,
       // 手机号
-      loginName: '18505016268',
+      loginName: '18505106268',
       // 密码
       password: 'nct123456',
       // 按钮加载

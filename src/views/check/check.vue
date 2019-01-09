@@ -17,7 +17,9 @@
     <div class="form">
       <div>
         <van-field v-model="code" type="tel" placeholder="请填写验证码">
-          <van-button slot="button" size="small" type="primary">重发短信</van-button>
+          <van-button slot="button" size="small" type="primary" :disabled="msgLoading" :loading="msgAsyncLoading"
+                      @click="resend">{{msg}}
+          </van-button>
         </van-field>
       </div>
       <div>
@@ -37,6 +39,7 @@
 <script>
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
+import model from '../../model/client.model'
 
 export default {
   name: 'check',
@@ -56,20 +59,54 @@ export default {
       height: 0,
       // 按钮加载
       isLoading: false,
+      // 验证码按钮
+      msgLoading: true,
+      // 验证码异步按钮
+      msgAsyncLoading: false,
+      // 服务端验证码
+      serveCode: '',
       // 短信验证码
       code: '',
       // 重置密码
-      password: ''
+      password: '',
+      // 倒计时
+      msg: ''
     }
   },
   methods: {
+    // 倒计时
+    countDown () {
+      this.msg = 5
+      let timer = setInterval(() => {
+        this.msg--
+        if (this.msg === 0) {
+          this.msgLoading = false
+          this.msg = '重新发送'
+          clearInterval(timer)
+        }
+      }, 1000)
+    },
+    // 重新发送
+    async resend () {
+      this.msgAsyncLoading = true
+      // 发送验证码
+      let res = await model.sendVerifyCode({ loginName: this.loginName })
+      console.log(res)
+      if (res.flag) { this.serveCode = res.code }
+      this.msgAsyncLoading = false
+      this.msgLoading = true
+      this.countDown()
+    },
+    // 完成提交
     async sub () {
-      console.log(await 'sub')
+      if (Number(this.serveCode) === Number(this.code)) {
+
+      }
     }
   },
   mounted () {
     this.height = window.innerHeight
-    console.log('!!!!!!', this.loginName)
+    this.countDown()
   },
   computed: {}
 }

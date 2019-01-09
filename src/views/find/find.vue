@@ -49,7 +49,7 @@ export default {
       // 按钮加载
       isLoading: false,
       // 用户名
-      loginName: '18505016268'
+      loginName: '18505106268'
     }
   },
   methods: {
@@ -64,8 +64,10 @@ export default {
       this.isLoading = false
       if (existRes.flag) return Notify('用户名不存在')
       if (existRes.stop) return Notify('账号已停用')
-      await model.sendVerifyCode({ loginName: this.loginName })
-      this.$router.push(`/check/${this.loginName}`)
+      // 发送验证码
+      let res = await model.sendVerifyCode({ loginName: this.loginName })
+      // 跳转至下一页
+      if (res.flag) { this.$router.push(`/check/${this.loginName}`) }
     }
   },
   mounted () {
