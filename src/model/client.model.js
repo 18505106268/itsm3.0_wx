@@ -58,5 +58,9 @@ export default {
   // 获取短信验证码
   sendVerifyCode (data) {
     return handleRequest($http.post('/admin/send-verify-code', data))
+  },
+  // 重置密码
+  resetPassword (data) {
+    return handleRequest($http.post('/admin/reset-password', data))
   }
 }

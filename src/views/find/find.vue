@@ -30,6 +30,7 @@
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'find',
@@ -53,6 +54,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * account/setServeCode 设置服务端验证码
+     * account/setCompanyId 设置企业ID
+     */
+    ...mapActions(['account/setServeCode', 'account/setCompanyId']),
     // 登录
     async next () {
       // 非空判断
@@ -61,13 +67,17 @@ export default {
       this.isLoading = true
       // 验证用户是否存在
       let existRes = await model.loginNameExist({ loginName: this.loginName })
+      // 保存企业ID
+      await this['account/setCompanyId'](existRes.id)
       this.isLoading = false
       if (existRes.flag) return Notify('用户名不存在')
       if (existRes.stop) return Notify('账号已停用')
       // 发送验证码
-      let res = await model.sendVerifyCode({ loginName: this.loginName })
+      let codeRes = await model.sendVerifyCode({ loginName: this.loginName })
+      // 保存服务端验证码
+      await this['account/setServeCode'](codeRes.code)
       // 跳转至下一页
-      if (res.flag) { this.$router.push(`/check/${this.loginName}`) }
+      if (codeRes.flag) { this.$router.push(`/check/${this.loginName}`) }
     }
   },
   mounted () {

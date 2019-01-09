@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 // 底层状态
 import common from './common/common'
+// 账户相关
+import account from './account/account'
 
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
@@ -31,7 +33,8 @@ const store = new Vuex.Store({
     // }
   ],
   modules: {
-    common: common
+    common: common,
+    account: account
   }
 })
 

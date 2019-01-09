@@ -1,26 +1,14 @@
-const state = {
-  // 当前页面状态
-  direction: ''
-}
+// state
+const state = {}
 
 // getters
-const getters = {
-  direction: state => state.direction
-}
+const getters = {}
 
 // actions
-const actions = {
-  setDirection: ({ state, commit }, direction) => {
-    return commit('SET_DIRECTION', direction)
-  }
-}
+const actions = {}
 
 // mutations
-const mutations = {
-  'SET_DIRECTION': (state, { direction }) => {
-    state.direction = direction
-  }
-}
+const mutations = {}
 
 export default {
   namespaced: true,

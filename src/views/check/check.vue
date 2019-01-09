@@ -16,14 +16,14 @@
     <!--Form Start-->
     <div class="form">
       <div>
-        <van-field v-model="code" type="tel" placeholder="请填写验证码">
+        <van-field v-model="code" :disabled="isLoading" type="tel" placeholder="请填写验证码">
           <van-button slot="button" size="small" type="primary" :disabled="msgLoading" :loading="msgAsyncLoading"
                       @click="resend">{{msg}}
           </van-button>
         </van-field>
       </div>
       <div>
-        <van-field v-model="password" placeholder="输入重置密码"/>
+        <van-field v-model="password" :disabled="isLoading" placeholder="输入重置密码"/>
       </div>
     </div>
     <!--Form End-->
@@ -40,6 +40,8 @@
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
+import color from '../../util/color'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'check',
@@ -63,8 +65,6 @@ export default {
       msgLoading: true,
       // 验证码异步按钮
       msgAsyncLoading: false,
-      // 服务端验证码
-      serveCode: '',
       // 短信验证码
       code: '',
       // 重置密码
@@ -74,6 +74,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * account/setServeCode 设置服务端验证码
+     */
+    ...mapActions(['account/setServeCode']),
     // 倒计时
     countDown () {
       this.msg = 5
@@ -91,24 +95,44 @@ export default {
       this.msgAsyncLoading = true
       // 发送验证码
       let res = await model.sendVerifyCode({ loginName: this.loginName })
-      console.log(res)
-      if (res.flag) { this.serveCode = res.code }
+      // 保存服务端验证码
+      await this['account/setServeCode'](res.code)
       this.msgAsyncLoading = false
       this.msgLoading = true
       this.countDown()
     },
     // 完成提交
     async sub () {
-      if (this.serveCode === this.code) {
-
+      if (this['account/serveCode'] !== this.code) return Notify('验证码错误')
+      if (!this.password) return Notify('请输入重置密码')
+      this.isLoading = true
+      // 重置密码
+      let res = await model.resetPassword({ id: this['account/companyId'], password: this.password })
+      if (res.flag) {
+        Notify({
+          message: '密码修改成功',
+          background: color.blue
+        })
+        setTimeout(() => {
+          this.$router.replace(`/login`)
+        }, 500)
+      } else {
+        Notify('ERROR')
       }
+      this.isLoading = false
     }
   },
   mounted () {
     this.height = window.innerHeight
     this.countDown()
   },
-  computed: {}
+  computed: {
+    /**
+     * common/serveCode 服务端验证码
+     * account/companyId 企业ID
+     */
+    ...mapGetters(['account/serveCode', 'account/companyId'])
+  }
 }
 </script>
 
