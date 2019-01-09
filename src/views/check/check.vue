@@ -99,7 +99,7 @@ export default {
     },
     // 完成提交
     async sub () {
-      if (Number(this.serveCode) === Number(this.code)) {
+      if (this.serveCode === this.code) {
 
       }
     }
