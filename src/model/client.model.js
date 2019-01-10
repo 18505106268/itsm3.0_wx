@@ -62,5 +62,9 @@ export default {
   // 重置密码
   resetPassword (data) {
     return handleRequest($http.post('/admin/reset-password', data))
+  },
+  // 获取用户数据和JSSDK
+  getConfigData (data) {
+    return handleRequest($http.post('wechat/getConfigData', data))
   }
 }
