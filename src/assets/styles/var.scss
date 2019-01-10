@@ -7,8 +7,21 @@ $font-size: 14px;
 
 // 基准值
 $space: 10px;
+$opacity: .5;
+$border-width: 1px;
+$border-radius: 5px;
+$shadow-layer: 3px 3px 3px rgba(0, 0, 0, .35);
 
-// color
-$color-black: #333;
-$color-grey: #70848e;
-$color-blue: #1694EF
+// main
+$color-blue: #1694EF; // 网站主色调
+$color-white: #fff; // 纯白色
+
+// 字体
+$color-black: #333333; // 字体色号 黑
+$color-grey: #666666; // 字体色号 灰黑
+$color-grey-plus: #999999; // 字体色号 灰
+
+// 首页
+$color-orange: #ff715d; // 待办数字
+$color-yellow: #ff8e00; // 已办数字
+$color-green: #34b134; // 消息数字

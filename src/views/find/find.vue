@@ -1,6 +1,6 @@
 <!-- 找回密码 -->
 <template>
-  <div id="find" :style="{height: `${height}px`}">
+  <div id="find">
     <!--Title Start-->
     <div class="title">
       找回密码
@@ -23,6 +23,12 @@
       <van-button type="primary" size="large" :loading="isLoading" @click="next">下一步</van-button>
     </div>
     <!-- Button End-->
+
+    <!-- Foot Start-->
+    <div class="foot">
+      <img src="../../assets/imgs/foot.png"/>
+    </div>
+    <!-- Foot End-->
   </div>
 </template>
 
@@ -45,8 +51,6 @@ export default {
   },
   data () {
     return {
-      // 容器高度
-      height: 0,
       // 按钮加载
       isLoading: false,
       // 用户名
@@ -80,9 +84,7 @@ export default {
       if (codeRes.flag) { this.$router.push(`/check/${this.loginName}`) }
     }
   },
-  mounted () {
-    this.height = window.innerHeight
-  },
+  mounted () {},
   computed: {}
 }
 </script>

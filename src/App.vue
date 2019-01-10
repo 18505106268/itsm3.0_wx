@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{height: `${height}px`}">
     <transition :name="transitionName">
       <router-view/>
     </transition>
@@ -14,7 +14,10 @@ export default {
   name: 'APP',
   data () {
     return {
-      transitionName: ''
+      // 动画
+      transitionName: '',
+      // 容器高度
+      height: 0
     }
   },
   methods: {},
@@ -25,7 +28,7 @@ export default {
   },
   computed: {},
   mounted () {
-    console.log(window.location.hash)
+    this.height = window.innerHeight
     if (window.location.hash === '#/') {
       let url = window.location.search
       if (Number(url.indexOf('?')) !== -1) {

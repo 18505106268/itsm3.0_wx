@@ -1,15 +1,18 @@
 export default [
   {
-    path: '/',
-    meta: {
-      index: 0
-    }
+    path: '/'
   },
   // 登录
   {
     name: 'login',
     path: '/login',
     component: () => import('../views/login/login.vue')
+  },
+  // 首页
+  {
+    name: 'home',
+    path: '/home',
+    component: () => import('../views/home/home.vue')
   },
   // 忘记密码
   {

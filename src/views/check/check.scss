@@ -3,9 +3,8 @@
 }
 
 #check {
-  width: 100%;
+  @include overflow();
   padding: ($space * 7) ($space * 4) 0 ($space * 4);
-  overflow: hidden;
 }
 
 .tip {

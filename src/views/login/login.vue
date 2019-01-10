@@ -1,6 +1,6 @@
 <!-- 登录 -->
 <template>
-  <div id="login" :style="{height: `${height}px`}">
+  <div id="login">
     <!--Title Start-->
     <div class="title">
       欢迎来到云惠ITSM
@@ -32,6 +32,12 @@
       <van-button type="primary" size="large" :loading="isLoading" @click="goSub">登录</van-button>
     </div>
     <!-- Button End-->
+
+    <!-- Foot Start-->
+    <div class="foot">
+      <img src="../../assets/imgs/foot.png"/>
+    </div>
+    <!-- Foot End-->
   </div>
 </template>
 
@@ -53,12 +59,10 @@ export default {
   },
   data () {
     return {
-      // 容器高度
-      height: 0,
       // 手机号
       loginName: '18505106268',
       // 密码
-      password: 'nct123456',
+      password: '123',
       // 按钮加载
       isLoading: false
     }
@@ -66,38 +70,39 @@ export default {
   methods: {
     // 登录
     async goSub () {
-      try {
-        // 非空判断
-        if (!this.loginName) return Notify('平台账号不能为空')
-        if (!this.password) return Notify('密码不能为空')
-        // 阻止多次提交
-        this.isLoading = true
-        // 验证用户是否存在
-        let existRes = await model.loginNameExist({ loginName: this.loginName })
-        this.isLoading = false
-        if (existRes.flag) return Notify('用户名不存在')
-        if (existRes.stop) return Notify('账号已停用')
-        let json = {
-          loginName: this.loginName,
-          password: this.password,
-          autoLogin: '0',
-          ipDesc: '',
-          loginType: '2',
-          isBinding: '0'
-        }
-        console.log(json)
-      } catch (e) {
-        console.log('catch')
+      // 非空判断
+      if (!this.loginName) return Notify('平台账号不能为空')
+      if (!this.password) return Notify('密码不能为空')
+      // 阻止多次提交
+      this.isLoading = true
+      // 验证用户是否存在
+      let existRes = await model.loginNameExist({ loginName: this.loginName })
+      this.isLoading = false
+      if (existRes.flag) return Notify('用户名不存在')
+      if (existRes.stop) return Notify('账号已停用')
+      let json = {
+        loginName: this.loginName,
+        password: this.password,
+        autoLogin: '0',
+        ipDesc: '',
+        loginType: '2',
+        isBinding: '0'
+        // openId: storage.get('openId', '-1'),
+        // 经度 纬度
+        // location: `${storage.get('longitude', '-1')},${storage.get('latitude', '-1')}`
       }
+      this.isLoading = true
+      let loginRes = await model.login(json)
+      this.isLoading = false
+      if (!loginRes.flag) return Notify('登录失败,用户名与密码不匹配')
+      this.$router.replace('/home')
     },
     // 忘记密码
     find () {
       this.$router.push(`/find`)
     }
   },
-  mounted () {
-    this.height = window.innerHeight
-  },
+  mounted () {},
   computed: {}
 }
 </script>

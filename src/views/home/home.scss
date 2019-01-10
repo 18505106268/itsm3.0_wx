@@ -1,0 +1,63 @@
+#home {
+  background-color: #f0f0f1;
+  @include overflow(auto);
+  padding-bottom: $space * 5;
+}
+
+.swipe {
+  width: 100%;
+}
+
+.van-tabbar-item {
+  font-size: $font-size;
+}
+
+.van-tabbar-item--active {
+  color: $color-blue;
+}
+
+.msg {
+  box-sizing: border-box;
+  margin: $space 0;
+  padding: 0 ($space * 1.4);
+  > div {
+    box-sizing: border-box;
+    display: flex;
+    background-color: $color-white;
+    padding: $space * 1.6 $space;
+    height: 100%;
+    > div {
+      height: 100%;
+      width: 33.3333333%;
+      span {
+        height: 100%;
+        width: 100%;
+        @include center;
+        display: flex;
+      }
+      > span:nth-child(1) {
+        font-size: $font-size * 2;
+        margin-bottom: $space;
+      }
+      > span:nth-child(2) {
+        color: $color-grey;
+        font-size: $font-size;
+      }
+    }
+    > div:nth-child(1) {
+      > span:nth-child(1) {
+        color: $color-orange;
+      }
+    }
+    > div:nth-child(2) {
+      > span:nth-child(1) {
+        color: $color-yellow;
+      }
+    }
+    > div:nth-child(3) {
+      > span:nth-child(1) {
+        color: $color-green;
+      }
+    }
+  }
+}

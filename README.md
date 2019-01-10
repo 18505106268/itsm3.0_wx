@@ -15,6 +15,7 @@
  登录 		    |  			            | 				| http://localhost:8080/#/login
  忘记密码 		|  			            | 				| http://localhost:8080/#/find
  验证并重置 		|  			            | 				| http://localhost:8080/#/check
+ 首页 		    |  			            | 				| http://localhost:8080/#/home
 
 ### 编辑备忘录
 
@@ -37,6 +38,8 @@
 ### 网站地图
 
 + 📦 登录 `login`
+
++ 📦 首页 `home`
 
 + 📦 忘记密码 `find`
     + 📦 验证并重置 `check`

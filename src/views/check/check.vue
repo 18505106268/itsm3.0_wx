@@ -1,6 +1,6 @@
 <!-- 验证并重置 -->
 <template>
-  <div id="check" :style="{height: `${height}px`}">
+  <div id="check">
     <!--Title Start-->
     <div class="title">
       找回密码
@@ -33,6 +33,12 @@
       <van-button type="primary" size="large" :loading="isLoading" @click="sub">完成</van-button>
     </div>
     <!-- Button End-->
+
+    <!-- Foot Start-->
+    <div class="foot">
+      <img src="../../assets/imgs/foot.png"/>
+    </div>
+    <!-- Foot End-->
   </div>
 </template>
 
@@ -57,8 +63,6 @@ export default {
   },
   data () {
     return {
-      // 容器高度
-      height: 0,
       // 按钮加载
       isLoading: false,
       // 验证码按钮
@@ -80,7 +84,7 @@ export default {
     ...mapActions(['account/setServeCode']),
     // 倒计时
     countDown () {
-      this.msg = 5
+      this.msg = 60
       let timer = setInterval(() => {
         this.msg--
         if (this.msg === 0) {
@@ -123,7 +127,6 @@ export default {
     }
   },
   mounted () {
-    this.height = window.innerHeight
     this.countDown()
   },
   computed: {
