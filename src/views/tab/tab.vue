@@ -6,7 +6,7 @@
     <div class="tab">
       <van-tabbar :fixed="true" v-model="active">
         <van-tabbar-item icon="home-o" to="/tab/home">首页</van-tabbar-item>
-        <van-tabbar-item icon="setting-o" to="/tab/info/relieve">我的</van-tabbar-item>
+        <van-tabbar-item icon="setting-o" to="/tab/info/relieve">个人</van-tabbar-item>
       </van-tabbar>
     </div>
     <!-- 底部导航 End-->

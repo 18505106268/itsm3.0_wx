@@ -2,3 +2,50 @@
   @include overflow();
   background-color: $color-white;
 }
+
+.title {
+  text-align: center;
+  box-sizing: border-box;
+  padding: 50px 30px 30px 30px;
+  font-size: $font-size * 1.8;
+  color: $color-black;
+}
+
+.head {
+  display: flex;
+  @include center;
+  img {
+    width: auto;
+    height: $space * 10;
+  }
+}
+
+.name {
+  font-size: $font-size * 1.2;
+  text-align: center;
+  margin-top: $space;
+}
+
+.relieve-btn, .field {
+  box-sizing: border-box;
+  padding: $space * 3;
+}
+
+.field {
+  font-size: $space * 1.6;
+  div {
+    border-bottom: $border-width solid gainsboro;
+    box-sizing: border-box;
+    padding-bottom: $space;
+    span {
+      display: inline-block;
+    }
+    > span:nth-child(1) {
+      color: $color-grey-plus;
+      margin-right: $space * 2;
+    }
+    > span:nth-child(2) {
+      color: $color-black;
+    }
+  }
+}
