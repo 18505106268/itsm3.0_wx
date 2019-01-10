@@ -37,6 +37,7 @@ export default {
         console.log(strs)
       }
     }
+    console.log(wx)
   }
 }
 
