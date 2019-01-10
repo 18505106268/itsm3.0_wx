@@ -95,7 +95,7 @@ export default {
       let loginRes = await model.login(json)
       this.isLoading = false
       if (!loginRes.flag) return Notify('登录失败,用户名与密码不匹配')
-      this.$router.replace('/home')
+      this.$router.replace('/tab/home')
     },
     // 忘记密码
     find () {

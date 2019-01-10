@@ -19,7 +19,7 @@
     padding-top: $space * 2.5;
     padding-bottom: $space * 1.2;
     display: flex;
-    border-bottom: 1px solid gainsboro;
+    border-bottom: $border-width solid gainsboro;
   }
   > div:nth-child(1) {
     span:nth-child(1) {

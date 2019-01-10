@@ -1,19 +1,11 @@
 #home {
   background-color: #f0f0f1;
   @include overflow(auto);
-  padding-bottom: $space * 5;
+  padding-bottom: $space;
 }
 
 .swipe {
   width: 100%;
-}
-
-.van-tabbar-item {
-  font-size: $font-size;
-}
-
-.van-tabbar-item--active {
-  color: $color-blue;
 }
 
 .msg {
@@ -25,6 +17,8 @@
     display: flex;
     background-color: $color-white;
     padding: $space * 1.6 $space;
+    border-radius: $border-radius;
+    box-shadow: $shadow-layer;
     height: 100%;
     > div {
       height: 100%;
@@ -36,7 +30,7 @@
         display: flex;
       }
       > span:nth-child(1) {
-        font-size: $font-size * 2;
+        font-size: $font-size * 2.4;
         margin-bottom: $space;
       }
       > span:nth-child(2) {
@@ -58,6 +52,47 @@
       > span:nth-child(1) {
         color: $color-green;
       }
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 ($space * 1.4);
+  margin-top: $space * 1.6;
+}
+
+.child {
+  padding: ($space * 1.6) $space;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: $color-white;
+  border-radius: $border-radius;
+}
+
+.title {
+  font-size: $font-size * 1.4;
+  color: $color-black;
+  margin-bottom: $space * .4;
+}
+
+.list {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  div {
+    width: 25%;
+    margin-top: $space;
+    span {
+      display: flex;
+      @include center;
+      font-size: $font-size;
+    }
+    img {
+      height: $space * 4.5;
+      width: $space * 4.5;
+      margin-bottom: $space;
     }
   }
 }

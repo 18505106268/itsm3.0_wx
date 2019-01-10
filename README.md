@@ -39,9 +39,15 @@
 
 + 📦 登录 `login`
 
-+ 📦 首页 `home`
++ 📦 底部TAB页 `tab`
+
+    + 📦 首页 `home`
+    
+    + 📦 我的 `info`
+        + 📦 解除绑定 `relieve`
 
 + 📦 忘记密码 `find`
+
     + 📦 验证并重置 `check`
 
 ### 变量命名
