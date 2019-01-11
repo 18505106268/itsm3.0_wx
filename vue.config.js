@@ -2,7 +2,7 @@ const autoprefixer = require('autoprefixer')
 const pxtorem = require('postcss-pxtorem')
 
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
+  baseUrl: process.env.NODE_ENV === 'production' ? 'https://itsm-wx-yy.oss-cn-shanghai.aliyuncs.com/' : '/',
   css: {
     loaderOptions: {
       postcss: {

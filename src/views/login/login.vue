@@ -45,6 +45,7 @@
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'login',
@@ -86,15 +87,17 @@ export default {
         autoLogin: '0',
         ipDesc: '',
         loginType: '2',
-        isBinding: '0'
-        // openId: storage.get('openId', '-1'),
-        // 经度 纬度
-        // location: `${storage.get('longitude', '-1')},${storage.get('latitude', '-1')}`
+        isBinding: '0',
+        openId: this['account/openId'],
+        location: this['account/location']
       }
       this.isLoading = true
       let loginRes = await model.login(json)
-      this.isLoading = false
-      if (!loginRes.flag) return Notify('登录失败,用户名与密码不匹配')
+      if (!loginRes.flag) {
+        Notify('登录失败,用户名与密码不匹配')
+        this.isLoading = false
+        return false
+      }
       this.$router.replace('/tab/home')
     },
     // 忘记密码
@@ -103,7 +106,13 @@ export default {
     }
   },
   mounted () {},
-  computed: {}
+  computed: {
+    /**
+     * account/location 用户经纬度
+     * account/openId 用户openId
+     */
+    ...mapGetters(['account/location', 'account/openId'])
+  }
 }
 </script>
 

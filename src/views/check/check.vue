@@ -123,7 +123,6 @@ export default {
       } else {
         Notify('ERROR')
       }
-      this.isLoading = false
     }
   },
   mounted () {

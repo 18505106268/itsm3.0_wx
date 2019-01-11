@@ -3,6 +3,7 @@
 }
 
 #find {
+  position: absolute;
   @include overflow();
   padding: ($space * 7) ($space * 4) 0 ($space * 4);
 }
