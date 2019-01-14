@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Meta from 'vue-meta'
 import store from './store'
 import VueRouter from 'vue-router'
+import parameters from './util/parameters'
 
 import router from './config/router'
 import bus from './util/bus'
@@ -21,6 +22,8 @@ Vue.use(Meta, {
   keyName: 'metaInfo',
   attribute: 'data-vue-meta'
 })
+
+Object.defineProperty(Vue.prototype, 'imgPath', { value: parameters.imgPath })
 
 const FastClick = require('fastclick')
 FastClick.attach(document.body)

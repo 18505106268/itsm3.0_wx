@@ -14,18 +14,15 @@
     <!-- 信息 Start-->
     <div class="msg">
       <div>
-        <div>
-          <span>0</span>
-          <span>我的待办</span>
-        </div>
-        <div>
-          <span>0</span>
-          <span>我的已办</span>
-        </div>
-        <div>
-          <span>0</span>
-          <span>我的消息</span>
-        </div>
+        <transition-group tag="div" name="van-fade" v-show="menuList">
+          <div v-for="ml in menuList" :key="ml.id">
+            <span>{{ml.count}}</span>
+            <span>{{ml.name}}</span>
+          </div>
+        </transition-group>
+        <span class="loading" v-show="!menuList">
+          <van-loading/>
+        </span>
       </div>
     </div>
     <!-- 信息 End-->
@@ -39,12 +36,17 @@
 
         <!-- List Start-->
         <div class="list">
-          <div v-for="i in 6" :key="i">
+          <transition-group tag="div" name="van-fade" v-show="appList">
+            <div v-for="al in appList" :key="al.id">
             <span>
-              <img src="http://itss-china.cn/views/main/images/notice.png"/>
+              <img :src="al.icon"/>
             </span>
-            <span>工单管理</span>
-          </div>
+              <span>{{al.appName}}</span>
+            </div>
+          </transition-group>
+          <span class="loading" v-show="!appList">
+          <van-loading/>
+        </span>
         </div>
         <!-- List End-->
       </div>
@@ -55,7 +57,8 @@
 
 <script>
 import { Mixin } from '../../util/mixin'
-import { Swipe, SwipeItem } from 'vant'
+import { Swipe, SwipeItem, Loading } from 'vant'
+import model from '../../model/client.model'
 
 export default {
   name: 'home',
@@ -65,7 +68,8 @@ export default {
   mixins: [Mixin],
   components: {
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem
+    [SwipeItem.name]: SwipeItem,
+    [Loading.name]: Loading
   },
   data () {
     return {
@@ -74,11 +78,37 @@ export default {
         'https://img1.mukewang.com/szimg/5c33228b0884a96609000300.jpg',
         'https://img2.mukewang.com/szimg/5c34030108968e3609000300.jpg',
         'https://img2.mukewang.com/szimg/5c34030108968e3609000300.jpg'
-      ]
+      ],
+      // 工作台
+      menuList: undefined,
+      // 应用列表
+      appList: undefined
     }
   },
-  methods: {},
-  mounted () {},
+  methods: {
+    // 获取用户待办，处理，抄送
+    async getLeftMenu () {
+      let res = await model.getLeftMenu({ appId: -1 })
+      this.menuList = res.menuList
+    },
+    // 获取应用列表
+    async getApplicationList () {
+      let res = await model.getApplicationList()
+      if (res.flag) {
+        this.appList = res.appList.map(item => {
+          // this.imgPath
+          item.icon = this.imgPath + item.icon
+          return item
+        })
+      }
+    }
+  },
+  mounted () {
+    // 获取用户待办，处理，抄送
+    this.getLeftMenu()
+    // 获取应用列表
+    this.getApplicationList()
+  },
   computed: {}
 }
 </script>

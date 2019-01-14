@@ -63,8 +63,19 @@ export default {
   resetPassword (data) {
     return handleRequest($http.post('/admin/reset-password', data))
   },
+  // 获取用户待办，处理，抄送
+  getLeftMenu (data) {
+    return handleRequest($http.post('admin/getLeftMenu', data))
+  },
   // 获取用户数据和JSSDK
   getConfigData (data) {
     return handleRequest($http.post('wechat/getConfigData', data))
+  },
+  /*
+  * 应用相关
+  * */
+  // 获取应用列表
+  getApplicationList (data) {
+    return handleRequest($http.post('selectMobile/getApplicationList', data))
   }
 }

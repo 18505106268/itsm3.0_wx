@@ -13,6 +13,7 @@
   margin: $space 0;
   padding: 0 ($space * 1.4);
   > div {
+    min-height: $space * 8.8;
     box-sizing: border-box;
     display: flex;
     background-color: $color-white;
@@ -20,7 +21,14 @@
     border-radius: $border-radius;
     box-shadow: $shadow-layer;
     height: 100%;
+    @include center;
     > div {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      @include center;
+    }
+    > div > div {
       height: 100%;
       width: 33.3333333%;
       span {
@@ -38,17 +46,17 @@
         font-size: $font-size;
       }
     }
-    > div:nth-child(1) {
+    > div > div:nth-child(1) {
       > span:nth-child(1) {
         color: $color-orange;
       }
     }
-    > div:nth-child(2) {
+    > div > div:nth-child(2) {
       > span:nth-child(1) {
         color: $color-yellow;
       }
     }
-    > div:nth-child(3) {
+    > div > div:nth-child(3) {
       > span:nth-child(1) {
         color: $color-green;
       }
@@ -79,9 +87,14 @@
 
 .list {
   box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
-  div {
+  min-height: $space * 7.8;
+  > div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  > div > div {
     width: 25%;
     margin-top: $space;
     span {
@@ -95,4 +108,12 @@
       margin-bottom: $space;
     }
   }
+}
+
+.loading {
+  min-height: $space * 5;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  @include center;
 }
