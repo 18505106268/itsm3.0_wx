@@ -46,5 +46,12 @@ export default [
         component: () => import('../views/info/relieve/relieve.vue')
       }
     ]
+  },
+  // 表单列表
+  {
+    name: 'menuList',
+    props: true,
+    path: '/menuList/:id',
+    component: () => import('../views/menuList/menuList.vue')
   }
 ]

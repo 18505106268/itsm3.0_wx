@@ -37,7 +37,7 @@
         <!-- List Start-->
         <div class="list">
           <transition-group tag="div" name="van-fade" v-show="appList">
-            <div v-for="al in appList" :key="al.id">
+            <div v-for="al in appList" :key="al.id" @click="goAppList(al)">
             <span>
               <img :src="al.icon"/>
             </span>
@@ -101,6 +101,10 @@ export default {
           return item
         })
       }
+    },
+    // 去表单列表
+    async goAppList (item) {
+      this.$router.push(`/menuList/${item.id}`)
     }
   },
   mounted () {

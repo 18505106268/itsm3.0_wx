@@ -8,15 +8,6 @@
  系统首页 		| http://localhost:8080/#/home
  Webfont 		| https://www.iconfont.cn/
 
-### 新增清单
-
- 第一层 			| 第二层 				| 第三层 		| 网址
-----------------|-----------------------|---------------|-------------
- 登录 		    |  			            | 				| http://localhost:8080/#/login
- 忘记密码 		|  			            | 				| http://localhost:8080/#/find
- 验证并重置 		|  			            | 				| http://localhost:8080/#/check
- 首页 		    |  			            | 				| http://localhost:8080/#/home
-
 ### 编辑备忘录
 
 1. 公用scss文件
@@ -43,7 +34,10 @@
 
     + 📦 首页 `home`
     
+        + 📦 表单列表 `list`
+        
     + 📦 我的 `info`
+    
         + 📦 解除绑定 `relieve`
 
 + 📦 忘记密码 `find`
