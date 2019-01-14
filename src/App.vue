@@ -84,6 +84,7 @@ export default {
              * 纬度 latitude
              * 保存用户经纬度
              */
+            alert('getUserLocation success')
             this[`${PATH}${SET_LOCATION}`](`${res.longitude},${res.latitude}`)
             this.loginJudge(configData)
           },
@@ -121,7 +122,7 @@ export default {
         }
         let loginRes = await model.login(json)
         if (loginRes.flag) {
-          this.$router.replace('/home')
+          this.$router.replace('/tab/home')
         }
       } else {
         this.$router.replace(`/login`)

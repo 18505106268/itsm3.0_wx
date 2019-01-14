@@ -1,7 +1,6 @@
 #tab {
   background-color: #f0f0f1;
   @include overflow(auto);
-  padding-bottom: $space * 5;
 }
 
 .van-tabbar-item {

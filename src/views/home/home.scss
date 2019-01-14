@@ -1,7 +1,7 @@
 #home {
   background-color: #f0f0f1;
   @include overflow(auto);
-  padding-bottom: $space;
+  padding-bottom: $space * 6;
 }
 
 .swipe {
