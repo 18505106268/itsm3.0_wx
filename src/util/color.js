@@ -1,3 +1,5 @@
 export default {
-  blue: '#1694EF'
+  success: '#36b37e',
+  warning: '#ffab00',
+  error: '#ff5630'
 }

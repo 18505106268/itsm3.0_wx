@@ -36,6 +36,7 @@
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
+import color from '../../util/color'
 import { mapActions } from 'vuex'
 
 export default {
@@ -66,7 +67,7 @@ export default {
     // 登录
     async next () {
       // 非空判断
-      if (!this.loginName) return Notify('平台账号不能为空')
+      if (!this.loginName) return Notify({ message: '平台账号不能为空', background: color.warning })
       // 阻止多次提交
       this.isLoading = true
       // 验证用户是否存在
@@ -74,8 +75,8 @@ export default {
       // 保存企业ID
       await this['account/setCompanyId'](existRes.id)
       this.isLoading = false
-      if (existRes.flag) return Notify('用户名不存在')
-      if (existRes.stop) return Notify('账号已停用')
+      if (existRes.flag) return Notify({ message: '用户名不存在', background: color.error })
+      if (existRes.stop) return Notify({ message: '账号已停用', background: color.error })
       // 发送验证码
       let codeRes = await model.sendVerifyCode({ loginName: this.loginName })
       // 保存服务端验证码

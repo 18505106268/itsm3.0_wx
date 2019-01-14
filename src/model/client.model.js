@@ -71,6 +71,10 @@ export default {
   getConfigData (data) {
     return handleRequest($http.post('wechat/getConfigData', data))
   },
+  // 解除绑定
+  unbind (data) {
+    return handleRequest($http.post('/admin/unbind', data))
+  },
   /*
   * 应用相关
   * */

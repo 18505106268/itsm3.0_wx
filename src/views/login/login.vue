@@ -45,6 +45,7 @@
 import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
+import color from '../../util/color'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -72,15 +73,15 @@ export default {
     // 登录
     async goSub () {
       // 非空判断
-      if (!this.loginName) return Notify('平台账号不能为空')
-      if (!this.password) return Notify('密码不能为空')
+      if (!this.loginName) return Notify({ message: '平台账号不能为空', background: color.warning })
+      if (!this.password) return Notify({ message: '密码不能为空', background: color.warning })
       // 阻止多次提交
       this.isLoading = true
       // 验证用户是否存在
       let existRes = await model.loginNameExist({ loginName: this.loginName })
       this.isLoading = false
-      if (existRes.flag) return Notify('用户名不存在')
-      if (existRes.stop) return Notify('账号已停用')
+      if (existRes.flag) return Notify({ message: '用户名不存在', background: color.error })
+      if (existRes.stop) return Notify({ message: '账号已停用', background: color.error })
       let json = {
         loginName: this.loginName,
         password: this.password,
@@ -94,7 +95,7 @@ export default {
       this.isLoading = true
       let loginRes = await model.login(json)
       if (!loginRes.flag) {
-        Notify('登录失败,用户名与密码不匹配')
+        Notify({ message: '登录失败,用户名与密码不匹配', background: color.error })
         this.isLoading = false
         return false
       }

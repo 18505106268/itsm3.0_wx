@@ -9,12 +9,12 @@
     <div>
       <!-- 头像 Start-->
       <div class="head">
-        <img src="https://img1.mukewang.com/533e505f00011ad102000200-140-140.jpg"/>
+        <img :src="headImgUrl"/>
       </div>
       <!-- 头像 End-->
 
       <!-- 昵称 Start-->
-      <div class="name">Mr牛牛</div>
+      <div class="name">{{nickname}}</div>
       <!-- 昵称 End-->
     </div>
     <!-- 微信信息 End-->
@@ -30,7 +30,7 @@
 
     <!--Button Start-->
     <div class="relieve-btn">
-      <van-button type="primary" size="large" :loading="isLoading" @click="relieve">解除</van-button>
+      <van-button type="primary" size="large" :loading="isLoading" @click="unbind">解除</van-button>
     </div>
     <!-- Button End-->
   </div>
@@ -38,7 +38,11 @@
 
 <script>
 import { Mixin } from '../../../util/mixin'
-import { Button } from 'vant'
+import { Button, Notify } from 'vant'
+import model from '../../../model/client.model'
+import color from '../../../util/color'
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'relieve',
@@ -47,22 +51,47 @@ export default {
   },
   mixins: [Mixin],
   components: {
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Notify.name]: Notify
   },
   data () {
     return {
-      loginName: '18505106268',
       // 解绑加载
       isLoading: false
     }
   },
   methods: {
     // 解除绑定
-    relieve () {
+    async unbind () {
+      // 阻止多次提交
+      this.isLoading = true
+      let res = await model.unbind()
+      if (!res.errMsg) {
+        Notify('解绑成功')
+        Notify({ message: '解绑成功', background: color.success })
+        setTimeout(() => {
+          this.$router.replace(`/login`)
+        }, 1000)
+      } else {
+        this.isLoading = false
+        Notify(res.errMsg)
+        Notify({ message: res.errMsg, background: color.error })
+      }
     }
   },
   mounted () {},
-  computed: {}
+  computed: {
+    /**
+     * account/headImgUrl 用户经头像
+     * account/loginName 用户名
+     * account/nickname 用户昵称
+     */
+    ...mapGetters({
+      headImgUrl: 'account/headImgUrl',
+      loginName: 'account/loginName',
+      nickname: 'account/nickname'
+    })
+  }
 }
 </script>
 

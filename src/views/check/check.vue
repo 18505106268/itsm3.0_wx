@@ -107,21 +107,19 @@ export default {
     },
     // 完成提交
     async sub () {
-      if (this['account/serveCode'] !== this.code) return Notify('验证码错误')
-      if (!this.password) return Notify('请输入重置密码')
+      if (!this.code) return Notify({ message: '请输入验证码', background: color.warning })
+      if (this['account/serveCode'] !== this.code) return Notify({ message: '验证码错误', background: color.error })
+      if (!this.password) return Notify({ message: '请输入重置密码', background: color.warning })
       this.isLoading = true
       // 重置密码
       let res = await model.resetPassword({ id: this['account/companyId'], password: this.password })
       if (res.flag) {
-        Notify({
-          message: '密码修改成功',
-          background: color.blue
-        })
+        Notify({ message: '密码修改成功', background: color.success })
         setTimeout(() => {
           this.$router.replace(`/login`)
         }, 500)
       } else {
-        Notify('ERROR')
+        Notify({ message: 'ERROR', background: color.error })
       }
     }
   },
