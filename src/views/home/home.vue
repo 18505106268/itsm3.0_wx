@@ -59,11 +59,13 @@
 import { Mixin } from '../../util/mixin'
 import { Swipe, SwipeItem, Loading } from 'vant'
 import model from '../../model/client.model'
+import { mapMutations } from 'vuex'
+import { PATH, SET_TITLE } from '../../store/types/common'
 
 export default {
   name: 'home',
   metaInfo: {
-    title: ''
+    title: '云惠ITSM云应用平台'
   },
   mixins: [Mixin],
   components: {
@@ -86,6 +88,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * common/SET_TITLE 设置HTML Title
+     */
+    ...mapMutations([
+      `${PATH}${SET_TITLE}`
+    ]),
     // 获取用户待办，处理，抄送
     async getLeftMenu () {
       let res = await model.getLeftMenu({ appId: -1 })
@@ -104,6 +112,8 @@ export default {
     },
     // 去表单列表
     async goAppList (item) {
+      // 设置HTML Title
+      this[`${PATH}${SET_TITLE}`](item.appName)
       this.$router.push(`/menuList/${item.id}`)
     }
   },

@@ -1,4 +1,4 @@
-export const PATH = 'account/'// 服务端验证码
+export const PATH = 'account/'// 模型路径
 export const SET_SERVE_CODE = 'SET_SERVE_CODE'// 服务端验证码
 export const SET_COMPANY_ID = 'SET_COMPANY_ID'// 找回密码企业ID
 export const SET_OPEN_ID = 'SET_OPEN_ID'// 用户openId

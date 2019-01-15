@@ -24,13 +24,16 @@
 <script>
 import model from '../../model/client.model'
 import { Mixin } from '../../util/mixin'
+import { mapGetters } from 'vuex'
 
 import { Collapse, CollapseItem, Actionsheet } from 'vant'
 
 export default {
   name: 'menuList',
-  metaInfo: {
-    title: ''
+  metaInfo () {
+    return {
+      title: this['common/title']
+    }
   },
   props: ['id'],
   mixins: [Mixin],
@@ -85,7 +88,12 @@ export default {
   mounted () {
     this.getFormListByApp()
   },
-  computed: {}
+  computed: {
+    /**
+     * common/title Html Title
+     */
+    ...mapGetters(['common/title'])
+  }
 }
 </script>
 
