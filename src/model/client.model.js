@@ -81,5 +81,9 @@ export default {
   // 获取应用列表
   getApplicationList (data) {
     return handleRequest($http.post('selectMobile/getApplicationList', data))
+  },
+  // 获取应用表单列表
+  getFromListByApp (data) {
+    return handleRequest($http.post('approve-index/getFormListByApp', data))
   }
 }

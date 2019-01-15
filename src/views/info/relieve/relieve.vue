@@ -69,9 +69,7 @@ export default {
       if (!res.errMsg) {
         Notify('解绑成功')
         Notify({ message: '解绑成功', background: color.success })
-        setTimeout(() => {
-          this.$router.replace(`/login`)
-        }, 1000)
+        this.$router.replace(`/login`)
       } else {
         this.isLoading = false
         Notify(res.errMsg)

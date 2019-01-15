@@ -2,3 +2,41 @@
   background-color: #f0f0f1;
   @include overflow(auto);
 }
+
+.item {
+  box-sizing: border-box;
+  padding: $space 0;
+}
+
+.item {
+  span {
+    padding: ($space * .6) ($space * 1.2);
+    color: $color-black;
+    margin-right: $space;
+    border-radius: $border-radius * .5;
+    font-size: $font-size;
+  }
+  $color: (
+          $color-0,
+          $color-1,
+          $color-2,
+          $color-3,
+          $color-4,
+          $color-5,
+          $color-6,
+          $color-7,
+          $color-8,
+          $color-9
+  );
+  @for $i from 0 to length($color) {
+    &:nth-child(#{$i + 1}) {
+      span {
+        background-color: nth($color, $i + 1);
+      }
+    }
+  }
+  .c-item {
+    height: 100%;
+    width: 100%;
+  }
+}

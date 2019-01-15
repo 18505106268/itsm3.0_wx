@@ -46,7 +46,8 @@ import { Field, Button, Notify } from 'vant'
 import { Mixin } from '../../util/mixin'
 import model from '../../model/client.model'
 import color from '../../util/color'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { PATH, SET_LOGIN_NAME } from '../../store/types/account'
 
 export default {
   name: 'login',
@@ -70,6 +71,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * account/setLoginName 设置用户名
+     */
+    ...mapMutations([
+      `${PATH}${SET_LOGIN_NAME}`
+    ]),
     // 登录
     async goSub () {
       // 非空判断
@@ -99,6 +106,8 @@ export default {
         this.isLoading = false
         return false
       }
+      // 保存用户名
+      this[`${PATH}${SET_LOGIN_NAME}`](json.loginName)
       this.$router.replace('/tab/home')
     },
     // 忘记密码

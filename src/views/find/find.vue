@@ -78,9 +78,12 @@ export default {
       if (existRes.flag) return Notify({ message: '用户名不存在', background: color.error })
       if (existRes.stop) return Notify({ message: '账号已停用', background: color.error })
       // 发送验证码
+      // 阻止多次提交
+      this.isLoading = true
       let codeRes = await model.sendVerifyCode({ loginName: this.loginName })
       // 保存服务端验证码
       await this['account/setServeCode'](codeRes.code)
+      this.isLoading = false
       // 跳转至下一页
       if (codeRes.flag) { this.$router.push(`/check/${this.loginName}`) }
     }

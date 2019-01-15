@@ -132,6 +132,7 @@ export default {
   watch: {
     '$route' (to, from) {
       this.transitionName = this.$store.state.interlude.direction !== 'forward' ? 'pop-out' : 'pop-in'
+      this.height = window.innerHeight
     }
   },
   computed: {
