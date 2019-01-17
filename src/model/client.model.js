@@ -82,8 +82,19 @@ export default {
   getApplicationList (data) {
     return handleRequest($http.post('selectMobile/getApplicationList', data))
   },
-  // 获取应用表单列表
+  // 获取应用下表单列表
   getFromListByApp (data) {
     return handleRequest($http.post('approve-index/getFormListByApp', data))
+  },
+  /*
+  * 流程相关
+  * */
+  // 验证有没有流程
+  checkProcessLimitMenu (data) {
+    return handleRequest($http.post('/processUtilNew/checkProcessLimitMenu', data))
+  },
+  // 获取动态表单
+  getFieldsInNode (data) {
+    return handleRequest($http.post('/processUtilNew/getFieldsInNode', data))
   }
 }

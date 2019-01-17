@@ -63,9 +63,9 @@ export default {
   data () {
     return {
       // 手机号
-      loginName: '18505106268',
+      loginName: 'guf',
       // 密码
-      password: '123',
+      password: 'yy123456',
       // 按钮加载
       isLoading: false
     }

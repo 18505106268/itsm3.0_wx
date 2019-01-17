@@ -54,7 +54,7 @@ export default {
       let res = await model.getConfigData(json)
       this.wx.config({
         // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        debug: true,
+        debug: false,
         // 必填，公众号的唯一标识
         appId: res.appId,
         // 必填，生成签名的时间戳
@@ -84,7 +84,6 @@ export default {
              * 纬度 latitude
              * 保存用户经纬度
              */
-            alert('getUserLocation success')
             this[`${PATH}${SET_LOCATION}`](`${res.longitude},${res.latitude}`)
             this.loginJudge(configData)
           },

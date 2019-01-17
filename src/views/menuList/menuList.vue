@@ -2,7 +2,7 @@
 <template>
   <div id="menuList">
     <!-- 列表 Start-->
-    <transition-group tag="div" name="van-fade">
+    <transition-group tag="div" name="van-fade" v-show="formList">
       <div class="item" v-for="fl in formList" :key="fl.menuName">
         <van-collapse v-model="activeNames">
           <van-collapse-item :title="fl.menuName" :name="fl.menuName">
@@ -15,6 +15,12 @@
     </transition-group>
     <!-- 列表 End-->
 
+    <!-- Loading Start-->
+    <div class="mask" v-show="!formList">
+      <van-loading/>
+    </div>
+    <!-- Loading End-->
+
     <!-- 上拉菜单 Start-->
     <van-actionsheet v-model="isShow" :actions="actions" @select="onSelect"/>
     <!-- 上拉菜单 End-->
@@ -26,7 +32,7 @@ import model from '../../model/client.model'
 import { Mixin } from '../../util/mixin'
 import { mapGetters } from 'vuex'
 
-import { Collapse, CollapseItem, Actionsheet } from 'vant'
+import { Collapse, CollapseItem, Actionsheet, Loading } from 'vant'
 
 export default {
   name: 'menuList',
@@ -40,7 +46,8 @@ export default {
   components: {
     [Collapse.name]: Collapse,
     [CollapseItem.name]: CollapseItem,
-    [Actionsheet.name]: Actionsheet
+    [Actionsheet.name]: Actionsheet,
+    [Loading.name]: Loading
   },
   data () {
     return {
@@ -51,16 +58,18 @@ export default {
       // 上拉菜单list
       actions: [
         {
-          id: '1',
-          name: '新增'
+          to: '/add/',
+          name: '新增',
+          item: undefined
         },
         {
-          id: '2',
-          name: '查看'
+          to: '/see/',
+          name: '查看',
+          item: undefined
         }
       ],
       // 表单列表
-      formList: []
+      formList: undefined
     }
   },
   methods: {
@@ -77,12 +86,15 @@ export default {
     // 查看或者新增
     see (item) {
       this.isShow = true
-      console.log(item)
+      this.actions[0].item = item
+      this.actions[1].item = item
     },
     // 选中菜单
-    onSelect (item) {
+    onSelect (obj) {
       this.isShow = false
-      console.log(item)
+      // formId_appId_menuId_limitMenuId_triggerId_keyId
+      let ids = `${obj.item.id}_${obj.item.appId}_${obj.item.menuId}_${obj.item.limitMenuId}_-1_-1`
+      this.$router.push(`${obj.to}${ids}`)
     }
   },
   mounted () {

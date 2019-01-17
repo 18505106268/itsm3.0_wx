@@ -18,8 +18,8 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/ITSM3.0': {
-        target: 'http://itss-china.cn',
+      '/ITSM4.0': {
+        target: 'http://iyunware.com:8085',
         ws: true,
         changeOrigin: true
       }

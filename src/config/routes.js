@@ -53,5 +53,12 @@ export default [
     props: true,
     path: '/menuList/:id',
     component: () => import('../views/menuList/menuList.vue')
+  },
+  // 新增
+  {
+    name: 'add',
+    props: true,
+    path: '/add/:ids',
+    component: () => import('../views/add/add.vue')
   }
 ]
