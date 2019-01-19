@@ -11,6 +11,7 @@
 import model from '../../model/client.model'
 import { Mixin } from '../../util/mixin'
 import DynamicForms from '../../components/dynamicForms/dynamicForms'
+import { FormsUtil } from '../../components/dynamicForms/formsUtil'
 
 export default {
   name: 'createDynamicForms',
@@ -80,7 +81,7 @@ export default {
       // this.$vux.loading.hide()
       // 表单列表 数据处理
       // if (res.errMsg) return this.showToast(res.errMsg)
-      this.fieldList = res.fieldList
+      this.fieldList = FormsUtil.getInstance(res.fieldList).init()
       // 按钮列表
       // this.buttonList = res.buttonList
       // this.buttonList.forEach(item => {

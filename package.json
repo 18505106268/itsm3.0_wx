@@ -13,7 +13,7 @@
     "fastclick": "^1.0.6",
     "postcss-pxtorem": "^4.0.1",
     "qs": "^6.6.0",
-    "vant": "^1.5.1",
+    "vant": "^1.5.2",
     "vue": "^2.5.17",
     "vue-meta": "^1.5.8",
     "vue-router": "^3.0.1",
