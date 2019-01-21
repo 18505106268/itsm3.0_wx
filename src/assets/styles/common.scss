@@ -55,3 +55,10 @@
 .van-cell {
   font-size: $font-size * 1.1;
 }
+
+.mask {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  @include center
+}

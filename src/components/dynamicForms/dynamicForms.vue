@@ -128,9 +128,7 @@ export default {
       console.log('cancel')
     }
   },
-  mounted () {
-    console.log('dynamicForms.vue', this.fieldList)
-  },
+  mounted () {},
   computed: {}
 }
 </script>
