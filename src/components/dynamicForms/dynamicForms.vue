@@ -56,7 +56,7 @@
         <!--6.日期时间-->
         <div class="item" v-else-if="Number(tmp.elementId) === 6 && tmp.readable">
           <div class="item-title">{{tmp.name}}</div>
-          <div @click="tmp.writable ? tmp.showPopup  = true : false">
+          <div @click="timeEvent(tmp)">
             <van-field
               class="van-field-padding"
               v-model="tmp.val"
@@ -68,12 +68,37 @@
             <van-datetime-picker
               v-model="tmp.value"
               :type="tmp.datatimeformat"
-              :min-date="tmp.minDate"
-              :max-date="tmp.maxDate"
-              @confirm="confirm(tmp)"
-              @cancel="cancel"
+              :min-date="tmp.datatimemin"
+              :max-date="tmp.datatimemax"
+              @confirm="confirm"
+              @cancel="cancel(tmp)"
             />
           </van-popup>
+        </div>
+        <!--9.下拉框 单选-->
+        <div class="item" v-else-if="Number(tmp.elementId) === 9 && Number(tmp.isMulti) === 0 && tmp.readable">
+          <div class="item-title">{{tmp.name}}</div>
+          <van-radio-group v-model="tmp.value">
+            <van-cell-group :border="false">
+              <van-cell class="van-cell-padding" :border="false" :title="o.name" clickable
+                        @click="tmp.writable ? tmp.value = o.name : false" v-for="(o,index) in tmp.option" :key="index">
+                <van-radio :name="o.name" :disabled="!tmp.writable"/>
+              </van-cell>
+            </van-cell-group>
+          </van-radio-group>
+        </div>
+        <!--9.下拉框 多选-->
+        <div class="item" v-else-if="Number(tmp.elementId) === 9 && Number(tmp.isMulti) === 1 && tmp.readable">
+          <div class="item-title">{{tmp.name}}</div>
+          <van-checkbox-group v-model="tmp.value" :disabled="!tmp.writable">
+            <van-cell-group :border="false">
+              <van-cell :border="false" class="van-cell-padding" v-for="(o,index) in tmp.option" clickable :key="index"
+                        :title="o.name"
+                        @click="toggle(index,tmp)">
+                <van-checkbox :name="o.name" :ref="`${tmp.elementId}_${tmp.inFieldId}`"/>
+              </van-cell>
+            </van-cell-group>
+          </van-checkbox-group>
         </div>
       </div>
     </transition-group>
@@ -82,7 +107,7 @@
 </template>
 
 <script>
-import { Mixin } from '../../util/mixin'
+import { Mixin } from '@/util/mixin'
 import { Field, RadioGroup, Radio, Cell, CellGroup, Checkbox, CheckboxGroup, DatetimePicker, Popup } from 'vant'
 
 export default {
@@ -112,7 +137,9 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      nowTmp: undefined
+    }
   },
   methods: {
     // 多选手动触发
@@ -120,12 +147,43 @@ export default {
       this.$refs[`${tmp.elementId}_${tmp.inFieldId}`][index].toggle()
     },
     // 时间控件点击完成触发事件
-    confirm (tmp) {
-      tmp.val = tmp.value.toString()
+    confirm (date) {
+      this.dateToString(date)
+      this.nowTmp.showPopup = false
     },
     // 时间控件点击取消触发事件
-    cancel () {
-      console.log('cancel')
+    cancel (tmp) {
+      tmp.showPopup = false
+    },
+    // 日期时间点击事件
+    timeEvent (tmp) {
+      if (tmp.writable) {
+        tmp.showPopup = true
+        this.nowTmp = tmp
+      }
+    },
+    // 时间转字符串
+    dateToString (date) {
+      let year, month, day, hour, minutes
+      if (typeof date !== 'string') {
+        year = date.getFullYear()
+        month = (date.getMonth() + 1).toString()
+        day = (date.getDate()).toString()
+        hour = (date.getHours()).toString()
+        minutes = (date.getMinutes()).toString()
+        switch (this.nowTmp.datatimeformat) {
+          case 'date':
+            this.nowTmp.val = `${year}-${month}-${day}`
+            break
+          case 'datetime':
+            hour = Number(hour) === 0 ? '00' : hour
+            minutes = Number(minutes) === 0 ? '00' : minutes
+            this.nowTmp.val = `${year}-${month}-${day} ${hour}:${minutes}`
+            break
+        }
+      } else {
+        this.nowTmp.val = date
+      }
     }
   },
   mounted () {},
@@ -162,5 +220,14 @@ export default {
 
   .van-field-padding {
     padding-bottom: $space * 1.8;
+  }
+
+  #dynamicForms {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: $space * 5;
+    overflow-y: auto;
   }
 </style>

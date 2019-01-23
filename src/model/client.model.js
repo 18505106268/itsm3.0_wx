@@ -96,5 +96,12 @@ export default {
   // 获取动态表单
   getFieldsInNode (data) {
     return handleRequest($http.post('/processUtilNew/getFieldsInNode', data))
+  },
+  /*
+  *  动态表单相关
+  * */
+  // 动态提交表单
+  dynamicSubmit (data) {
+    return handleRequest($http.post(data.api, data.json))
   }
 }
