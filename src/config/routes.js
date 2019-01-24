@@ -60,5 +60,12 @@ export default [
     props: true,
     path: '/add/:ids',
     component: () => import('../views/add/add.vue')
+  },
+  // 待办，已办，抄送
+  {
+    name: 'agenda',
+    props: true,
+    path: '/agenda/:ids',
+    component: () => import('../views/agenda/agenda.vue')
   }
 ]

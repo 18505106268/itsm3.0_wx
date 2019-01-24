@@ -11,11 +11,11 @@
     </div>
     <!-- 轮播 End-->
 
-    <!-- 信息 Start-->
+    <!-- 待办，已办，抄送 Start-->
     <div class="msg">
       <div>
         <transition-group tag="div" name="van-fade" v-show="menuList">
-          <div v-for="ml in menuList" :key="ml.id">
+          <div v-for="ml in menuList" :key="ml.id" @click="goList(ml)">
             <span>{{ml.count}}</span>
             <span>{{ml.name}}</span>
           </div>
@@ -45,8 +45,8 @@
             </div>
           </transition-group>
           <span class="loading" v-show="!appList">
-          <van-loading/>
-        </span>
+            <van-loading/>
+          </span>
         </div>
         <!-- List End-->
       </div>
@@ -56,11 +56,11 @@
 </template>
 
 <script>
-import { Mixin } from '../../util/mixin'
 import { Swipe, SwipeItem, Loading } from 'vant'
-import model from '../../model/client.model'
 import { mapMutations } from 'vuex'
-import { PATH, SET_TITLE } from '../../store/types/common'
+import model from '@/model/client.model'
+import { Mixin } from '@/util/mixin'
+import { PATH, SET_TITLE } from '@/store/types/common'
 
 export default {
   name: 'home',
@@ -111,10 +111,18 @@ export default {
       }
     },
     // 去表单列表
-    async goAppList (item) {
+    goAppList (item) {
       // 设置HTML Title
       this[`${PATH}${SET_TITLE}`](item.appName)
       this.$router.push(`/menuList/${item.id}`)
+    },
+    // 去列表
+    goList (ml) {
+      // 设置HTML Title
+      let index = ml.url.lastIndexOf('/')
+      let url = ml.url.substring(index + 1, ml.url.length)
+      this[`${PATH}${SET_TITLE}`](ml.name)
+      this.$router.push(`/agenda/${url.replace(/\?/g, '_')}`)
     }
   },
   mounted () {

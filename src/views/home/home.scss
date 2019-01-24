@@ -109,11 +109,3 @@
     }
   }
 }
-
-.loading {
-  min-height: $space * 5;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  @include center;
-}

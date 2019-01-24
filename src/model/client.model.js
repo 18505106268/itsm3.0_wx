@@ -75,6 +75,10 @@ export default {
   unbind (data) {
     return handleRequest($http.post('/admin/unbind', data))
   },
+  // 获取待办,已办，抄送列表
+  undoOrDone (data) {
+    return handleRequest($http.post('my-work/undoOrDone', data))
+  },
   /*
   * 应用相关
   * */
@@ -97,9 +101,6 @@ export default {
   getFieldsInNode (data) {
     return handleRequest($http.post('/processUtilNew/getFieldsInNode', data))
   },
-  /*
-  *  动态表单相关
-  * */
   // 动态提交表单
   dynamicSubmit (data) {
     return handleRequest($http.post(data.api, data.json))
