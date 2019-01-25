@@ -110,6 +110,13 @@ export class FormsUtil {
           break
         case 7:
           // 数据源
+          item.showPopup = false
+          item.showValue = ''
+          if (item.value) {
+            item.showValue = item.value.map(item => {
+              return item.userName
+            }).join(',')
+          }
           break
         case 8:
           // 附件

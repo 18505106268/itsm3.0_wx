@@ -75,6 +75,21 @@
             />
           </van-popup>
         </div>
+        <!--7.数据源-->
+        <div class="item" v-else-if="Number(tmp.elementId) === 7 && tmp.readable">
+          <div class="item-title">{{tmp.name}}</div>
+          <div @click="dataSourceEvent(tmp)">
+            <van-field
+              class="van-field-padding"
+              v-model="tmp.showValue"
+              :placeholder="tmp.writable ? `请选择${tmp.name}` : `${tmp.name}不可用`"
+              disabled="true"
+            />
+          </div>
+          <van-popup v-model="tmp.showPopup" position="right" class="data-source-popup" :overlay="false">
+            <data-source :itemData="tmp"></data-source>
+          </van-popup>
+        </div>
         <!--9.下拉框 单选-->
         <div class="item" v-else-if="Number(tmp.elementId) === 9 && Number(tmp.isMulti) === 0 && tmp.readable">
           <div class="item-title">{{tmp.name}}</div>
@@ -109,6 +124,7 @@
 <script>
 import { Mixin } from '@/util/mixin'
 import { Field, RadioGroup, Radio, Cell, CellGroup, Checkbox, CheckboxGroup, DatetimePicker, Popup } from 'vant'
+import DataSource from '@/components/dataSource/dataSource'
 
 export default {
   name: 'dynamicForms',
@@ -117,6 +133,7 @@ export default {
   },
   mixins: [Mixin],
   components: {
+    DataSource: DataSource,
     [Field.name]: Field,
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
@@ -184,6 +201,14 @@ export default {
       } else {
         this.nowTmp.val = date
       }
+    },
+    // 数据源事件
+    dataSourceEvent (tmp) {
+      console.log(tmp)
+      tmp.showPopup = true
+      if (tmp.writable) {
+        tmp.showPopup = true
+      }
     }
   },
   mounted () {},
@@ -223,11 +248,15 @@ export default {
   }
 
   #dynamicForms {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: $space * 5;
-    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding-bottom: $space * 5;
+  }
+
+  .data-source-popup {
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
   }
 </style>

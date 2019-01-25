@@ -247,12 +247,13 @@ export default {
   @import "../../assets/styles/global";
 
   #createDynamicForms {
+    position: relative;
     height: 100%;
     width: 100%;
   }
 
   .handle-btn {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;

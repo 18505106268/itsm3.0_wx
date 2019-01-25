@@ -104,5 +104,9 @@ export default {
   // 动态提交表单
   dynamicSubmit (data) {
     return handleRequest($http.post(data.api, data.json))
+  },
+  // 获取数据源
+  getDataListProcess (data) {
+    return handleRequest($http.post('selectMobile/getDataListProcess', data))
   }
 }
