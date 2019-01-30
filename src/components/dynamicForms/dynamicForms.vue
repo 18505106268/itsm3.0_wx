@@ -122,15 +122,12 @@
 </template>
 
 <script>
-import { Mixin } from '@/util/mixin'
 import { Field, RadioGroup, Radio, Cell, CellGroup, Checkbox, CheckboxGroup, DatetimePicker, Popup } from 'vant'
+import { Mixin } from '@/util/mixin'
 import DataSource from '@/components/dataSource/dataSource'
 
 export default {
   name: 'dynamicForms',
-  metaInfo: {
-    title: ''
-  },
   mixins: [Mixin],
   components: {
     DataSource: DataSource,

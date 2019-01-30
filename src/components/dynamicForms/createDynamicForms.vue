@@ -1,6 +1,12 @@
 <!-- 新增 动态表单 新增走流程 -->
 <template>
   <div id="createDynamicForms">
+    <!-- 相关服务请求 Start -->
+    <div class="see-request" @click="setRequest">
+      相关服务请求
+    </div>
+    <!-- 相关服务请求 End -->
+
     <!-- 动态表单 Start -->
     <div class="create-dynamic-forms-block">
       <dynamic-forms :fieldList="fieldList"></dynamic-forms>
@@ -22,10 +28,16 @@
     <!-- Actionsheet End -->
 
     <!-- Loading Start-->
-    <div class="mask" v-show="!fieldList">
+    <div class="mask-top" v-show="!fieldList">
       <van-loading/>
     </div>
     <!-- Loading End-->
+
+    <!-- 相关服务请求页 Start -->
+    <van-popup v-model="servePopup" position="right" :overlay="false" class="serves-popup">
+      <set-serves></set-serves>
+    </van-popup>
+    <!-- 相关服务请求页 End -->
   </div>
 </template>
 
@@ -36,6 +48,7 @@ import { Mixin } from '@/util/mixin'
 import color from '@/util/color'
 import DynamicForms from '@/components/dynamicForms/dynamicForms'
 import ProPop from '@/components/proPop/proPop'
+import setServes from '@/components/setServes/setServes'
 import { FormsUtil } from '@/components/dynamicForms/formsUtil'
 
 export default {
@@ -47,6 +60,7 @@ export default {
   components: {
     DynamicForms: DynamicForms,
     ProPop: ProPop,
+    setServes: setServes,
     [Loading.name]: Loading,
     [Popup.name]: Popup,
     [Button.name]: Button,
@@ -77,7 +91,9 @@ export default {
       // 按钮列表
       buttonList: [],
       // 是否显示上拉菜单
-      isShow: false
+      isShow: false,
+      // 显示相关服务请求
+      servePopup: false
     }
   },
   methods: {
@@ -236,6 +252,10 @@ export default {
     // 开启上拉菜单
     handle () {
       this.isShow = true
+    },
+    // 设置相关服务请求
+    setRequest () {
+      this.servePopup = true
     }
   },
   mounted () {},
@@ -259,4 +279,15 @@ export default {
     right: 0;
   }
 
+  .see-request {
+    font-size: $font-size;
+    @include right;
+    padding: $space * 1.6;
+    color: $color-blue;
+  }
+
+  .serves-popup {
+    width: 100%;
+    height: 100%;
+  }
 </style>

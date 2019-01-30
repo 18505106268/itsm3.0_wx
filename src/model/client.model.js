@@ -1,5 +1,6 @@
 // 全局 api
 import URL from '../util/parameters'
+import bus from '../util/bus'
 
 const qs = require('qs')
 const axios = require('axios')
@@ -32,7 +33,7 @@ const handleRequest = (request) => {
   return new Promise((resolve, reject) => {
     request.then(resp => {
       if (resp.data) {
-        // if (resp.data.loginTimeOut) return bus.$emit('goLogin')
+        if (resp.data.loginTimeOut) return bus.$emit('goLogin')
         resolve(resp.data)
       }
     })
@@ -108,5 +109,9 @@ export default {
   // 获取数据源
   getDataListProcess (data) {
     return handleRequest($http.post('selectMobile/getDataListProcess', data))
+  },
+  // 获取相关服务请求列表
+  getServers (data) {
+    return handleRequest($http.post('servers-desk/serversChoose-table', data))
   }
 }

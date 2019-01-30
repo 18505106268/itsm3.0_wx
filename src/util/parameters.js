@@ -1,4 +1,5 @@
 export default {
+  // imgPath: 'http://192.168.1.160:8080/ITSM3.0',
   imgPath: 'http://iyunware.com:8085/ITSM4.0',
   // imgPath: 'http://itss-china.cn',
   axiosPath: '/ITSM4.0',

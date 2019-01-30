@@ -65,6 +65,13 @@
   @include center
 }
 
+.mask-top {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .van-tabs--line .van-tabs__wrap {
   top: 0;
   position: fixed;
