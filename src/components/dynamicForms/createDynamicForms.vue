@@ -35,7 +35,7 @@
 
     <!-- 相关服务请求页 Start -->
     <van-popup v-model="servePopup" position="right" :overlay="false" class="serves-popup">
-      <set-serves></set-serves>
+      <set-serves @serverSub="serverSub" @serverCancel="serverCancel"></set-serves>
     </van-popup>
     <!-- 相关服务请求页 End -->
   </div>
@@ -48,7 +48,7 @@ import { Mixin } from '@/util/mixin'
 import color from '@/util/color'
 import DynamicForms from '@/components/dynamicForms/dynamicForms'
 import ProPop from '@/components/proPop/proPop'
-import setServes from '@/components/setServes/setServes'
+import setServes from '@/components/serves/setServe'
 import { FormsUtil } from '@/components/dynamicForms/formsUtil'
 
 export default {
@@ -256,6 +256,15 @@ export default {
     // 设置相关服务请求
     setRequest () {
       this.servePopup = true
+    },
+    // 关闭相关服务器请求
+    serverCancel () {
+      this.servePopup = false
+    },
+    // 保存相关服务请求
+    serverSub (arr) {
+      console.log(arr)
+      this.servePopup = false
     }
   },
   mounted () {},

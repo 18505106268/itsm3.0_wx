@@ -1,8 +1,8 @@
 <!-- 设置相关服务请求 -->
 <template>
-  <div id="setServes">
+  <div id="setServe">
     <!-- 新增 Start-->
-    <div class="add">新建</div>
+    <div class="add" @click="add">新建</div>
     <!-- 新增 End-->
 
     <!-- 列表 Start -->
@@ -14,34 +14,68 @@
     <!-- 底部按钮 Start-->
     <div class="btn">
       <div class="btn-item">
-        <van-button size="large" type="primary">确定</van-button>
+        <van-button size="large" type="primary" @click="sub">确定</van-button>
       </div>
       <div class="btn-item">
-        <van-button size="large">取消</van-button>
+        <van-button size="large" @click="cancel">取消</van-button>
       </div>
     </div>
     <!-- 底部按钮 End-->
+
+    <!-- 新建服务请求 Start -->
+    <van-popup v-model="servePopup" position="right" :overlay="false" class="serves-popup">
+      <new-serve @newSub="newSub" @newCancel="newCancel"></new-serve>
+    </van-popup>
+    <!-- 新建服务请求 End -->
   </div>
 </template>
 
 <script>
 import { Mixin } from '../../util/mixin'
-import { Button } from 'vant'
+import { Button, Popup } from 'vant'
+import newServe from '@/components/serves/newServe'
 
 export default {
-  name: 'setServes',
+  name: 'setServe',
   mixins: [Mixin],
   components: {
-    [Button.name]: Button
+    newServe: newServe,
+    [Button.name]: Button,
+    [Popup.name]: Popup
   },
   data () {
-    return {}
+    return {
+      // 是否显示新增服务请求页
+      servePopup: false
+    }
   },
   methods: {
     // 获取服务请求列表
-    async getServes () {}
+    async getServes () {},
+    // 确定
+    sub () {
+      this.$emit('serverSub', [])
+    },
+    // 取消
+    cancel () {
+      this.$emit('serverCancel')
+    },
+    // 新建
+    add () {
+      this.servePopup = true
+    },
+    // 新建确定
+    newSub (item) {
+      console.log(item)
+      this.servePopup = false
+    },
+    // 新建取消
+    newCancel () {
+      this.servePopup = false
+    }
   },
-  mounted () {},
+  mounted () {
+  },
   computed: {}
 }
 </script>
@@ -49,7 +83,7 @@ export default {
 <style lang="scss" scoped>
   @import "../../assets/styles/global";
 
-  #setServes {
+  #setServe {
     @include overflow();
     background-color: $color-white;
     position: relative;
@@ -85,5 +119,10 @@ export default {
     bottom: $space * 5;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  .serves-popup {
+    width: 100%;
+    height: 100%;
   }
 </style>
