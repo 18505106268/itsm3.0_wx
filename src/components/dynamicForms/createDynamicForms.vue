@@ -13,9 +13,15 @@
     </div>
     <!-- 动态表单 End-->
 
-    <!-- 弹框 Start-->
-    <pro-pop :list="roleList" listType="radio" ref="proPop" @popSub="popSub"></pro-pop>
-    <!-- 弹框 End-->
+    <!-- 多角色人员选择弹框 Start-->
+    <pro-pop :list="roleList" listType="radio" keyName="roleId" showName="roleName" ref="proPop"
+             @popSub="popSub" title_1="系统检测到您当前拥有多个角色" title_2="请选择本次提交时所使用的角色"></pro-pop>
+    <!-- 多角色人员选择弹框 End-->
+
+    <!-- 下一节点人员选择弹框 Start-->
+    <pro-pop :list="nextRoleList" keyName="userId" showName="userName" :listType="listType" ref="nextProPop"
+             @popSub="nextPopSub" title_1="下一节点人员选择"></pro-pop>
+    <!-- 下一节点人员选择弹框 End-->
 
     <!-- 操作 Start -->
     <div class="handle-btn">
@@ -88,21 +94,42 @@ export default {
       processObj: {},
       // 角色列表
       roleList: [],
+      // 下一节点人员角色列表
+      nextRoleList: [],
       // 按钮列表
       buttonList: [],
       // 是否显示上拉菜单
       isShow: false,
       // 显示相关服务请求
-      servePopup: false
+      servePopup: false,
+      // 选择弹框类型
+      listType: 'radio'
     }
   },
   methods: {
     // 弹框数据确认
-    popSub (val) {
-      this.processObj.roleId = val
+    popSub (item) {
+      this.processObj.roleId = item.roleId
       // 设置fieldList为undefined开启loading
       this.fieldList = undefined
       this.getFieldsInNode()
+    },
+    // 下一节点人员弹框数据确认
+    async nextPopSub (obj) {
+      if (Array.isArray(obj)) {
+        this.processObj.userList = JSON.stringify(obj.map(item => {
+          return { userId: item.userId, roleId: item.roleId }
+        }))
+      } else {
+        this.processObj.userList = JSON.stringify([{ userId: obj.userId, roleId: obj.roleId }])
+      }
+      let res = await model.processAssignTask(this.processObj)
+      if (res.errMsg) {
+        Notify({ message: res.errMsg, background: color.success })
+      }
+      setTimeout(() => {
+        this.$router.go(-1)
+      }, 500)
     },
     // 获取当前应用表单
     async getFromListByApp () {
@@ -152,6 +179,7 @@ export default {
       // 按钮列表
       this.buttonList = res.buttonList.map(item => {
         item.name = item.buttonName
+        item.loading = false
         return item
       })
     },
@@ -167,6 +195,7 @@ export default {
       *reason:
       *triggerId: 32
       *masterId: 81
+      *requestId: []
       *list: [{"id":"479_1","value":"单行文本"},{"id":"480_2","value":""}]
       * */
       let data = {
@@ -177,58 +206,54 @@ export default {
           pcId: this.processObj.pcId,
           appId: this.processObj.appId,
           roleId: this.processObj.roleId,
-          triggerId: this.processObj.triggerId,
-          masterId: this.processObj.keyId
+          triggerId: this.processObj.triggerId === '-1' ? '' : this.processObj.triggerId,
+          masterId: this.processObj.keyId === '-1' ? '' : this.processObj.keyId,
+          reason: !reason ? '' : reason
         },
         api: ''
-      }
-      if (reason) {
-        data.json.reason = reason
       }
       // 表单验证
       let obj = FormsUtil.getInstance().verify(this.fieldList)
       if (obj.flag !== -1) return Notify({ message: obj.prompt, background: color.error })
-      console.log(FormsUtil.getInstance().save(this.fieldList))
       data.json.list = JSON.stringify(FormsUtil.getInstance().save(this.fieldList))
+      data.json.requestId = JSON.stringify([])
       data.api = item.buttonFunc
+      item.loading = true
       let res = await model.dynamicSubmit(data)
-      console.log(res)
-      // try {
-      //   this.$vux.loading.show()
-      //   let res = await this['common/dynamicSubmit'](data)
-      //   this.$vux.loading.hide()
-      //   if (res.errMsg) {
-      //     // 完成
-      //     this.showToast(res.errMsg)
-      //     setTimeout(() => {
-      //       if (this.processObj.triggerId === '-1') {
-      //         this.$router.go(-1)
-      //       } else {
-      //         this.$router.replace('/home')
-      //       }
-      //     }, 1000)
-      //   } else {
-      //     this.processObj.pcId = res.pcId
-      //     this.processObj.nodeId = res.nextNodeId
-      //     this.processObj.pRecoId = res.recoId
-      //     this.signStart = res.signStart
-      //     this.$refs.nextRolePopup.style.height = `${window.innerHeight * 0.85 - 42}px`
-      //     // 多个角色
-      //     this.userRoleList = res.userRoleList.map((item, index) => {
-      //       return {key: `${index}_${item.userId}_${item.roleId}`, value: item.userName, inlineDesc: item.roleName}
-      //     })
-      //     // 判断是否是会签，会签默认全选
-      //     if (Number(this.signStart) === 1) {
-      //       this.userRoleListValue = this.userRoleList.map(item => {
-      //         return item.key
-      //       })
-      //     }
-      //     // 下一节点人员选择
-      //     this.showNextPopup = true
-      //   }
-      // } catch (e) {
-      //   this.$vux.loading.hide()
-      // }
+      if (res.errMsg) {
+        // 完成
+        Notify({ message: res.errMsg, background: color.success })
+        this.isShow = false
+        setTimeout(() => {
+          if (this.processObj.triggerId === '-1') {
+            this.$router.go(-1)
+          } else {
+            this.$router.replace('/home')
+          }
+        }, 200)
+      } else {
+        this.processObj.pcId = res.pcId
+        this.processObj.nodeId = res.nextNodeId
+        this.processObj.pRecoId = res.recoId
+        this.signStart = res.signStart
+        this.nextRoleList = res.userRoleList
+        // 判断是否是会签 listType
+        if (Number(this.signStart) === 1) {
+          // 会签默认选中，并且为多选
+          this.listType = 'checkbox'
+          // 显示弹框
+          this.$refs.nextProPop.show()
+          this.$nextTick(() => {
+            // 设置全部选中
+            this.$refs.nextProPop.all()
+          })
+        } else {
+          // 显示弹框
+          this.$refs.nextProPop.show()
+        }
+        item.loading = false
+        this.isShow = false
+      }
     },
     // 上拉菜单事件监听 按钮操作
     onSelect (item) {
@@ -263,7 +288,6 @@ export default {
     },
     // 保存相关服务请求
     serverSub (arr) {
-      console.log(arr)
       this.servePopup = false
     }
   },

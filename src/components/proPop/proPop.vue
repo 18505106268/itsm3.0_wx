@@ -5,8 +5,8 @@
     <div class="role">
       <!-- Title Start -->
       <div class="role-title">
-        <span>系统检测到您当前拥有多个角色</span>
-        <span>请选择本次提交时所使用的角色</span>
+        <span>{{title_1}}</span>
+        <span>{{title_2}}</span>
       </div>
       <!-- Title End -->
 
@@ -18,11 +18,11 @@
             <van-cell
               v-for="(item,index) in list"
               clickable
-              :key="item.roleId"
-              :title="item.roleName"
+              :key="item[keyName]"
+              :title="item[showName]"
               @click="toggle(index,'checkboxes')"
             >
-              <van-checkbox :name="item.roleName" ref="checkboxes"/>
+              <van-checkbox :name="item[keyName]" ref="checkboxes"/>
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
@@ -32,11 +32,11 @@
         <van-radio-group v-model="radio" v-if="listType === 'radio'">
           <van-cell-group>
             <van-cell v-for="item in list"
-                      :key="item.roleId"
-                      :title="item.roleName"
+                      :key="item[keyName]"
+                      :title="item[showName]"
                       @click="toggle('','radioes',item)"
             >
-              <van-radio :name="item.roleId" ref="radioes"/>
+              <van-radio :name="item[keyName]" ref="radioes"/>
             </van-cell>
           </van-cell-group>
         </van-radio-group>
@@ -54,7 +54,8 @@
 </template>
 
 <script>
-import { Popup, Button, RadioGroup, Radio, Checkbox, CheckboxGroup, Cell, CellGroup } from 'vant'
+import { Popup, Button, RadioGroup, Radio, Checkbox, CheckboxGroup, Cell, CellGroup, Notify } from 'vant'
+import color from '@/util/color'
 
 export default {
   name: 'proPopup',
@@ -73,6 +74,24 @@ export default {
     max: {
       type: Number,
       default: 0
+    },
+    // 绑定key名
+    keyName: {
+      type: String
+    },
+    // 绑定显示名
+    showName: {
+      type: String
+    },
+    // 顶部提示1
+    title_1: {
+      type: String,
+      default: ''
+    },
+    // 顶部提示2
+    title_2: {
+      type: String,
+      default: ''
     }
   },
   components: {
@@ -83,7 +102,8 @@ export default {
     [Radio.name]: Radio,
     [RadioGroup.name]: RadioGroup,
     [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup
+    [CellGroup.name]: CellGroup,
+    [Notify.name]: Notify
   },
   data () {
     return {
@@ -92,7 +112,9 @@ export default {
       // radio选中的值
       radio: '',
       // 是否显示组件
-      showPopup: false
+      showPopup: false,
+      // 选中的对象
+      item: undefined
     }
   },
   methods: {
@@ -103,22 +125,34 @@ export default {
           this.$refs[type][index].toggle()
           break
         case 'radioes':
-          this.radio = item.roleId
+          this.radio = item[this.keyName]
+          this.item = item
           break
       }
     },
     // 提交
     sub () {
       if (this.listType === 'checkbox') {
-        this.$emit('popSub', this.result)
+        let arr = this.list.filter(item => {
+          return this.result.some(ele => {
+            return ele === item[this.keyName]
+          })
+        })
+        if (arr.length === 0) return Notify({ message: '请至少选择一位', background: color.error })
+        this.$emit('popSub', arr)
       } else {
-        this.$emit('popSub', this.radio)
+        if (!this.item) return Notify({ message: '请至少选择一位', background: color.error })
+        this.$emit('popSub', this.item)
       }
       this.showPopup = false
     },
     // 显示组件
     show () {
       this.showPopup = true
+    },
+    // 设置多选框全部选中
+    all () {
+      this.result = this.list.map(item => item[this.keyName])
     }
   },
   mounted () {},

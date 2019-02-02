@@ -115,6 +115,30 @@
             </van-cell-group>
           </van-checkbox-group>
         </div>
+        <!--10.表单数据-->
+        <div class="item" v-else-if="Number(tmp.elementId === 10) && tmp.readable">
+          <div class="item-title">{{tmp.name}}</div>
+          <div @click="formEvent(tmp)">
+            <van-field
+              class="van-field-padding"
+              v-model="tmp.val"
+              :placeholder="tmp.writable ? `请选择${tmp.name}` : `${tmp.name}不可用`"
+              disabled="true"
+            />
+          </div>
+          <van-popup v-model="tmp.showPopup" position="bottom" class="popup-height">
+            <van-radio-group v-model="tmp.value">
+              <van-cell-group>
+                <van-cell :border="false" class="van-cell-padding" v-for="(o,index) in tmp.option" clickable
+                          :key="index"
+                          :title="o.name"
+                          @click="formToggle(tmp,o)">
+                  <van-radio :name="o.id"/>
+                </van-cell>
+              </van-cell-group>
+            </van-radio-group>
+          </van-popup>
+        </div>
       </div>
     </transition-group>
     <!-- 列表 End-->
@@ -206,6 +230,16 @@ export default {
       if (tmp.writable) {
         tmp.showPopup = true
       }
+    },
+    // 表单数据点击事件
+    formEvent (tmp) {
+      tmp.showPopup = true
+    },
+    // 表单数据选中事件
+    formToggle (tmp, o) {
+      tmp.value = o.id
+      tmp.val = o.name
+      tmp.showPopup = false
     }
   },
   mounted () {},
@@ -255,5 +289,9 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 99999;
+  }
+
+  .popup-height {
+    height: 50%;
   }
 </style>

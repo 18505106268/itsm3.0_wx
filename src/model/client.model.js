@@ -113,5 +113,9 @@ export default {
   // 获取相关服务请求列表
   getServers (data) {
     return handleRequest($http.post('servers-desk/serversChoose-table', data))
+  },
+  // 提交下一节点人员选择
+  processAssignTask (data) {
+    return handleRequest($http.post('/processUtilNew/process_assignTask', data))
   }
 }

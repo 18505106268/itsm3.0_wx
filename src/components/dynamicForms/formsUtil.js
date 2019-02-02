@@ -123,7 +123,6 @@ export class FormsUtil {
           break
         case 9:
           // 下拉框
-          console.log(item.option.filter(item => item.checked))
           if (Number(item.isMulti) === 0) {
             let arr = item.option.filter(item => item.checked)
             item.value = arr.length > 0 ? arr[0].name : ''
@@ -134,6 +133,17 @@ export class FormsUtil {
           break
         case 10:
           // 表单元素
+          item.showPopup = false
+          let arr = item.option.filter(item => item.checked)
+          if (arr.length > 0) {
+            // 有选中元素
+            item.value = arr[0].id
+            item.val = arr[0].name
+          } else {
+            // 没有选中元素，默认设置第一个元素为选中元素
+            item.value = item.option[0].id
+            item.val = item.option[0].name
+          }
           break
         case 11:
           // 审批元素
