@@ -130,7 +130,10 @@ export default {
     },
     // 列表去详情
     async goAgendaDetail (al) {
-      console.log(al)
+      // formId_nodeId_pcId_processId_appId_roleId_keyId_isHandle
+      // keyId = pcId
+      let ids = `${al.cfrm_id}_${al.nodeId}_${al.keyId}_${al.processId}_${al.appId}_${al.roleId}_${al.keyId}_1`
+      this.$router.push(`/progressDetail/${ids}`)
     },
     // tab切换事件
     tabClick (index) {

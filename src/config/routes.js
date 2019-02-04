@@ -67,5 +67,12 @@ export default [
     props: true,
     path: '/agenda/:ids',
     component: () => import('../views/agenda/agenda.vue')
+  },
+  // 详情，查看
+  {
+    name: 'agenda',
+    props: true,
+    path: '/progressDetail/:ids',
+    component: () => import('../views/progressDetail/progressDetail.vue')
   }
 ]

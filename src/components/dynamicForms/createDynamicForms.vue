@@ -145,7 +145,7 @@ export default {
         this.checkProcessLimitMenu()
       }
     },
-    // 1.验证有没有流程
+    // 1.新增：验证有没有流程
     async checkProcessLimitMenu () {
       let res = await model.checkProcessLimitMenu(this.processJson)
       if (res.errMsg) return Notify({ message: res.errMsg, background: color.error })
@@ -170,18 +170,35 @@ export default {
         this.getFieldsInNode()
       }
     },
+    // 1.处理：所需参数覆盖
+    handleData () {
+      this.processObj = this.processJson
+      this.getFieldsInNode()
+    },
     // 2.获取动态表单
     async getFieldsInNode () {
+      let flag = 0
       let res = await model.getFieldsInNode(this.processObj)
       // 表单列表 数据处理
       if (res.errMsg) return Notify({ message: res.errMsg, background: color.error })
       this.fieldList = FormsUtil.getInstance().init(res.fieldList)
       // 按钮列表
       this.buttonList = res.buttonList.map(item => {
+        // 判断按钮是否含有接受或者拒绝
+        if (item.buttonCode === 'ACCEPT' || item.buttonCode === 'REJECT') {
+          flag = 1
+        }
         item.name = item.buttonName
         item.loading = false
         return item
       })
+      // flag为1表单全部设为禁用
+      if (flag === 1) {
+        this.fieldList = this.fieldList.map(item => {
+          item.writable = false
+          return item
+        })
+      }
     },
     // 3.提交数据
     async dynamicSubmit (item, reason) {
@@ -220,16 +237,13 @@ export default {
       data.api = item.buttonFunc
       item.loading = true
       let res = await model.dynamicSubmit(data)
+      console.log(res)
       if (res.errMsg) {
         // 完成
         Notify({ message: res.errMsg, background: color.success })
         this.isShow = false
         setTimeout(() => {
-          if (this.processObj.triggerId === '-1') {
-            this.$router.go(-1)
-          } else {
-            this.$router.replace('/home')
-          }
+          this.$router.go(-1)
         }, 200)
       } else {
         this.processObj.pcId = res.pcId
@@ -259,19 +273,69 @@ export default {
     onSelect (item) {
       this.processObj.result = item.result
       this.processObj.flag = item.flag
-      switch (item.buttonCode) {
-        case 'CANCEL':
-          break
-        case 'REJECT':
-          break
-        case 'ACCEPT':
-          break
-        default:
-          if (!item.hasReason) {
-            this.dynamicSubmit(item)
-          } else {
-            // 需说明理由
-          }
+      if (Number.isNaN(Number(item.buttonCode))) {
+        switch (item.buttonCode) {
+          case 'CANCEL':
+            this.isShow = false
+            break
+          case 'REJECT':
+            // 接受
+            this.rejectOrAcceptDynamicSubmit(item)
+            break
+          case 'ACCEPT':
+            // 拒绝
+            this.rejectOrAcceptDynamicSubmit(item)
+            break
+          default:
+            if (!item.hasReason) {
+              this.dynamicSubmit(item)
+            } else {
+              // 需说明理由
+            }
+        }
+      } else {
+        // 触发器
+        // formId_appId_menuId_limitMenuId_triggerId_keyId
+        let ids = `-1_-1_-1_-1_${item.buttonCode}_${this.processJson.keyId}`
+        this.$router.push(`/add/${ids}`)
+      }
+    },
+    // 接受或拒绝
+    async rejectOrAcceptDynamicSubmit (item) {
+      let data = {
+        json: {
+          processId: this.processObj.processId,
+          nodeId: this.processObj.nodeId,
+          formId: this.processObj.formId,
+          pcId: this.processObj.pcId,
+          appId: this.processObj.appId,
+          roleId: this.processObj.roleId
+        },
+        api: ''
+      }
+      data.api = item.buttonFunc
+      let res = await model.dynamicSubmit(data)
+      if (item.buttonCode === 'ACCEPT') {
+        // 接受
+        if (!res.errMsg) {
+          // 表单列表 数据处理
+          this.fieldList = FormsUtil.getInstance().init(res.fieldList)
+
+          // 按钮列表
+          this.buttonList = res.buttonList
+          // 按钮列表
+          this.buttonList = res.buttonList.map(item => {
+            item.name = item.buttonName
+            item.loading = false
+            return item
+          })
+        } else {
+          Notify({ message: res.errMsg, background: color.error })
+        }
+      } else if (item.buttonCode === 'REJECT') {
+        // 拒绝
+        Notify({ message: res.errMsg, background: color.success })
+        this.$router.go(-1)
       }
     },
     // 开启上拉菜单

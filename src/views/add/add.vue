@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import { Mixin } from '../../util/mixin'
-import CreateDynamicForms from '../../components/dynamicForms/createDynamicForms'
+import { Mixin } from '@/util/mixin'
+import CreateDynamicForms from '@/components/dynamicForms/createDynamicForms'
 
 export default {
   name: 'add',
