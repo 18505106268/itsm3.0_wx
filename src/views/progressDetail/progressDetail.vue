@@ -17,7 +17,11 @@
 
     <!-- 处理流程 Start -->
     <div class="info" v-show="tabIndex === 1">
-      处理流程
+      <div v-for="(c,index) in circulation" :key="index">
+        <span>{{c[0]}}</span>
+        <span>{{c[1]}}</span>
+        <span>{{c[3]}}</span>
+      </div>
     </div>
     <!-- 处理流程 End-->
 
@@ -26,6 +30,7 @@
 
 <script>
 import CreateDynamicForms from '@/components/dynamicForms/createDynamicForms'
+import model from '@/model/client.model'
 import { Tab, Tabs } from 'vant'
 import { Mixin } from '../../util/mixin'
 import color from '@/util/color'
@@ -53,7 +58,9 @@ export default {
       // tab颜色
       blue: color.blue,
       // 显示模块
-      tabIndex: 0
+      tabIndex: 0,
+      // 流转信息
+      circulation: []
     }
   },
   methods: {
@@ -61,10 +68,17 @@ export default {
     tabClick (index) {
       // 当前模块下标
       this.tabIndex = index
+    },
+    // 获取流转信息
+    async getProcessCirculation () {
+      let res = await model.processCirculation({ pcId: this.ids.split('_')[2] })
+      this.circulation = res.circulation
+      console.log(this.circulation)
     }
   },
   mounted () {
     // formId_nodeId_pcId_processId_appId_roleId_keyId_isHandle
+    this.getProcessCirculation()
     let ids = this.ids.split('_')
     this.processJson.formId = ids[0]
     this.processJson.nodeId = ids[1]

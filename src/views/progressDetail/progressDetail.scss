@@ -24,3 +24,27 @@
   left: 0;
   right: 0;
 }
+
+.info {
+  font-size: $font-size;
+  box-sizing: border-box;
+  padding-top: $space;
+  > div {
+    width: 100%;
+    display: flex;
+    span {
+      display: flex;
+      @include center;
+      width: 33.3333333%;
+      box-sizing: border-box;
+      padding: $space;
+    }
+  }
+  > div:first-child {
+    font-weight: 400;
+    color: $color-black;
+  }
+  > div:not(first-child) {
+    color: $color-grey;
+  }
+}

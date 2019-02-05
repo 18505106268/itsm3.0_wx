@@ -117,5 +117,9 @@ export default {
   // 提交下一节点人员选择
   processAssignTask (data) {
     return handleRequest($http.post('/processUtilNew/process_assignTask', data))
+  },
+  // 获取流转信息
+  processCirculation (data) {
+    return handleRequest($http.post('processUtilNew/process_circulation', data))
   }
 }
