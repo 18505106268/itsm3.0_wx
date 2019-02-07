@@ -237,7 +237,6 @@ export default {
       data.api = item.buttonFunc
       item.loading = true
       let res = await model.dynamicSubmit(data)
-      console.log(res)
       if (res.errMsg) {
         // 完成
         Notify({ message: res.errMsg, background: color.success })
@@ -249,22 +248,32 @@ export default {
         this.processObj.pcId = res.pcId
         this.processObj.nodeId = res.nextNodeId
         this.processObj.pRecoId = res.recoId
-        this.signStart = res.signStart
-        this.nextRoleList = res.userRoleList
-        // 判断是否是会签 listType
-        if (Number(this.signStart) === 1) {
-          // 会签默认选中，并且为多选
-          this.listType = 'checkbox'
-          // 显示弹框
-          this.$refs.nextProPop.show()
-          this.$nextTick(() => {
-            // 设置全部选中
-            this.$refs.nextProPop.all()
-          })
-        } else {
-          // 显示弹框
-          this.$refs.nextProPop.show()
+
+        if (res.signStart) {
+          // 会签
+          this.signStart = res.signStart
+          this.nextRoleList = res.userRoleList
+          // 判断是否是会签 listType
+          if (Number(this.signStart) === 1) {
+            // 会签默认选中，并且为多选
+            this.listType = 'checkbox'
+            // 显示弹框
+            this.$refs.nextProPop.show()
+            this.$nextTick(() => {
+              // 设置全部选中：下一节点人员选择
+              this.$refs.nextProPop.all()
+            })
+          } else {
+            // 显示弹框：下一节点人员选择
+            this.$refs.nextProPop.show()
+          }
         }
+
+        if (Number(res.isAppoint) === 1) {
+          // 分派
+          console.log(res)
+        }
+
         item.loading = false
         this.isShow = false
       }
@@ -302,6 +311,7 @@ export default {
     },
     // 接受或拒绝
     async rejectOrAcceptDynamicSubmit (item) {
+      item.loading = true
       let data = {
         json: {
           processId: this.processObj.processId,
@@ -315,6 +325,8 @@ export default {
       }
       data.api = item.buttonFunc
       let res = await model.dynamicSubmit(data)
+      item.loading = false
+      this.isShow = false
       if (item.buttonCode === 'ACCEPT') {
         // 接受
         if (!res.errMsg) {
