@@ -44,6 +44,12 @@
       <set-serves @serverSub="serverSub" @serverCancel="serverCancel"></set-serves>
     </van-popup>
     <!-- 相关服务请求页 End -->
+
+    <!--分派 Start -->
+    <van-popup v-model="itemData.showPopup" position="right" :overlay="false" class="serves-popup">
+      <frame-work :itemData="itemData" @goAssign="goAssign"></frame-work>
+    </van-popup>
+    <!--分派 End -->
   </div>
 </template>
 
@@ -55,6 +61,7 @@ import color from '@/util/color'
 import DynamicForms from '@/components/dynamicForms/dynamicForms'
 import ProPop from '@/components/proPop/proPop'
 import setServes from '@/components/serves/setServe'
+import FrameWork from '@/components/frameWork/frameWork'
 import { FormsUtil } from '@/components/dynamicForms/formsUtil'
 
 export default {
@@ -66,6 +73,7 @@ export default {
   components: {
     DynamicForms: DynamicForms,
     ProPop: ProPop,
+    FrameWork: FrameWork,
     setServes: setServes,
     [Loading.name]: Loading,
     [Popup.name]: Popup,
@@ -103,7 +111,17 @@ export default {
       // 显示相关服务请求
       servePopup: false,
       // 选择弹框类型
-      listType: 'radio'
+      listType: 'radio',
+      // 分派相关
+      itemData: {
+        showPopup: false,
+        showValue: [],
+        value: [],
+        isMulti: 0,
+        name: '分派'
+      },
+      // 分派选中人员后需要的参数
+      goAssignData: {}
     }
   },
   methods: {
@@ -271,7 +289,10 @@ export default {
 
         if (Number(res.isAppoint) === 1) {
           // 分派
-          console.log(res)
+          this.goAssignData = res
+          this.goAssignData.result = item.result
+          this.goAssignData.flag = item.flag
+          this.itemData.showPopup = true
         }
 
         item.loading = false
@@ -365,6 +386,29 @@ export default {
     // 保存相关服务请求
     serverSub (arr) {
       this.servePopup = false
+    },
+    // 去分派
+    async goAssign (item) {
+      let data = {
+        json: {
+          pcId: this.goAssignData.pcId,
+          appId: this.processObj.appId,
+          processId: this.processObj.processId,
+          nodeId: this.goAssignData.nextNodeId,
+          result: this.goAssignData.result,
+          pRecoId: this.goAssignData.recoId,
+          userList: JSON.stringify([{ userId: item.id, roleId: this.processObj.roleId }]),
+          flag: this.goAssignData.flag
+        },
+        api: this.goAssignData.assignUrl
+      }
+      console.log(data)
+      let res = await model.dynamicSubmit(data)
+      // 完成
+      Notify({ message: res.errMsg, background: color.success })
+      setTimeout(() => {
+        this.$router.go(-1)
+      }, 200)
     }
   },
   mounted () {},

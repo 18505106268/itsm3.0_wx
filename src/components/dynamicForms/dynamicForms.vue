@@ -225,15 +225,15 @@ export default {
     },
     // 数据源事件
     dataSourceEvent (tmp) {
-      console.log(tmp)
-      tmp.showPopup = true
       if (tmp.writable) {
         tmp.showPopup = true
       }
     },
     // 表单数据点击事件
     formEvent (tmp) {
-      tmp.showPopup = true
+      if (tmp.writable) {
+        tmp.showPopup = true
+      }
     },
     // 表单数据选中事件
     formToggle (tmp, o) {

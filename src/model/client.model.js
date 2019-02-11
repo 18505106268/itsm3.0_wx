@@ -121,5 +121,9 @@ export default {
   // 获取流转信息
   processCirculation (data) {
     return handleRequest($http.post('processUtilNew/process_circulation', data))
+  },
+  // 获取组织架构
+  getAppointUserList (data) {
+    return handleRequest($http.post('selectMobile/getAppointUserList', data))
   }
 }
