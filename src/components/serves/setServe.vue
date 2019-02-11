@@ -7,7 +7,7 @@
 
     <!-- 列表 Start -->
     <div class="serve-content">
-      <div v-for="i in 100" :key="i">{{i}}</div>
+      <div v-for="l in list" :key="l.serversDeskId">{{l.serversCode}}</div>
     </div>
     <!-- 列表 End -->
 
@@ -31,8 +31,9 @@
 </template>
 
 <script>
-import { Mixin } from '../../util/mixin'
 import { Button, Popup } from 'vant'
+import { Mixin } from '@/util/mixin'
+import model from '@/model/client.model'
 import newServe from '@/components/serves/newServe'
 
 export default {
@@ -46,12 +47,17 @@ export default {
   data () {
     return {
       // 是否显示新增服务请求页
-      servePopup: false
+      servePopup: false,
+      // 服务请求列表
+      list: []
     }
   },
   methods: {
     // 获取服务请求列表
-    async getServes () {},
+    async getServes () {
+      let res = await model.getServers({ pcId: '-1', custId: '1' })
+      this.list = res.data
+    },
     // 确定
     sub () {
       this.$emit('serverSub', [])
@@ -75,6 +81,7 @@ export default {
     }
   },
   mounted () {
+    this.getServes()
   },
   computed: {}
 }

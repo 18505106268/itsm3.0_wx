@@ -108,13 +108,23 @@ export default {
           item.icon = this.imgPath + item.icon
           return item
         })
+        this.appList.push({
+          appName: '服务请求',
+          icon: `${this.imgPath}/views/main/images/infermationdesk.png`,
+          id: -1
+        })
       }
     },
     // 去表单列表
     goAppList (item) {
-      // 设置HTML Title
-      this[`${PATH}${SET_TITLE}`](item.appName)
-      this.$router.push(`/menuList/${item.id}`)
+      if (item.appType) {
+        // 设置HTML Title
+        this[`${PATH}${SET_TITLE}`](item.appName)
+        this.$router.push(`/menuList/${item.id}`)
+      } else {
+        this[`${PATH}${SET_TITLE}`](item.appName)
+        this.$router.push('/request')
+      }
     },
     // 去列表
     goList (ml) {

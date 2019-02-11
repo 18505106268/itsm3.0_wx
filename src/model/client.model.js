@@ -91,6 +91,18 @@ export default {
   getFromListByApp (data) {
     return handleRequest($http.post('approve-index/getFormListByApp', data))
   },
+  // 获取组织架构
+  getAppointUserList (data) {
+    return handleRequest($http.post('selectMobile/getAppointUserList', data))
+  },
+  // 获取相关服务请求列表
+  getServers (data) {
+    return handleRequest($http.post('servers-desk/serversChoose-table', data))
+  },
+  // 获取服务请求列表
+  getServersDesk (data) {
+    return handleRequest($http.post('servers-desk/serversDesk-table', data))
+  },
   /*
   * 流程相关
   * */
@@ -110,10 +122,6 @@ export default {
   getDataListProcess (data) {
     return handleRequest($http.post('selectMobile/getDataListProcess', data))
   },
-  // 获取相关服务请求列表
-  getServers (data) {
-    return handleRequest($http.post('servers-desk/serversChoose-table', data))
-  },
   // 提交下一节点人员选择
   processAssignTask (data) {
     return handleRequest($http.post('/processUtilNew/process_assignTask', data))
@@ -121,9 +129,5 @@ export default {
   // 获取流转信息
   processCirculation (data) {
     return handleRequest($http.post('processUtilNew/process_circulation', data))
-  },
-  // 获取组织架构
-  getAppointUserList (data) {
-    return handleRequest($http.post('selectMobile/getAppointUserList', data))
   }
 }

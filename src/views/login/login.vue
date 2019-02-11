@@ -43,10 +43,10 @@
 
 <script>
 import { Field, Button, Notify } from 'vant'
+import { mapGetters, mapMutations } from 'vuex'
 import { Mixin } from '@/util/mixin'
 import model from '@/model/client.model'
 import color from '@/util/color'
-import { mapGetters, mapMutations } from 'vuex'
 import { PATH, SET_LOGIN_NAME } from '@/store/types/account'
 
 export default {
@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       // 手机号
-      loginName: 'guf',
+      loginName: 'xiq',
       // 密码
       password: 'yy123456',
       // 按钮加载

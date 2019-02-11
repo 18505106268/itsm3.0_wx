@@ -74,5 +74,11 @@ export default [
     props: true,
     path: '/progressDetail/:ids',
     component: () => import('../views/progressDetail/progressDetail.vue')
+  },
+  // 固定表模块：服务请求
+  {
+    name: 'request',
+    path: '/request',
+    component: () => import('../views/request/request.vue')
   }
 ]
