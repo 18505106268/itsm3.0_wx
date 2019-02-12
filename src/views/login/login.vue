@@ -89,6 +89,7 @@ export default {
       this.isLoading = false
       if (existRes.flag) return Notify({ message: '用户名不存在', background: color.error })
       if (existRes.stop) return Notify({ message: '账号已停用', background: color.error })
+      // 保存数据
       let json = {
         loginName: this.loginName,
         password: this.password,
@@ -99,6 +100,7 @@ export default {
         openId: this['account/openId'],
         location: this['account/location']
       }
+      // 阻止多次提交并提交数据
       this.isLoading = true
       let loginRes = await model.login(json)
       if (!loginRes.flag) {
@@ -108,6 +110,7 @@ export default {
       }
       // 保存用户名
       this[`${PATH}${SET_LOGIN_NAME}`](json.loginName)
+      // 登录成功跳转至首页
       this.$router.replace('/tab/home')
     },
     // 忘记密码

@@ -80,5 +80,11 @@ export default [
     name: 'request',
     path: '/request',
     component: () => import('../views/request/request.vue')
+  },
+  // 服务台列表 > 新建服务请求
+  {
+    name: 'addRequest',
+    path: '/addRequest',
+    component: () => import('../views/request/addRequest/addRequest.vue')
   }
 ]

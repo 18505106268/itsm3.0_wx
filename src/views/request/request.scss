@@ -1,5 +1,5 @@
 #request {
-  @include overflow(auto);
+  @include overflow();
   position: relative;
 }
 
@@ -11,6 +11,7 @@
   margin-bottom: $space;
   font-size: $font-size;
   box-shadow: $shadow-layer;
+  height: 100%;
   > div {
     box-sizing: border-box;
     padding: $space;
@@ -33,4 +34,27 @@
 
 .font-grey {
   color: $color-grey-plus;
+}
+
+.list {
+  position: absolute;
+  top: $space * 4;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.title {
+  height: $space * 4;
+  background-color: $color-white;
+  box-sizing: border-box;
+  @include right;
+  padding: 0 $space;
+}
+
+.more {
+  font-size: $font-size;
+  color: $color-blue;
 }

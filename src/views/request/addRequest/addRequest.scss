@@ -1,0 +1,38 @@
+#addRequest {
+  @include overflow();
+}
+
+.form {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.item {
+  box-sizing: border-box;
+  color: $color-black;
+  padding: ($space * 2) ($space * 1.6) 0 ($space * 1.6);
+  &-title {
+    box-sizing: border-box;
+    font-size: $font-size * 1.1;
+    padding-bottom: $space * 1.2;
+  }
+}
+
+.van-cell, .item-bottom {
+  border-bottom: $border-width solid $solid-color;
+}
+
+.van-cell {
+  font: initial;
+  font-size: $font-size;
+}
+
+.van-cell-padding {
+  padding: $space;
+}
+
+.van-field-padding {
+  padding-bottom: $space * 1.8;
+}

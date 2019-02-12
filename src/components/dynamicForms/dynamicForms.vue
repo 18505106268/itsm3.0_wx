@@ -262,7 +262,7 @@ export default {
   }
 
   .van-cell, .item-bottom {
-    border-bottom: $border-width solid #ebedf0;
+    border-bottom: $border-width solid $solid-color;
   }
 
   .van-cell {

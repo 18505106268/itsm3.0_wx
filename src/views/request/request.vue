@@ -2,44 +2,56 @@
 <template>
   <div id="request">
 
+    <!-- Title Start -->
+    <div class="title">
+      <span class="more" @click="more">更多</span>
+    </div>
+    <!-- Title End -->
+
     <!-- List Start -->
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getServersDesk()">
+    <div class="list">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getServersDesk()">
 
-      <!-- List Start -->
-      <div class="request-list" v-for="rl in requestList" :key="rl.serversDeskId">
-        <div>
-          <span class="font-grey" :style="{color: rl.levelColor}">{{rl.serversCode}}</span>
-          <span class="font-grey">{{rl.createTime}}</span>
+        <!-- List Start -->
+        <div class="request-list" v-for="rl in requestList" :key="rl.serversDeskId">
+          <div>
+            <span class="font-grey" :style="{color: rl.levelColor}">{{rl.serversCode}}</span>
+            <span class="font-grey">{{rl.createTime}}</span>
+          </div>
+          <div>
+            <span>{{rl.createUser}}</span>
+            <span class="font-grey">{{rl.requestName}}</span>
+          </div>
+          <div>
+            <b>{{rl.serversStateDesc}}</b>
+          </div>
         </div>
-        <div>
-          <span>{{rl.createUser}}</span>
-          <span class="font-grey">{{rl.requestName}}</span>
-        </div>
-        <div>
-          <b>{{rl.serversStateDesc}}</b>
-        </div>
-      </div>
-      <!-- List End -->
+        <!-- List End -->
 
-    </van-list>
+      </van-list>
+    </div>
     <!-- List End-->
 
+    <!-- 上拉菜单 Start -->
+    <van-actionsheet v-model="show" :actions="actions" @select="onSelect"/>
+    <!-- 上拉菜单 End -->
   </div>
 </template>
 
 <script>
 import { Mixin } from '@/util/mixin'
-import { List } from 'vant'
+import { List, Actionsheet } from 'vant'
 import model from '@/model/client.model'
 
 export default {
   name: 'request',
   metaInfo: {
-    title: ''
+    title: '服务请求'
   },
   mixins: [Mixin],
   components: {
-    [List.name]: List
+    [List.name]: List,
+    [Actionsheet.name]: Actionsheet
   },
   data () {
     return {
@@ -50,7 +62,16 @@ export default {
       // 加载完成
       finished: false,
       // 分页起始位置
-      start: 0
+      start: 0,
+      // 是否显示上拉菜单
+      show: false,
+      actions: [
+        {
+          name: '新增',
+          loading: false,
+          to: '/addRequest'
+        }
+      ]
     }
   },
   methods: {
@@ -74,6 +95,14 @@ export default {
       }
       // 关闭加载
       this.loading = false
+    },
+    // 更多
+    more () {
+      this.show = true
+    },
+    // 上拉菜单选中后回调
+    onSelect (item) {
+      this.$router.push(item.to)
     }
   },
   mounted () {
