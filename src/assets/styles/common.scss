@@ -84,3 +84,8 @@
   width: 100%;
   @include center;
 }
+
+input[disabled], input:disabled, input.disabled {
+  color: $color-black !important;
+  opacity: 1;
+}

@@ -139,6 +139,14 @@
             </van-radio-group>
           </van-popup>
         </div>
+        <!--13.照片上传-->
+        <div class="item" v-if="Number(tmp.elementId) === 13 && tmp.readable">
+          <div class="item-title">{{tmp.name}}</div>
+          <div class="img-upload-block">
+            照片上传
+            <!--<weixin-vue-upload :itemData="tmp"></weixin-vue-upload>-->
+          </div>
+        </div>
       </div>
     </transition-group>
     <!-- 列表 End-->
@@ -293,5 +301,9 @@ export default {
 
   .popup-height {
     height: 50%;
+  }
+
+  .img-upload-block {
+    position: relative;
   }
 </style>

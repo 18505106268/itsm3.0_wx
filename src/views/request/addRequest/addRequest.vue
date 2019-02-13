@@ -68,20 +68,45 @@
           />
         </div>
       </div>
+      <!-- 类型 -->
+      <div class="item">
+        <div class="item-title">类型</div>
+        <div @click="popupEvent('isShowServersType')">
+          <van-field
+            class="van-field-padding"
+            v-model="form.data.serversTypeName"
+            placeholder="请选择请求来源"
+            disabled="true"
+          />
+        </div>
+      </div>
       <!-- 优先级 -->
       <div class="item">
         <div class="item-title">优先级</div>
         <div @click="popupEvent('isShowLevel')">
           <van-field
             class="van-field-padding"
-            v-model="levelName"
+            v-model="form.data.levelName"
             placeholder="请选择优先级"
             disabled="true"
           />
         </div>
       </div>
+      <!-- 图片上传 -->
+      <div class="item">
+        <div class="item-title">图片上传</div>
+        <div class="img-upload-block">
+          <wx-upload :itemData="itemData"></wx-upload>
+        </div>
+      </div>
     </div>
     <!-- Form End -->
+
+    <!-- 提交 Start -->
+    <div class="sub-btn">
+      <van-button type="primary" size="large" :loading="isLoading" @click="goSub">提交</van-button>
+    </div>
+    <!-- 提交 End -->
 
     <!-- 请求时间弹框 Start -->
     <van-popup v-model="isShowTime" position="bottom">
@@ -97,10 +122,10 @@
     <van-popup v-model="isShowRequest" position="bottom" class="popup-height">
       <van-radio-group v-model="form.data.requestName">
         <van-cell-group>
-          <van-cell :border="false" class="van-cell-padding" v-for="(rl,index) in requestList" clickable
-                    :key="index"
+          <van-cell :border="false" class="van-cell-padding" v-for="rl in requestList" clickable
+                    :key="rl.requestId"
                     :title="rl.requestName"
-                    @click="form.data.requestName = rl.requestName">
+                    @click="form.data.requestName = rl.requestName;form.data.requestId = rl.requestId">
             <van-radio :name="rl.requestName"/>
           </van-cell>
         </van-cell-group>
@@ -112,11 +137,26 @@
     <van-popup v-model="isShowClient" position="bottom" class="popup-height">
       <van-radio-group v-model="form.data.clientName">
         <van-cell-group>
-          <van-cell :border="false" class="van-cell-padding" v-for="(cl,index) in clientList" clickable
-                    :key="index"
-                    :title="cl.clientName"
-                    @click="form.data.clientName = cl.clientName">
-            <van-radio :name="cl.clientName"/>
+          <van-cell :border="false" class="van-cell-padding" v-for="cl in clientList" clickable
+                    :key="cl.custId"
+                    :title="cl.custName"
+                    @click="form.data.clientName = cl.custName;form.data.clientId = cl.custId">
+            <van-radio :name="cl.custName"/>
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </van-popup>
+    <!-- 客户名称弹框 End-->
+
+    <!-- 类型弹框 Start -->
+    <van-popup v-model="isShowServersType" position="bottom" class="popup-height">
+      <van-radio-group v-model="form.data.serversTypeName">
+        <van-cell-group>
+          <van-cell :border="false" class="van-cell-padding" v-for="stl in serversTypeList" clickable
+                    :key="stl.typeId"
+                    :title="stl.typeName"
+                    @click="form.data.serversTypeName = stl.typeName;form.data.serversTypeId = stl.typeId">
+            <van-radio :name="stl.typeName"/>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
@@ -125,12 +165,12 @@
 
     <!-- 优先级弹框 Start -->
     <van-popup v-model="isShowLevel" position="bottom" class="popup-height">
-      <van-radio-group v-model="levelName">
+      <van-radio-group v-model="form.data.levelName">
         <van-cell-group>
-          <van-cell :border="false" class="van-cell-padding" v-for="(ll,index) in levelList" clickable
-                    :key="index"
+          <van-cell :border="false" class="van-cell-padding" v-for="ll in levelList" clickable
+                    :key="ll.levelId"
                     :title="ll.levelName"
-                    @click="levelName = ll.levelName">
+                    @click="form.data.levelName = ll.levelName;form.data.levelId = ll.levelId">
             <van-radio :name="ll.levelName"/>
           </van-cell>
         </van-cell-group>
@@ -141,8 +181,11 @@
 </template>
 
 <script>
-import { Field, DatetimePicker, Popup, Cell, CellGroup, RadioGroup, Radio } from 'vant'
+import { Field, DatetimePicker, Popup, Cell, CellGroup, RadioGroup, Radio, Button, Notify } from 'vant'
+import model from '@/model/client.model'
+import color from '@/util/color'
 import { Mixin } from '@/util/mixin'
+import WxUpload from '@/components/wxUpload/wxUpload'
 
 export default {
   name: 'addRequest',
@@ -151,13 +194,16 @@ export default {
   },
   mixins: [Mixin],
   components: {
+    WxUpload: WxUpload,
     [Field.name]: Field,
+    [Button.name]: Button,
     [DatetimePicker.name]: DatetimePicker,
     [Popup.name]: Popup,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [RadioGroup.name]: RadioGroup,
-    [Radio.name]: Radio
+    [Radio.name]: Radio,
+    [Notify.name]: Notify
   },
   data () {
     return {
@@ -175,65 +221,32 @@ export default {
           phoneNum: '',
           // 请求人
           createUser: '',
-          // 请求来源
+          // 请求来源ID
+          requestId: '',
+          // 请求来源名称
           requestName: '',
+          // 客户ID
+          clientId: '',
           // 客户名称
           clientName: '',
-          // 优先级
-          levelId: '1'
+          // 优先级名称
+          levelName: '',
+          // 优先级ID
+          levelId: '',
+          // 类型ID
+          serversTypeId: '',
+          // 类型名称
+          serversTypeName: ''
         }
       },
-      // 优先级文字展示
-      levelName: '',
       // 请求来源数据
-      requestList: [
-        {
-          requestName: '请求来源_1'
-        },
-        {
-          requestName: '请求来源_2'
-        },
-        {
-          requestName: '请求来源_3'
-        },
-        {
-          requestName: '请求来源_4'
-        }
-      ],
+      requestList: [],
       // 客户名称数据
-      clientList: [
-        {
-          clientName: '客户名称_1'
-        },
-        {
-          clientName: '客户名称_2'
-        },
-        {
-          clientName: '客户名称_3'
-        },
-        {
-          clientName: '客户名称_4'
-        }
-      ],
+      clientList: [],
       // 优先级数据
-      levelList: [
-        {
-          levelId: '1',
-          levelName: '低级'
-        },
-        {
-          levelId: '2',
-          levelName: '中级'
-        },
-        {
-          levelId: '3',
-          levelName: '高级'
-        },
-        {
-          levelId: '4',
-          levelName: '紧急'
-        }
-      ],
+      levelList: [],
+      // 类型数据
+      serversTypeList: [],
       // 组件时间初始化
       time: new Date(),
       // 是否显示请求时间上拉菜单
@@ -243,10 +256,42 @@ export default {
       // 是否显示客户名称上拉菜单
       isShowClient: false,
       // 是否显示优先级上拉菜单
-      isShowLevel: false
+      isShowLevel: false,
+      // 是否显示类型上拉菜单
+      isShowServersType: false,
+      // 照片上传数据
+      itemData: {
+        localIds: [],
+        writable: true,
+        uploadObjArr: []
+      },
+      // 提交按钮loading控制
+      isLoading: false
     }
   },
   methods: {
+    // 表单参数初始化
+    async formDataInit () {
+      let res = await Promise.all([
+        // 获取请求来源
+        model.getRequestSourceList(),
+        // 获取类型
+        model.getServersTypeList(),
+        // 获取优先级
+        model.getServersLevelList(),
+        // 获取客户名称
+        model.getCustList()
+      ])
+      // 请求来源
+      this.requestList = res[0].flag ? res[0].serversRequestList : []
+      // 类型
+      this.serversTypeList = res[1].flag ? res[1].serversTypeList : []
+      // 优先级
+      this.levelList = res[2].flag ? res[2].serversLevelList : []
+      // 客户名称
+      this.clientList = res[3].flag ? res[3].custList : []
+      console.log(res)
+    },
     // 上拉菜单显示
     popupEvent (key) {
       if (!this.form.isDisabled) {
@@ -277,9 +322,23 @@ export default {
     // 时间控件点击取消触发事件
     cancel () {
       this.isShowTime = false
+    },
+    // 提交
+    async goSub () {
+      this.isLoading = true
+      let res = await model.saveServersDesk(this.form.data)
+      this.isLoading = false
+      if (res.keyId) {
+        Notify({ message: '保存成功', background: color.success })
+        setTimeout(() => {
+          this.$router.go(-1)
+        }, 200)
+      }
     }
   },
-  mounted () {},
+  mounted () {
+    this.formDataInit()
+  },
   computed: {}
 }
 </script>

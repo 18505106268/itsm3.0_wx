@@ -402,7 +402,6 @@ export default {
         },
         api: this.goAssignData.assignUrl
       }
-      console.log(data)
       let res = await model.dynamicSubmit(data)
       // 完成
       Notify({ message: res.errMsg, background: color.success })

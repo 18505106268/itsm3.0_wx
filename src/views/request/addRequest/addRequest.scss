@@ -3,10 +3,14 @@
 }
 
 .form {
-  height: 100%;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: $space * 5;
 }
 
 .item {
@@ -35,4 +39,16 @@
 
 .van-field-padding {
   padding-bottom: $space * 1.8;
+}
+
+.img-upload-block {
+  position: relative;
+}
+
+.sub-btn {
+  width: 100%;
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }

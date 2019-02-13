@@ -129,5 +129,28 @@ export default {
   // 获取流转信息
   processCirculation (data) {
     return handleRequest($http.post('processUtilNew/process_circulation', data))
+  },
+  /*
+  * 服务请求
+  * */
+  // 获取请求来源
+  getRequestSourceList (data) {
+    return handleRequest($http.post('selectRequest/getRequestSourceList', data))
+  },
+  // 获取类型
+  getServersTypeList (data) {
+    return handleRequest($http.post('selectRequest/getServersTypeList', data))
+  },
+  // 获取优先级
+  getServersLevelList (data) {
+    return handleRequest($http.post('selectRequest/getServersLevelList', data))
+  },
+  // 获取客户名称
+  getCustList (data) {
+    return handleRequest($http.post('selectRequest/getCustList', data))
+  },
+  // 保存服务请求
+  saveServersDesk (data) {
+    return handleRequest($http.post('servers-desk/saveServersDesk', data))
   }
 }

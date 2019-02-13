@@ -29,7 +29,7 @@
 
 <script>
 import model from '@/model/client.model'
-import { Mixin } from '../../util/mixin'
+import { Mixin } from '@/util/mixin'
 import { mapGetters } from 'vuex'
 
 import { Collapse, CollapseItem, Actionsheet, Loading } from 'vant'
