@@ -29,10 +29,10 @@
       <!-- 客户名称 -->
       <div class="item">
         <div class="item-title">客户名称</div>
-        <div @click="popupEvent('isShowClient')">
+        <div @click="popupEvent('isShowCust')">
           <van-field
             class="van-field-padding"
-            v-model="form.data.clientName"
+            v-model="form.data.custName"
             placeholder="请选择请求来源"
             disabled="true"
           />
@@ -104,7 +104,8 @@
 
     <!-- 提交 Start -->
     <div class="sub-btn">
-      <van-button type="primary" size="large" :loading="isLoading" @click="goSub">提交</van-button>
+      <van-button type="primary" size="large" :loading="isLoading" @click="goSub" :disabled="this.form.isDisabled">提交
+      </van-button>
     </div>
     <!-- 提交 End -->
 
@@ -134,13 +135,13 @@
     <!-- 请求来源弹框 End-->
 
     <!-- 客户名称弹框 Start -->
-    <van-popup v-model="isShowClient" position="bottom" class="popup-height">
-      <van-radio-group v-model="form.data.clientName">
+    <van-popup v-model="isShowCust" position="bottom" class="popup-height">
+      <van-radio-group v-model="form.data.custName">
         <van-cell-group>
-          <van-cell :border="false" class="van-cell-padding" v-for="cl in clientList" clickable
+          <van-cell :border="false" class="van-cell-padding" v-for="cl in custList" clickable
                     :key="cl.custId"
                     :title="cl.custName"
-                    @click="form.data.clientName = cl.custName;form.data.clientId = cl.custId">
+                    @click="form.data.custName = cl.custName;form.data.custId = cl.custId">
             <van-radio :name="cl.custName"/>
           </van-cell>
         </van-cell-group>
@@ -190,8 +191,9 @@ import WxUpload from '@/components/wxUpload/wxUpload'
 export default {
   name: 'addRequest',
   metaInfo: {
-    title: '新增'
+    title: '服务请求'
   },
+  props: ['id'],
   mixins: [Mixin],
   components: {
     WxUpload: WxUpload,
@@ -226,9 +228,9 @@ export default {
           // 请求来源名称
           requestName: '',
           // 客户ID
-          clientId: '',
+          custId: '',
           // 客户名称
-          clientName: '',
+          custName: '',
           // 优先级名称
           levelName: '',
           // 优先级ID
@@ -242,7 +244,7 @@ export default {
       // 请求来源数据
       requestList: [],
       // 客户名称数据
-      clientList: [],
+      custList: [],
       // 优先级数据
       levelList: [],
       // 类型数据
@@ -254,7 +256,7 @@ export default {
       // 是否显示请求来源上拉菜单
       isShowRequest: false,
       // 是否显示客户名称上拉菜单
-      isShowClient: false,
+      isShowCust: false,
       // 是否显示优先级上拉菜单
       isShowLevel: false,
       // 是否显示类型上拉菜单
@@ -289,7 +291,7 @@ export default {
       // 优先级
       this.levelList = res[2].flag ? res[2].serversLevelList : []
       // 客户名称
-      this.clientList = res[3].flag ? res[3].custList : []
+      this.custList = res[3].flag ? res[3].custList : []
       console.log(res)
     },
     // 上拉菜单显示
@@ -325,19 +327,46 @@ export default {
     },
     // 提交
     async goSub () {
+      // 阻止多次提交
       this.isLoading = true
-      let res = await model.saveServersDesk(this.form.data)
-      this.isLoading = false
-      if (res.keyId) {
-        Notify({ message: '保存成功', background: color.success })
-        setTimeout(() => {
-          this.$router.go(-1)
-        }, 200)
+      // 通过ID判断是修改还是新增
+      if (String(this.id) !== '-1') {
+        // 修改
+      } else {
+        // 新增
+        let res = await model.saveServersDesk(this.form.data)
+        this.isLoading = false
+        if (res.keyId) {
+          Notify({ message: '保存成功', background: color.success })
+          setTimeout(() => {
+            this.$router.go(-1)
+          }, 200)
+        }
+      }
+    },
+    // 获取单个服务请求数据
+    async getServersDeskInfoByDeskId () {
+      let res = await model.getServersDeskInfoByDeskId({ serversDeskId: this.id })
+      if (res.flag) {
+        // 回填数据
+        for (let key of Object.keys(this.form.data)) {
+          this.form.data[key] = res.serversDesk[key]
+        }
+        // 判断表单是否可以修改
+        if (Number(res.serversDesk.serversState) !== 1) {
+          // 禁用表单
+          this.form.isDisabled = true
+        }
       }
     }
   },
   mounted () {
+    // 表单初始化
     this.formDataInit()
+    // 通过ID判断是新增还是查看
+    if (String(this.id) !== '-1') {
+      this.getServersDeskInfoByDeskId()
+    }
   },
   computed: {}
 }

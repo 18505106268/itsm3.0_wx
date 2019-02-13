@@ -13,7 +13,7 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getServersDesk()">
 
         <!-- List Start -->
-        <div class="request-list" v-for="rl in requestList" :key="rl.serversDeskId">
+        <div class="request-list" v-for="rl in requestList" :key="rl.serversDeskId" @click="goDetail(rl.serversDeskId)">
           <div>
             <span class="font-grey" :style="{color: rl.levelColor}">{{rl.serversCode}}</span>
             <span class="font-grey">{{rl.createTime}}</span>
@@ -69,7 +69,7 @@ export default {
         {
           name: '新增',
           loading: false,
-          to: '/addRequest'
+          to: '/addRequest/-1'
         }
       ]
     }
@@ -103,6 +103,10 @@ export default {
     // 上拉菜单选中后回调
     onSelect (item) {
       this.$router.push(item.to)
+    },
+    // 查看详情
+    goDetail (id) {
+      this.$router.push(`/addRequest/${id}`)
     }
   },
   mounted () {

@@ -84,7 +84,8 @@ export default [
   // 服务台列表 > 新建服务请求
   {
     name: 'addRequest',
-    path: '/addRequest',
+    props: true,
+    path: '/addRequest/:id',
     component: () => import('../views/request/addRequest/addRequest.vue')
   }
 ]

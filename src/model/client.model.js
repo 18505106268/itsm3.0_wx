@@ -152,5 +152,9 @@ export default {
   // 保存服务请求
   saveServersDesk (data) {
     return handleRequest($http.post('servers-desk/saveServersDesk', data))
+  },
+  // 查询单个服务请求数据
+  getServersDeskInfoByDeskId (data) {
+    return handleRequest($http.post('servers-desk/getServersDeskInfoByDeskId', data))
   }
 }
