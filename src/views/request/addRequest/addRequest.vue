@@ -332,6 +332,15 @@ export default {
       // 通过ID判断是修改还是新增
       if (String(this.id) !== '-1') {
         // 修改
+        this.form.data.serversDeskId = this.id
+        this.form.data.clientId = this.form.data.custId
+        let res = await model.updateServers(this.form.data)
+        if (res.keyId) {
+          Notify({ message: '修改成功', background: color.success })
+          setTimeout(() => {
+            this.$router.go(-1)
+          }, 200)
+        }
       } else {
         // 新增
         let res = await model.saveServersDesk(this.form.data)

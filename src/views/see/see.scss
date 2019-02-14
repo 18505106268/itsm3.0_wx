@@ -1,0 +1,41 @@
+#see {
+  @include overflow();
+}
+
+.progress-query-block {
+  overflow-x: hidden;
+  overflow-y: auto;
+  > div {
+    margin-bottom: $space * .5;
+  }
+}
+
+.progress-query-item {
+  background-color: $color-list-bg;
+  box-sizing: border-box;
+  padding: 0 ($space * 1.2);
+  font-size: $space * 1.5;
+  box-shadow: $shadow-layer;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding-top: $space * 1.5;
+  }
+  > div:nth-child(1) {
+    color: $color-grey-plus;
+  }
+  > div:nth-child(2) {
+    color: $color-black;
+  }
+  > div:nth-child(3) {
+    padding-bottom: $space * .8;
+    > span:nth-child(1) {
+      color: $color-grey-plus;
+    }
+    > span:nth-child(2) {
+      color: $color-blue;
+    }
+  }
+}

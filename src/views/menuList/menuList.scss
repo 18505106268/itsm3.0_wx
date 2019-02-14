@@ -1,5 +1,5 @@
 #menuList {
-  background-color: #f0f0f1;
+  background-color: $color-bg;
   @include overflow(auto);
 }
 

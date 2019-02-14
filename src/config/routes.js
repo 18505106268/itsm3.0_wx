@@ -61,6 +61,13 @@ export default [
     path: '/add/:ids',
     component: () => import('../views/add/add.vue')
   },
+  // 查看
+  {
+    name: 'see',
+    props: true,
+    path: '/see/:ids',
+    component: () => import('../views/see/see.vue')
+  },
   // 待办，已办，抄送
   {
     name: 'agenda',

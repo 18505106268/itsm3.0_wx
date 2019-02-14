@@ -130,6 +130,10 @@ export default {
   processCirculation (data) {
     return handleRequest($http.post('processUtilNew/process_circulation', data))
   },
+  // 根据对应应用列表
+  getCreateList (data) {
+    return handleRequest($http.post('processUtilNew/getCreateList', data))
+  },
   /*
   * 服务请求
   * */
@@ -152,6 +156,10 @@ export default {
   // 保存服务请求
   saveServersDesk (data) {
     return handleRequest($http.post('servers-desk/saveServersDesk', data))
+  },
+  // 更新服务请求
+  updateServers (data) {
+    return handleRequest($http.post('servers-desk/updateServersDesk', data))
   },
   // 查询单个服务请求数据
   getServersDeskInfoByDeskId (data) {
