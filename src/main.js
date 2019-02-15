@@ -9,13 +9,14 @@ import router from './config/router'
 import bus from './util/bus'
 import App from './App.vue'
 
-import { Lazyload } from 'vant'
+import { Lazyload, Dialog } from 'vant'
 
 import './assets/styles/global.scss'
 
 Vue.config.productionTip = false
 
 Vue.use(Lazyload)
+Vue.use(Dialog)
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Meta, {

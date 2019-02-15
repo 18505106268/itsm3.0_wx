@@ -305,7 +305,6 @@ export default {
       this.levelList = res[2].flag ? res[2].serversLevelList : []
       // 客户名称
       this.custList = res[3].flag ? res[3].custList : []
-      console.log(res)
     },
     // 上拉菜单显示
     popupEvent (key) {
@@ -381,6 +380,8 @@ export default {
         if (Number(res.serversDesk.serversState) !== 1) {
           // 禁用表单
           this.form.isDisabled = true
+          // 禁用照片上传
+          this.itemData.writable = false
         }
       }
     },

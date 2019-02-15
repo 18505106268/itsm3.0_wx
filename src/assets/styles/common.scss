@@ -85,7 +85,7 @@
   @include center;
 }
 
-input[disabled], input:disabled, input.disabled {
+input[disabled], input:disabled, input.disabled, textarea[disabled], textarea:disabled, textarea.disabled {
   color: $color-black !important;
   opacity: 1;
 }

@@ -50,11 +50,19 @@
       <frame-work :itemData="itemData" @goAssign="goAssign"></frame-work>
     </van-popup>
     <!--分派 End -->
+
+    <!-- 退回理由 Start -->
+    <van-dialog v-model="isShowReason" show-cancel-button :before-close="beforeClose">
+      <div class="reason">
+        <van-field v-model="reason" placeholder="请输入理由" type="textarea" autosize/>
+      </div>
+    </van-dialog>
+    <!-- 退回里有 End -->
   </div>
 </template>
 
 <script>
-import { Loading, Popup, Button, Checkbox, CheckboxGroup, Cell, CellGroup, Actionsheet, Notify } from 'vant'
+import { Loading, Popup, Button, Checkbox, CheckboxGroup, Cell, CellGroup, Actionsheet, Notify, Field } from 'vant'
 import model from '@/model/client.model'
 import { Mixin } from '@/util/mixin'
 import color from '@/util/color'
@@ -83,6 +91,7 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Actionsheet.name]: Actionsheet,
+    [Field.name]: Field,
     [Notify.name]: Notify
   },
   props: {
@@ -108,6 +117,8 @@ export default {
       buttonList: [],
       // 是否显示上拉菜单
       isShow: false,
+      // 是否显示说明理由弹框
+      isShowReason: false,
       // 显示相关服务请求
       servePopup: false,
       // 选择弹框类型
@@ -121,7 +132,11 @@ export default {
         name: '分派'
       },
       // 分派选中人员后需要的参数
-      goAssignData: {}
+      goAssignData: {},
+      // 说明理由
+      reason: '',
+      // 选中按钮缓存
+      itemBtn: undefined
     }
   },
   methods: {
@@ -321,6 +336,8 @@ export default {
               this.dynamicSubmit(item)
             } else {
               // 需说明理由
+              this.isShowReason = true
+              this.itemBtn = item
             }
         }
       } else {
@@ -328,6 +345,19 @@ export default {
         // formId_appId_menuId_limitMenuId_triggerId_keyId
         let ids = `-1_-1_-1_-1_${item.buttonCode}_${this.processJson.keyId}`
         this.$router.push(`/add/${ids}`)
+      }
+    },
+    // 理由弹框 按钮操作
+    beforeClose (action, done) {
+      if (action === 'confirm') {
+        if (!this.reason) {
+          Notify({ message: '请输入理由', background: color.error })
+          return done(false)
+        }
+        done()
+        this.dynamicSubmit(this.itemBtn)
+      } else {
+        done()
       }
     },
     // 接受或拒绝
@@ -441,5 +471,15 @@ export default {
   .serves-popup {
     width: 100%;
     height: 100%;
+  }
+
+  .reason {
+    padding: ($space * 2) ($space * 1.5);
+    box-sizing: border-box;
+  }
+
+  .van-cell {
+    font: initial;
+    font-size: $font-size;
   }
 </style>
