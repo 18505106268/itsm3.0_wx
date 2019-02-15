@@ -92,6 +92,17 @@
           />
         </div>
       </div>
+      <!-- 描述 -->
+      <div class="item">
+        <div class="item-title">描述</div>
+        <van-field
+          v-model="form.data.serversDesc"
+          placeholder="请输入描述"
+          :disabled="form.isDisabled"
+          type="textarea"
+          autosize
+        />
+      </div>
       <!-- 图片上传 -->
       <div class="item">
         <div class="item-title">图片上传</div>
@@ -238,7 +249,9 @@ export default {
           // 类型ID
           serversTypeId: '',
           // 类型名称
-          serversTypeName: ''
+          serversTypeName: '',
+          // 描述
+          serversDesc: ''
         }
       },
       // 请求来源数据
@@ -327,6 +340,8 @@ export default {
     },
     // 提交
     async goSub () {
+      let res = this.verify()
+      if (res.verify) return Notify({ message: res.msg, background: color.error })
       // 阻止多次提交
       this.isLoading = true
       // 通过ID判断是修改还是新增
@@ -343,6 +358,7 @@ export default {
         }
       } else {
         // 新增
+        this.form.data.clientId = this.form.data.custId
         let res = await model.saveServersDesk(this.form.data)
         this.isLoading = false
         if (res.keyId) {
@@ -367,6 +383,17 @@ export default {
           this.form.isDisabled = true
         }
       }
+    },
+    // 非空判断
+    verify () {
+      let keys = ['createTime', 'requestName', 'serversSubject', 'serversTypeName', 'custName', 'createUser', 'levelName', 'phoneNum']
+      let values = ['请求时间', '请求来源', '主题', '类型', '客户名称', '请求人', '优先级', '联系电话']
+      for (let [index, key] of keys.entries()) {
+        if (!this.form.data[key]) {
+          return { verify: true, msg: `${values[index]}不能为空` }
+        }
+      }
+      return { verify: false }
     }
   },
   mounted () {

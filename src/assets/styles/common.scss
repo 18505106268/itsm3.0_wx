@@ -89,3 +89,12 @@ input[disabled], input:disabled, input.disabled {
   color: $color-black !important;
   opacity: 1;
 }
+
+.point {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: $color-grey-plus;
+  margin-top: 40%;
+  font-size: $font-size * 2;
+}
