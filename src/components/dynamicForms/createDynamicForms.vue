@@ -2,7 +2,7 @@
 <template>
   <div id="createDynamicForms">
     <!-- 相关服务请求 Start -->
-    <div class="see-request" @click="setRequest">
+    <div class="see-request" @click="setRequest" v-if="isShowRequest">
       相关服务请求
     </div>
     <!-- 相关服务请求 End -->
@@ -63,26 +63,26 @@
 
 <script>
 import { Loading, Popup, Button, Checkbox, CheckboxGroup, Cell, CellGroup, Actionsheet, Notify, Field } from 'vant'
-import model from '@/model/client.model'
+import Model from '@/model/client.model'
 import { Mixin } from '@/util/mixin'
-import color from '@/util/color'
+import Color from '@/util/color'
 import DynamicForms from '@/components/dynamicForms/dynamicForms'
 import ProPop from '@/components/proPop/proPop'
-import setServes from '@/components/serves/setServe'
+import SetServes from '@/components/serves/setServe'
 import FrameWork from '@/components/frameWork/frameWork'
 import { FormsUtil } from '@/components/dynamicForms/formsUtil'
 
 export default {
   name: 'createDynamicForms',
   metaInfo: {
-    title: ''
+    title: '新增'
   },
   mixins: [Mixin],
   components: {
     DynamicForms: DynamicForms,
     ProPop: ProPop,
     FrameWork: FrameWork,
-    setServes: setServes,
+    SetServes: SetServes,
     [Loading.name]: Loading,
     [Popup.name]: Popup,
     [Button.name]: Button,
@@ -136,7 +136,9 @@ export default {
       // 说明理由
       reason: '',
       // 选中按钮缓存
-      itemBtn: undefined
+      itemBtn: undefined,
+      // 是否显示相关服务请求
+      isShowRequest: false
     }
   },
   methods: {
@@ -156,9 +158,9 @@ export default {
       } else {
         this.processObj.userList = JSON.stringify([{ userId: obj.userId, roleId: obj.roleId }])
       }
-      let res = await model.processAssignTask(this.processObj)
+      let res = await Model.processAssignTask(this.processObj)
       if (res.errMsg) {
-        Notify({ message: res.errMsg, background: color.success })
+        Notify({ message: res.errMsg, background: Color.success })
       }
       setTimeout(() => {
         this.$router.go(-1)
@@ -166,7 +168,7 @@ export default {
     },
     // 获取当前应用表单
     async getFromListByApp () {
-      let res = await model.getFromListByApp(this.processJson)
+      let res = await Model.getFromListByApp(this.processJson)
       this.formList = res.formList
       if (this.formList.length > 1) {
         // 多张表单
@@ -180,8 +182,8 @@ export default {
     },
     // 1.新增：验证有没有流程
     async checkProcessLimitMenu () {
-      let res = await model.checkProcessLimitMenu(this.processJson)
-      if (res.errMsg) return Notify({ message: res.errMsg, background: color.error })
+      let res = await Model.checkProcessLimitMenu(this.processJson)
+      if (res.errMsg) return Notify({ message: res.errMsg, background: Color.error })
       this.processObj.pcId = -1
       this.processObj.formId = res.formId
       this.processObj.nodeId = res.nodeId
@@ -211,9 +213,9 @@ export default {
     // 2.获取动态表单
     async getFieldsInNode () {
       let flag = 0
-      let res = await model.getFieldsInNode(this.processObj)
+      let res = await Model.getFieldsInNode(this.processObj)
       // 表单列表 数据处理
-      if (res.errMsg) return Notify({ message: res.errMsg, background: color.error })
+      if (res.errMsg) return Notify({ message: res.errMsg, background: Color.error })
       this.fieldList = FormsUtil.getInstance().init(res.fieldList)
       // 按钮列表
       this.buttonList = res.buttonList.map(item => {
@@ -232,6 +234,8 @@ export default {
           return item
         })
       }
+      // 判断是否要显示相关服务请求
+      this.isShowRequest = !!res.isRequest
     },
     // 3.提交数据
     async dynamicSubmit (item, reason) {
@@ -264,15 +268,15 @@ export default {
       }
       // 表单验证
       let obj = FormsUtil.getInstance().verify(this.fieldList)
-      if (obj.flag !== -1) return Notify({ message: obj.prompt, background: color.error })
+      if (obj.flag !== -1) return Notify({ message: obj.prompt, background: Color.error })
       data.json.list = JSON.stringify(FormsUtil.getInstance().save(this.fieldList))
       data.json.requestId = JSON.stringify([])
       data.api = item.buttonFunc
       item.loading = true
-      let res = await model.dynamicSubmit(data)
+      let res = await Model.dynamicSubmit(data)
       if (res.errMsg) {
         // 完成
-        Notify({ message: res.errMsg, background: color.success })
+        Notify({ message: res.errMsg, background: Color.success })
         this.isShow = false
         setTimeout(() => {
           this.$router.go(-1)
@@ -351,7 +355,7 @@ export default {
     beforeClose (action, done) {
       if (action === 'confirm') {
         if (!this.reason) {
-          Notify({ message: '请输入理由', background: color.error })
+          Notify({ message: '请输入理由', background: Color.error })
           return done(false)
         }
         done()
@@ -375,7 +379,7 @@ export default {
         api: ''
       }
       data.api = item.buttonFunc
-      let res = await model.dynamicSubmit(data)
+      let res = await Model.dynamicSubmit(data)
       item.loading = false
       this.isShow = false
       if (item.buttonCode === 'ACCEPT') {
@@ -393,11 +397,11 @@ export default {
             return item
           })
         } else {
-          Notify({ message: res.errMsg, background: color.error })
+          Notify({ message: res.errMsg, background: Color.error })
         }
       } else if (item.buttonCode === 'REJECT') {
         // 拒绝
-        Notify({ message: res.errMsg, background: color.success })
+        Notify({ message: res.errMsg, background: Color.success })
         this.$router.go(-1)
       }
     },
@@ -432,9 +436,9 @@ export default {
         },
         api: this.goAssignData.assignUrl
       }
-      let res = await model.dynamicSubmit(data)
+      let res = await Model.dynamicSubmit(data)
       // 完成
-      Notify({ message: res.errMsg, background: color.success })
+      Notify({ message: res.errMsg, background: Color.success })
       setTimeout(() => {
         this.$router.go(-1)
       }, 200)
