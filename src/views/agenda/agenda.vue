@@ -40,6 +40,7 @@ import { mapGetters } from 'vuex'
 import { Mixin } from '@/util/mixin'
 import model from '@/model/client.model'
 import color from '@/util/color'
+import { Tools } from '@/util/tools'
 
 export default {
   name: 'agenda',
@@ -111,6 +112,9 @@ export default {
           break
         case 'done':
           this.agendaJson.choose = -3
+          let time = Tools.getTime(new Date(), 'yyyy-MM-dd')
+          this.agendaJson.startTime = `${time} 00:00`
+          this.agendaJson.endTime = `${time} 23:30`
           res = await model.undoOrDone(this.agendaJson)
           break
         case 'info':
