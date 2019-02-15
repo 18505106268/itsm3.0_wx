@@ -143,8 +143,7 @@
         <div class="item" v-if="Number(tmp.elementId) === 13 && tmp.readable">
           <div class="item-title">{{tmp.name}}</div>
           <div class="img-upload-block">
-            照片上传
-            <!--<weixin-vue-upload :itemData="tmp"></weixin-vue-upload>-->
+            <wx-upload :itemData="tmp"></wx-upload>
           </div>
         </div>
       </div>
@@ -157,12 +156,14 @@
 import { Field, RadioGroup, Radio, Cell, CellGroup, Checkbox, CheckboxGroup, DatetimePicker, Popup } from 'vant'
 import { Mixin } from '@/util/mixin'
 import DataSource from '@/components/dataSource/dataSource'
+import WxUpload from '@/components/wxUpload/wxUpload'
 
 export default {
   name: 'dynamicForms',
   mixins: [Mixin],
   components: {
     DataSource: DataSource,
+    WxUpload: WxUpload,
     [Field.name]: Field,
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
