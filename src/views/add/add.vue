@@ -1,7 +1,9 @@
 <!-- 新增 -->
 <template>
   <div id="add">
-    <create-dynamic-forms :processJson="processJson" ref="createDynamicForms"></create-dynamic-forms>
+    <keep-alive>
+      <create-dynamic-forms :processJson="processJson" ref="createDynamicForms"></create-dynamic-forms>
+    </keep-alive>
   </div>
 </template>
 

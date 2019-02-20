@@ -1,7 +1,7 @@
 <!-- 底部导航页  -->
 <template>
   <div id="tab">
-    <router-view></router-view>
+    <router-view/>
     <!-- 底部导航 Start-->
     <div class="tab">
       <van-tabbar :fixed="true" v-model="active">

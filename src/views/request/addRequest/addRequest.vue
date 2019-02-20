@@ -56,18 +56,6 @@
           <van-field class="van-field-padding" v-model="form.data.createTime" placeholder="请选择请求时间" disabled="true"/>
         </div>
       </div>
-      <!-- 请求来源 -->
-      <div class="item">
-        <div class="item-title">请求来源</div>
-        <div @click="popupEvent('isShowRequest')">
-          <van-field
-            class="van-field-padding"
-            v-model="form.data.requestName"
-            placeholder="请选择请求来源"
-            disabled="true"
-          />
-        </div>
-      </div>
       <!-- 类型 -->
       <div class="item">
         <div class="item-title">类型</div>
@@ -129,21 +117,6 @@
       />
     </van-popup>
     <!-- 请求时间弹框 End -->
-
-    <!-- 请求来源弹框 Start -->
-    <van-popup v-model="isShowRequest" position="bottom" class="popup-height">
-      <van-radio-group v-model="form.data.requestName">
-        <van-cell-group>
-          <van-cell :border="false" class="van-cell-padding" v-for="rl in requestList" clickable
-                    :key="rl.requestId"
-                    :title="rl.requestName"
-                    @click="form.data.requestName = rl.requestName;form.data.requestId = rl.requestId">
-            <van-radio :name="rl.requestName"/>
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-    </van-popup>
-    <!-- 请求来源弹框 End-->
 
     <!-- 客户名称弹框 Start -->
     <van-popup v-model="isShowCust" position="bottom" class="popup-height">
@@ -235,9 +208,9 @@ export default {
           // 请求人
           createUser: '',
           // 请求来源ID
-          requestId: '',
+          requestId: '2',
           // 请求来源名称
-          requestName: '',
+          requestName: '微信',
           // 客户ID
           custId: '',
           // 客户名称
@@ -254,8 +227,6 @@ export default {
           serversDesc: ''
         }
       },
-      // 请求来源数据
-      requestList: [],
       // 客户名称数据
       custList: [],
       // 优先级数据
@@ -266,8 +237,6 @@ export default {
       time: new Date(),
       // 是否显示请求时间上拉菜单
       isShowTime: false,
-      // 是否显示请求来源上拉菜单
-      isShowRequest: false,
       // 是否显示客户名称上拉菜单
       isShowCust: false,
       // 是否显示优先级上拉菜单
@@ -288,8 +257,6 @@ export default {
     // 表单参数初始化
     async formDataInit () {
       let res = await Promise.all([
-        // 获取请求来源
-        model.getRequestSourceList(),
         // 获取类型
         model.getServersTypeList(),
         // 获取优先级
@@ -297,14 +264,12 @@ export default {
         // 获取客户名称
         model.getCustList()
       ])
-      // 请求来源
-      this.requestList = res[0].flag ? res[0].serversRequestList : []
       // 类型
-      this.serversTypeList = res[1].flag ? res[1].serversTypeList : []
+      this.serversTypeList = res[0].flag ? res[0].serversTypeList : []
       // 优先级
-      this.levelList = res[2].flag ? res[2].serversLevelList : []
+      this.levelList = res[1].flag ? res[1].serversLevelList : []
       // 客户名称
-      this.custList = res[3].flag ? res[3].custList : []
+      this.custList = res[2].flag ? res[2].custList : []
     },
     // 上拉菜单显示
     popupEvent (key) {
@@ -387,8 +352,8 @@ export default {
     },
     // 非空判断
     verify () {
-      let keys = ['createTime', 'requestName', 'serversSubject', 'serversTypeName', 'custName', 'createUser', 'levelName', 'phoneNum']
-      let values = ['请求时间', '请求来源', '主题', '类型', '客户名称', '请求人', '优先级', '联系电话']
+      let keys = ['createTime', 'serversSubject', 'serversTypeName', 'custName', 'createUser', 'levelName', 'phoneNum']
+      let values = ['请求时间', '主题', '类型', '客户名称', '请求人', '优先级', '联系电话']
       for (let [index, key] of keys.entries()) {
         if (!this.form.data[key]) {
           return { verify: true, msg: `${values[index]}不能为空` }

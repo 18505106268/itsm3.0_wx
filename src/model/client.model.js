@@ -137,10 +137,6 @@ export default {
   /*
   * 服务请求
   * */
-  // 获取请求来源
-  getRequestSourceList (data) {
-    return handleRequest($http.post('selectRequest/getRequestSourceList', data))
-  },
   // 获取类型
   getServersTypeList (data) {
     return handleRequest($http.post('selectRequest/getServersTypeList', data))

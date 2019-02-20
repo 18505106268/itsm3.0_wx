@@ -41,7 +41,7 @@
 
     <!-- 相关服务请求页 Start -->
     <van-popup v-model="servePopup" position="right" :overlay="false" class="serves-popup">
-      <set-serves @serverSub="serverSub" @serverCancel="serverCancel"></set-serves>
+      <set-serves @serverSub="serverSub" @serverCancel="serverCancel" :serveData="serveData"></set-serves>
     </van-popup>
     <!-- 相关服务请求页 End -->
 
@@ -138,7 +138,13 @@ export default {
       // 选中按钮缓存
       itemBtn: undefined,
       // 是否显示相关服务请求
-      isShowRequest: false
+      isShowRequest: false,
+      // 相关服务请求
+      requestId: [],
+      // 服务请求相关数据
+      serveData: {
+        pcId: -1
+      }
     }
   },
   methods: {
@@ -182,6 +188,9 @@ export default {
     },
     // 1.新增：验证有没有流程
     async checkProcessLimitMenu () {
+      // 相关服务请求设置为新增状态
+      this.serveData.pcId = -1
+      // API送出
       let res = await Model.checkProcessLimitMenu(this.processJson)
       if (res.errMsg) return Notify({ message: res.errMsg, background: Color.error })
       this.processObj.pcId = -1
@@ -208,6 +217,8 @@ export default {
     // 1.处理：所需参数覆盖
     handleData () {
       this.processObj = this.processJson
+      // 相关服务请求设置为处理状态
+      this.serveData.pcId = this.processJson.pcId
       this.getFieldsInNode()
     },
     // 2.获取动态表单
@@ -270,7 +281,7 @@ export default {
       let obj = FormsUtil.getInstance().verify(this.fieldList)
       if (obj.flag !== -1) return Notify({ message: obj.prompt, background: Color.error })
       data.json.list = JSON.stringify(FormsUtil.getInstance().save(this.fieldList))
-      data.json.requestId = JSON.stringify([])
+      data.json.requestId = JSON.stringify(this.requestId)
       data.api = item.buttonFunc
       item.loading = true
       let res = await Model.dynamicSubmit(data)
@@ -418,7 +429,8 @@ export default {
       this.servePopup = false
     },
     // 保存相关服务请求
-    serverSub (arr) {
+    serverSub (list) {
+      this.requestId = list
       this.servePopup = false
     },
     // 去分派
