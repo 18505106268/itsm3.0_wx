@@ -24,9 +24,9 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getServes()">
 
         <!-- List Start -->
-        <div class="list" v-for="l in list" :key="l.serversDeskId">
+        <div class="list" v-for="(l,index) in list" :key="l.serversDeskId">
 
-          <van-checkbox v-model="l.selected">
+          <van-checkbox v-model="l.selected" @change="checkboxChange(l)">
             <div class="server-item">
 
               <div class="server-item-title">
@@ -43,7 +43,14 @@
           <div class="server-btn">
             <van-button class="server-btn-space" size="small" type="primary" @click="goDetail(l.serversDeskId)">查看
             </van-button>
-            <van-button size="small" type="primary">开始处理</van-button>
+            <van-button size="small" type="primary" v-if="l.dealFlag === 0 & serveData.pcId !== -1"
+                        @click="startHandle(l,index)" :loading="l.loading" ref="sHandle">
+              开始处理
+            </van-button>
+            <van-button size="small" type="primary" v-if="l.dealFlag === 1 & serveData.pcId !== -1"
+                        @click="endHandle(l,index)" :loading="l.loading">
+              处理结束
+            </van-button>
           </div>
 
         </div>
@@ -77,12 +84,39 @@
                   :show-toolbar="true" title="客户"/>
     </van-popup>
     <!-- 客户选择 End -->
+
+    <!-- 处理结束 Start -->
+    <van-dialog v-model="isShowHandle" show-cancel-button :before-close="beforeClose">
+      <div class="handle">
+        <div class="item">
+          <div class="item-title">原因</div>
+          <van-field
+            v-model="reason"
+            placeholder="请输入原因"
+            type="textarea"
+            autosize
+          />
+        </div>
+        <div class="item">
+          <div class="item-title">处理方式</div>
+          <van-field
+            v-model="mth"
+            placeholder="请输入原因"
+            type="textarea"
+            autosize
+          />
+        </div>
+      </div>
+    </van-dialog>
+    <!-- 处理结束 End -->
+
   </div>
 </template>
 
 <script>
-import { Button, Popup, Picker, List, Checkbox, CheckboxGroup } from 'vant'
+import { Button, Popup, Picker, List, Checkbox, CheckboxGroup, Notify, Field } from 'vant'
 import { Mixin } from '@/util/mixin'
+import Color from '@/util/color'
 import model from '@/model/client.model'
 import NewServe from '@/components/serves/newServe'
 
@@ -96,7 +130,9 @@ export default {
     [Picker.name]: Picker,
     [List.name]: List,
     [Checkbox.name]: Checkbox,
-    [CheckboxGroup.name]: CheckboxGroup
+    [CheckboxGroup.name]: CheckboxGroup,
+    [Field.name]: Field,
+    [Notify.name]: Notify
   },
   props: {
     serveData: {
@@ -134,7 +170,13 @@ export default {
       // 服务请求表单是否禁用
       setDisabled: false,
       // 是否渲染服務請求單
-      isShowServer: false
+      isShowServer: false,
+      // 是否显示处理方法弹窗
+      isShowHandle: false,
+      // 处理方法原因
+      reason: '',
+      // 处理方式
+      mth: ''
     }
   },
   methods: {
@@ -148,6 +190,7 @@ export default {
       let res = await model.getServers(this.serveJson)
       if (res.data.length !== 0) {
         this.list = [...this.list, ...res.data]
+        this.list.forEach((item) => { item.loading = false })
         this.serveJson.start += 10
       } else {
         // 显示底部提示
@@ -226,10 +269,49 @@ export default {
         // 编辑传入选中ID
         this.$refs.newServe.init(true, String(id))
       })
+    },
+    // 开始处理
+    async startHandle (item, index) {
+      item.loading = true
+      let res = await model.startDeal({ requestId: item.serversDeskId, pcId: this.serveData.pcId })
+      item.loading = false
+      // false API调用失败
+      if (!res.flag) return Notify({ message: '处理异常', background: Color.error })
+      // 开始处理成功，显示处理结束按钮
+      item.dealFlag = 1
+    },
+    // 处理结束
+    endHandle (item, index) {
+      console.log(item, index)
+      this.isShowHandle = true
+    },
+    // 处理结束弹框 按钮操作
+    beforeClose (action, done) {
+      if (action === 'confirm') {
+        if (!this.mth) {
+          Notify({ message: '请填写处理方式', background: Color.error })
+          return done(false)
+        }
+        console.log(this.mth)
+        console.log(this.reason)
+        done()
+      } else {
+        done()
+      }
+    },
+    // 多选框选中事件监听
+    checkboxChange (item) {
+      // 判断当前元素是否选中
+      if (item.selected) {
+        // 选中下显示开始处理按钮
+        item.dealFlag = 0
+      } else {
+        // 未选中隐藏开始处理按钮
+        item.dealFlag = 3
+      }
     }
   },
   mounted () {
-    console.log(this.serveData)
     this.getServes()
     this.getCustList()
   },
@@ -338,6 +420,27 @@ export default {
     margin-bottom: $space;
     &-space {
       margin-right: $space;
+    }
+  }
+
+  .handle {
+    box-sizing: border-box;
+    padding: $space;
+  }
+
+  .van-cell {
+    font: initial;
+    font-size: $font-size;
+  }
+
+  .item {
+    box-sizing: border-box;
+    color: $color-black;
+    padding: ($space * 2) ($space * 1.6) 0 ($space * 1.6);
+    &-title {
+      box-sizing: border-box;
+      font-size: $font-size * 1.1;
+      padding-bottom: $space * 1.2;
     }
   }
 </style>

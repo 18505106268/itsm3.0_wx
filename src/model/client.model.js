@@ -160,5 +160,9 @@ export default {
   // 查询单个服务请求数据
   getServersDeskInfoByDeskId (data) {
     return handleRequest($http.post('servers-desk/getServersDeskInfoByDeskId', data))
+  },
+  // 开始处理
+  startDeal (data) {
+    return handleRequest($http.post('servers-solution/start-deal', data))
   }
 }

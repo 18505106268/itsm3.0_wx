@@ -43,11 +43,11 @@
 </template>
 
 <script>
-import { Field, Button, Notify } from 'vant'
-import { Mixin } from '../../util/mixin'
-import model from '../../model/client.model'
-import color from '../../util/color'
 import { mapGetters, mapActions } from 'vuex'
+import { Field, Button, Notify } from 'vant'
+import { Mixin } from '@/util/mixin'
+import model from '@/model/client.model'
+import Color from '@/util/color'
 
 export default {
   name: 'check',
@@ -107,19 +107,19 @@ export default {
     },
     // 完成提交
     async sub () {
-      if (!this.code) return Notify({ message: '请输入验证码', background: color.warning })
-      if (this['account/serveCode'] !== this.code) return Notify({ message: '验证码错误', background: color.error })
-      if (!this.password) return Notify({ message: '请输入重置密码', background: color.warning })
+      if (!this.code) return Notify({ message: '请输入验证码', background: Color.warning })
+      if (this['account/serveCode'] !== this.code) return Notify({ message: '验证码错误', background: Color.error })
+      if (!this.password) return Notify({ message: '请输入重置密码', background: Color.warning })
       this.isLoading = true
       // 重置密码
       let res = await model.resetPassword({ id: this['account/companyId'], password: this.password })
       if (res.flag) {
-        Notify({ message: '密码修改成功', background: color.success })
+        Notify({ message: '密码修改成功', background: Color.success })
         setTimeout(() => {
           this.$router.replace(`/login`)
         }, 500)
       } else {
-        Notify({ message: 'ERROR', background: color.error })
+        Notify({ message: 'ERROR', background: Color.error })
       }
     }
   },

@@ -27,6 +27,32 @@
     </div>
     <!-- 信息 End-->
 
+    <!-- 固定表应用 Start-->
+    <div class="container">
+      <div class="child">
+        <!-- Title Start-->
+        <div class="title">常用应用</div>
+        <!-- Title End-->
+
+        <!-- List Start-->
+        <div class="list">
+          <transition-group tag="div" name="van-fade">
+            <div v-for="fal in fixedAppList" :key="fal.id" @click="goAppList(fal)">
+            <span>
+              <img :src="fal.icon"/>
+            </span>
+              <span>{{fal.appName}}</span>
+            </div>
+          </transition-group>
+          <span class="loading" v-show="!appList">
+            <van-loading/>
+          </span>
+        </div>
+        <!-- List End-->
+      </div>
+    </div>
+    <!-- 固定表应用 End-->
+
     <!-- 项目管理 Start-->
     <div class="container">
       <div class="child">
@@ -84,7 +110,13 @@ export default {
       // 工作台
       menuList: undefined,
       // 应用列表
-      appList: undefined
+      appList: undefined,
+      // 固定表应用列
+      fixedAppList: [{
+        appName: '服务请求',
+        icon: `${this.imgPath}/views/main/images/infermationdesk.png`,
+        id: -1
+      }]
     }
   },
   methods: {
@@ -107,11 +139,6 @@ export default {
           // this.imgPath
           item.icon = this.imgPath + item.icon
           return item
-        })
-        this.appList.push({
-          appName: '服务请求',
-          icon: `${this.imgPath}/views/main/images/infermationdesk.png`,
-          id: -1
         })
       }
     },

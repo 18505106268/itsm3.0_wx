@@ -73,7 +73,6 @@ export default {
     async getProcessCirculation () {
       let res = await model.processCirculation({ pcId: this.ids.split('_')[2] })
       this.circulation = res.circulation
-      console.log(this.circulation)
     }
   },
   mounted () {
