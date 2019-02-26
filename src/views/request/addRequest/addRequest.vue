@@ -224,7 +224,9 @@ export default {
           // 类型名称
           serversTypeName: '',
           // 描述
-          serversDesc: ''
+          serversDesc: '',
+          // 照片上传路径
+          imagesWX: ''
         }
       },
       // 客户名称数据
@@ -306,10 +308,21 @@ export default {
     async goSub () {
       let res = this.verify()
       if (res.verify) return Notify({ message: res.msg, background: color.error })
+      //  保存照片上传数据
+      let serverIds = this.itemData.uploadObjArr.map(_item => {
+        return _item.serverId
+      }).join()
+
       // 阻止多次提交
       this.isLoading = true
       // 通过ID判断是修改还是新增
       if (String(this.id) !== '-1') {
+        let oldImg = this.itemData.localIds.filter(i => i.startsWith('http')).join()
+        if (oldImg || serverIds) {
+          this.from.data.imagesWX = `${oldImg}#${serverIds}`
+        } else {
+          this.form.data.imagesWX = ''
+        }
         // 修改
         this.form.data.serversDeskId = this.id
         this.form.data.clientId = this.form.data.custId
@@ -322,6 +335,7 @@ export default {
         }
       } else {
         // 新增
+        this.from.data.imagesWX = serverIds
         this.form.data.clientId = this.form.data.custId
         let res = await model.saveServersDesk(this.form.data)
         this.isLoading = false
