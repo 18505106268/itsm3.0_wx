@@ -2,7 +2,7 @@
 <template>
   <div id="createDynamicForms">
     <!-- 相关服务请求 Start -->
-    <div class="see-request" @click="setRequest" v-if="isShowRequest">
+    <div class="see-request" @click="setRequest" v-if="isShowRequest" :style="{'margin-top': `${marginTop}rem`}">
       相关服务请求
     </div>
     <!-- 相关服务请求 End -->
@@ -41,7 +41,7 @@
 
     <!-- 相关服务请求页 Start -->
     <van-popup v-model="servePopup" position="right" :overlay="false" class="serves-popup">
-      <set-serves @serverSub="serverSub" @serverCancel="serverCancel" :serveData="serveData"></set-serves>
+      <set-serves @serverSub="serverSub" @serverCancel="serverCancel" :serveData="serveData" ref="serves"></set-serves>
     </van-popup>
     <!-- 相关服务请求页 End -->
 
@@ -143,8 +143,14 @@ export default {
       requestId: [],
       // 服务请求相关数据
       serveData: {
-        pcId: -1
-      }
+        pcId: -1,
+        // 客戶ID
+        custId: -1,
+        // 是否可編輯
+        isServiceEdit: 1
+      },
+      // 相关服务请求顶部间距
+      marginTop: 0
     }
   },
   methods: {
@@ -216,6 +222,7 @@ export default {
     },
     // 1.处理：所需参数覆盖
     handleData () {
+      this.marginTop = 0.9
       this.processObj = this.processJson
       // 相关服务请求设置为处理状态
       this.serveData.pcId = this.processJson.pcId
@@ -247,6 +254,10 @@ export default {
       }
       // 判断是否要显示相关服务请求
       this.isShowRequest = !!res.isRequest
+      // 写入客户ID
+      this.serveData.custId = res.custId
+      // 是否可編輯
+      this.serveData.isServiceEdit = res.isServiceEdit
     },
     // 3.提交数据
     async dynamicSubmit (item, reason) {
@@ -407,6 +418,12 @@ export default {
             item.loading = false
             return item
           })
+          // 设置相关服务请求为可用
+          this.serveData.isServiceEdit = res.isServiceEdit
+          // 设置list为可操作状态
+          if (this.$refs.serves) {
+            this.$refs.serves.checkboxEvent()
+          }
         } else {
           Notify({ message: res.errMsg, background: Color.error })
         }
@@ -429,7 +446,8 @@ export default {
       this.servePopup = false
     },
     // 保存相关服务请求
-    serverSub (list) {
+    async serverSub (list) {
+      await Model.saveRequestIndex({ pcId: this.serveData.pcId, requestIds: JSON.stringify(list) })
       this.requestId = list
       this.servePopup = false
     },
@@ -481,6 +499,7 @@ export default {
     font-size: $font-size;
     @include right;
     padding: $space * 1.6;
+    margin-top: $space * 3.5;
     color: $color-blue;
   }
 

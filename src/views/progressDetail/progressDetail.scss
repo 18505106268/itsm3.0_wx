@@ -3,32 +3,10 @@
   padding-top: $space;
 }
 
-.tab {
-  box-sizing: border-box;
-  padding-top: $space * 5;
-}
-
-.form-list, .info {
-  position: absolute;
-  right: 0;
-  left: 0;
-  bottom: $space * 5;
-  top: $space * 4;
-  overflow-x: auto;
-  overflow-y: auto;
-}
-
-.handle-btn {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
 .info {
   font-size: $font-size;
   box-sizing: border-box;
-  padding-top: $space;
+  padding-top: $space * 4;
   > div {
     width: 100%;
     display: flex;

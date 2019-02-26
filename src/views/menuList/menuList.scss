@@ -15,6 +15,7 @@
     margin-right: $space;
     border-radius: $border-radius * .5;
     font-size: $font-size;
+    white-space: nowrap;
   }
   $color: (
           $color-0,

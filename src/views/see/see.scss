@@ -1,5 +1,5 @@
 #see {
-  @include overflow();
+  @include overflow('auto');
 }
 
 .progress-query-block {

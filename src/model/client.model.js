@@ -161,8 +161,16 @@ export default {
   getServersDeskInfoByDeskId (data) {
     return handleRequest($http.post('servers-desk/getServersDeskInfoByDeskId', data))
   },
+  // 保存当前选中服务请求
+  saveRequestIndex (data) {
+    return handleRequest($http.post('servers-desk/saveRequestIndex', data))
+  },
   // 开始处理
   startDeal (data) {
     return handleRequest($http.post('servers-solution/start-deal', data))
+  },
+  // 处理结束
+  finishDeal (data) {
+    return handleRequest($http.post('servers-solution/finish-deal', data))
   }
 }

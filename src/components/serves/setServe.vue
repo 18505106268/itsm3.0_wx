@@ -12,7 +12,7 @@
       <!-- 篩選 End-->
 
       <!-- 新增 Start-->
-      <div class="title-add" @click="add">新建</div>
+      <div class="title-add" @click="add" v-if="serveData.isServiceEdit === 1">新建</div>
       <!-- 新增 End-->
 
     </div>
@@ -24,9 +24,9 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getServes()">
 
         <!-- List Start -->
-        <div class="list" v-for="(l,index) in list" :key="l.serversDeskId">
+        <div class="list" v-for="(l,index) in list" :key="index">
 
-          <van-checkbox v-model="l.selected" @change="checkboxChange(l)">
+          <van-checkbox :disabled="l.disabled" v-model="l.selected" @change="checkboxChange(l)">
             <div class="server-item">
 
               <div class="server-item-title">
@@ -43,11 +43,13 @@
           <div class="server-btn">
             <van-button class="server-btn-space" size="small" type="primary" @click="goDetail(l.serversDeskId)">查看
             </van-button>
-            <van-button size="small" type="primary" v-if="l.dealFlag === 0 & serveData.pcId !== -1"
-                        @click="startHandle(l,index)" :loading="l.loading" ref="sHandle">
+            <van-button size="small" type="primary"
+                        v-if="l.dealFlag === 0 & serveData.pcId !== -1 & serveData.isServiceEdit !== 0"
+                        @click="startHandle(l,index)" :loading="l.loading">
               开始处理
             </van-button>
-            <van-button size="small" type="primary" v-if="l.dealFlag === 1 & serveData.pcId !== -1"
+            <van-button size="small" type="primary"
+                        v-if="l.dealFlag === 1 & serveData.pcId !== -1  & serveData.isServiceEdit !== 0"
                         @click="endHandle(l,index)" :loading="l.loading">
               处理结束
             </van-button>
@@ -81,7 +83,7 @@
     <!-- 客户选择 Start -->
     <van-popup v-model="showPopup" position="bottom">
       <van-picker value-key="custName" :columns="custList" @confirm="confirmEvent" @cancel="showPopup = false"
-                  :show-toolbar="true" title="客户"/>
+                  :show-toolbar="true" title="客户" ref="custPicker"/>
     </van-popup>
     <!-- 客户选择 End -->
 
@@ -117,7 +119,7 @@
 import { Button, Popup, Picker, List, Checkbox, CheckboxGroup, Notify, Field } from 'vant'
 import { Mixin } from '@/util/mixin'
 import Color from '@/util/color'
-import model from '@/model/client.model'
+import Model from '@/model/client.model'
 import NewServe from '@/components/serves/newServe'
 
 export default {
@@ -176,7 +178,12 @@ export default {
       // 处理方法原因
       reason: '',
       // 处理方式
-      mth: ''
+      mth: '',
+      //  处理结束数据暂存
+      handleData: {
+        data: undefined,
+        index: undefined
+      }
     }
   },
   methods: {
@@ -187,10 +194,20 @@ export default {
       // 开启加载提示
       this.loading = true
       this.serveJson.pcId = this.serveData.pcId
-      let res = await model.getServers(this.serveJson)
+      this.serveJson.custId = this.serveData.custId
+      let res = await Model.getServers(this.serveJson)
       if (res.data.length !== 0) {
+        res.data.forEach((item) => {
+          // 设置元素按钮加载
+          item.loading = false
+          // 判断服务请求状态
+          if (item.dealFlag !== 3 || this.serveData.isServiceEdit === 0) {
+            item.disabled = true
+            return false
+          }
+          item.disabled = false
+        })
         this.list = [...this.list, ...res.data]
-        this.list.forEach((item) => { item.loading = false })
         this.serveJson.start += 10
       } else {
         // 显示底部提示
@@ -201,13 +218,18 @@ export default {
     },
     // 获取客户
     async getCustList () {
-      let res = await model.getCustList()
+      let res = await Model.getCustList()
       this.custList = res.custList
       this.custList.unshift({ custId: -1, custName: '全部' })
-      // this.custList.defaultIndex
+      this.custList.forEach((item, index) => {
+        if (item.custId === this.serveData.custId) {
+          this.custList[index].defaultIndex = index
+          this.custName = this.custList[index].custName
+        }
+      })
     },
     // 确定
-    sub () {
+    async sub () {
       this.$emit('serverSub', this.list.filter(item => item.selected).map(function (item) {
         return { id: item.serversDeskId, solve: item.solution }
       }))
@@ -218,13 +240,15 @@ export default {
     },
     // 新建
     add () {
-      this.servePopup = true
-      this.setDisabled = false
-      this.isShowServer = true
-      this.$nextTick(() => {
-        // 新建ID传入-1
-        this.$refs.newServe.init(false, '-1')
-      })
+      if (this.serveData.isServiceEdit === 1) {
+        this.servePopup = true
+        this.setDisabled = false
+        this.isShowServer = true
+        this.$nextTick(() => {
+          // 新建ID传入-1
+          this.$refs.newServe.init(false, '-1')
+        })
+      }
     },
     // 新建确定
     newSub (item) {
@@ -273,27 +297,44 @@ export default {
     // 开始处理
     async startHandle (item, index) {
       item.loading = true
-      let res = await model.startDeal({ requestId: item.serversDeskId, pcId: this.serveData.pcId })
+      let res = await Model.startDeal({ requestId: item.serversDeskId, pcId: this.serveData.pcId })
       item.loading = false
       // false API调用失败
       if (!res.flag) return Notify({ message: '处理异常', background: Color.error })
       // 开始处理成功，显示处理结束按钮
       item.dealFlag = 1
+      item.disabled = true
     },
     // 处理结束
     endHandle (item, index) {
-      console.log(item, index)
+      this.handleData.data = item
+      this.handleData.index = index
       this.isShowHandle = true
     },
     // 处理结束弹框 按钮操作
-    beforeClose (action, done) {
+    async beforeClose (action, done) {
       if (action === 'confirm') {
         if (!this.mth) {
           Notify({ message: '请填写处理方式', background: Color.error })
           return done(false)
         }
-        console.log(this.mth)
-        console.log(this.reason)
+        let json = {
+          requestId: this.handleData.data.serversDeskId,
+          pcId: this.handleData.data.pcId,
+          solution: this.mth,
+          reason: this.reason,
+          requestIds: JSON.stringify(this.list.filter(item => item.selected).map(function (item) {
+            return { id: item.serversDeskId, solve: item.solution }
+          }))
+        }
+        let res = await Model.finishDeal(json)
+        // 处理结束成功修改元素状态V
+        if (res.flag) {
+          this.list[this.handleData.index].dealFlag = 2
+        }
+        // 清空文本
+        this.mth = ''
+        this.reason = ''
         done()
       } else {
         done()
@@ -308,6 +349,13 @@ export default {
       } else {
         // 未选中隐藏开始处理按钮
         item.dealFlag = 3
+      }
+    },
+    // 多选框设置
+    checkboxEvent () {
+      // 可操作
+      if (this.serveData.isServiceEdit === 1) {
+        this.list.forEach((item) => { item.disabled = false })
       }
     }
   },
