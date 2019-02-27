@@ -3,7 +3,7 @@
   <div id="dynamicForms">
     <!-- 列表 Start-->
     <transition-group tag="div" name="van-fade">
-      <div v-for="tmp in fieldList" :key="tmp.inFieldId">
+      <div v-for="(tmp,pIndex) in fieldList" :key="tmp.inFieldId">
         <!--1.文本框 && 2.多行文本-->
         <div class="item" v-if="Number(tmp.elementId) === 1 ||Number(tmp.elementId) === 2 && tmp.readable">
           <div class="item-title">{{tmp.name}}</div>
@@ -64,7 +64,7 @@
               disabled="true"
             />
           </div>
-          <van-popup v-model="tmp.showPopup" position="bottom">
+          <van-popup v-model="tmp.showPopup" position="bottom" class="z-index">
             <van-datetime-picker
               v-model="tmp.value"
               :type="tmp.datatimeformat"
@@ -86,7 +86,7 @@
               disabled="true"
             />
           </div>
-          <van-popup v-model="tmp.showPopup" position="right" class="data-source-popup" :overlay="false">
+          <van-popup v-model="tmp.showPopup" position="right" class="data-source-popup z-index" :overlay="false">
             <data-source :itemData="tmp"></data-source>
           </van-popup>
         </div>
@@ -126,13 +126,13 @@
               disabled="true"
             />
           </div>
-          <van-popup v-model="tmp.showPopup" position="bottom" class="popup-height">
+          <van-popup v-model="tmp.showPopup" position="bottom" class="popup-height z-index">
             <van-radio-group v-model="tmp.value">
               <van-cell-group>
                 <van-cell :border="false" class="van-cell-padding" v-for="(o,index) in tmp.option" clickable
                           :key="index"
                           :title="o.name"
-                          @click="formToggle(tmp,o)">
+                          @click="formToggle(tmp,o,pIndex)">
                   <van-radio :name="o.id"/>
                 </van-cell>
               </van-cell-group>
@@ -157,6 +157,7 @@ import { Field, RadioGroup, Radio, Cell, CellGroup, Checkbox, CheckboxGroup, Dat
 import { Mixin } from '@/util/mixin'
 import DataSource from '@/components/dataSource/dataSource'
 import WxUpload from '@/components/wxUpload/wxUpload'
+import Model from '@/model/client.model'
 
 export default {
   name: 'dynamicForms',
@@ -245,13 +246,27 @@ export default {
       }
     },
     // 表单数据选中事件
-    formToggle (tmp, o) {
+    async formToggle (tmp, o, pIndex) {
+      // 如果不等于-1则为级联组件
+      if (tmp.cascade !== '-1') {
+        let res = await Model.getCascadeList({
+          api: tmp.function,
+          json: { parentId: o.id, cascadeFieldId: tmp.cascade }
+        })
+        if (res.flag) {
+          this.fieldList[pIndex + 1].option = res.optList.map(item => {
+            item.checked = false
+            return item
+          })
+        }
+      }
       tmp.value = o.id
       tmp.val = o.name
       tmp.showPopup = false
     }
   },
-  mounted () {},
+  mounted () {
+  },
   computed: {}
 }
 </script>
@@ -302,6 +317,10 @@ export default {
 
   .popup-height {
     height: 50%;
+  }
+
+  .z-index {
+    z-index: 99999 !important;
   }
 
   .img-upload-block {

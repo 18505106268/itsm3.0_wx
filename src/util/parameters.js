@@ -1,5 +1,5 @@
 export default {
-  axiosPath: '/ITSM3.0',
+  axiosPath: '/ITSM4.0',
   basePath: 'http://0.0.0.0:8000',
   imgPath: 'http://iyunware.com:8085/ITSM4.0'
 

@@ -134,6 +134,10 @@ export default {
   getCreateList (data) {
     return handleRequest($http.post('processUtilNew/getCreateList', data))
   },
+  // 获取级联组件下一级数据
+  getCascadeList (data) {
+    return handleRequest($http.post(data.api, data.json))
+  },
   /*
   * 服务请求
   * */
