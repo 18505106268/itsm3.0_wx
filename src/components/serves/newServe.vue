@@ -314,9 +314,14 @@ export default {
     async goSub () {
       let v = this.verify()
       if (v.verify) return Notify({ message: v.msg, background: color.error })
+      //  保存照片上传数据
+      let serverIds = this.itemData.uploadObjArr.map(_item => {
+        return _item.serverId
+      }).join()
       // 阻止多次提交
       this.isLoading = true
       // 新增
+      this.form.data.imagesWX = serverIds
       this.form.data.clientId = this.form.data.custId
       let res = await model.saveServersDesk(this.form.data)
       this.isLoading = false

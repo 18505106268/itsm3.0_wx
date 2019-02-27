@@ -84,7 +84,9 @@ export default {
       // 清空历史数据
       let res = await model.getServersDesk({
         menuId: 21,
-        start: this.start
+        start: this.start,
+        orderName: 'createTime',
+        dir: 'desc'
       })
       if (res.data.length !== 0) {
         this.requestList = [...this.requestList, ...res.data]

@@ -200,13 +200,13 @@ export default {
         // 数据
         data: {
           // 主题
-          serversSubject: '',
+          serversSubject: '主题',
           // 请求时间
           createTime: '',
           // 联系电话
-          phoneNum: '',
+          phoneNum: '18505016268',
           // 请求人
-          createUser: '',
+          createUser: '请求人',
           // 请求来源ID
           requestId: '2',
           // 请求来源名称
@@ -224,7 +224,7 @@ export default {
           // 类型名称
           serversTypeName: '',
           // 描述
-          serversDesc: '',
+          serversDesc: '描述',
           // 照片上传路径
           imagesWX: ''
         }
@@ -312,7 +312,6 @@ export default {
       let serverIds = this.itemData.uploadObjArr.map(_item => {
         return _item.serverId
       }).join()
-
       // 阻止多次提交
       this.isLoading = true
       // 通过ID判断是修改还是新增
@@ -326,6 +325,7 @@ export default {
         // 修改
         this.form.data.serversDeskId = this.id
         this.form.data.clientId = this.form.data.custId
+        alert(`${oldImg} ___ ${serverIds}`)
         let res = await model.updateServers(this.form.data)
         if (res.keyId) {
           Notify({ message: '修改成功', background: color.success })
@@ -335,7 +335,8 @@ export default {
         }
       } else {
         // 新增
-        this.from.data.imagesWX = serverIds
+        alert(`${serverIds}`)
+        this.form.data.imagesWX = serverIds
         this.form.data.clientId = this.form.data.custId
         let res = await model.saveServersDesk(this.form.data)
         this.isLoading = false
