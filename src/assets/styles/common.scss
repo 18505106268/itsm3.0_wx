@@ -59,10 +59,10 @@
 }
 
 .mask {
-  height: 100%;
   width: 100%;
   display: flex;
-  @include center
+  @include center;
+  margin-top: 45%;
 }
 
 .mask-top {
@@ -88,6 +88,14 @@
 input[disabled], input:disabled, input.disabled, textarea[disabled], textarea:disabled, textarea.disabled {
   color: $color-black !important;
   opacity: 1;
+}
+
+textarea {
+  color: $color-textarea !important;
+}
+
+input[type='tel'] {
+  color: $color-textarea !important;
 }
 
 .point {

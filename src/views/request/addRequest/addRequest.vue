@@ -200,13 +200,13 @@ export default {
         // 数据
         data: {
           // 主题
-          serversSubject: '主题',
+          serversSubject: '',
           // 请求时间
           createTime: '',
           // 联系电话
-          phoneNum: '18505016268',
+          phoneNum: '',
           // 请求人
-          createUser: '请求人',
+          createUser: '',
           // 请求来源ID
           requestId: '2',
           // 请求来源名称
@@ -224,7 +224,7 @@ export default {
           // 类型名称
           serversTypeName: '',
           // 描述
-          serversDesc: '描述',
+          serversDesc: '',
           // 照片上传路径
           imagesWX: ''
         }
@@ -318,14 +318,13 @@ export default {
       if (String(this.id) !== '-1') {
         let oldImg = this.itemData.localIds.filter(i => i.startsWith('http')).join()
         if (oldImg || serverIds) {
-          this.from.data.imagesWX = `${oldImg}#${serverIds}`
+          this.form.data.imagesWX = `${oldImg}#${serverIds}`
         } else {
           this.form.data.imagesWX = ''
         }
         // 修改
         this.form.data.serversDeskId = this.id
         this.form.data.clientId = this.form.data.custId
-        alert(`${oldImg} ___ ${serverIds}`)
         let res = await model.updateServers(this.form.data)
         if (res.keyId) {
           Notify({ message: '修改成功', background: color.success })
@@ -335,7 +334,6 @@ export default {
         }
       } else {
         // 新增
-        alert(`${serverIds}`)
         this.form.data.imagesWX = serverIds
         this.form.data.clientId = this.form.data.custId
         let res = await model.saveServersDesk(this.form.data)
@@ -355,6 +353,10 @@ export default {
         // 回填数据
         for (let key of Object.keys(this.form.data)) {
           this.form.data[key] = res.serversDesk[key]
+        }
+        // 图片回填
+        if (res.serversDesk.filePath) {
+          this.itemData.localIds = res.serversDesk.filePath.split(',')
         }
         // 判断表单是否可以修改
         if (Number(res.serversDesk.serversState) !== 1) {

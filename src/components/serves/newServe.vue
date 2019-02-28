@@ -342,6 +342,10 @@ export default {
         for (let key of Object.keys(this.form.data)) {
           this.form.data[key] = res.serversDesk[key]
         }
+        // 图片回填
+        if (res.serversDesk.filePath) {
+          this.itemData.localIds = res.serversDesk.filePath.split(',')
+        }
         // 判断表单是否可以修改
         if (this.setDisabled) {
           // 禁用表单

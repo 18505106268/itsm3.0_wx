@@ -1,6 +1,8 @@
 <!-- 微信照片上传 -->
 <template>
   <div class="upload-block">
+
+    <!-- 照片上传 Start -->
     <div class="upload">
       <div class="upload_warp">
         <div class="upload_warp_left" @click="chooseImage" v-show="itemData.writable">
@@ -15,15 +17,17 @@
           <div class="upload_warp_img_div_top" v-show="itemData.writable">
             <img src="../../assets/imgs/icon-del.png" class="upload_warp_img_div_del" @click="fileDel(index,item)">
           </div>
-          <img :src="item" @click="showImgFn(item)"/>
+          <img :src="item" @click="showImgFn(index)"/>
         </div>
       </div>
     </div>
+    <!-- 照片上传 End -->
   </div>
 </template>
 
 <script>
 import { Mixin } from '@/util/mixin'
+import { ImagePreview } from 'vant'
 
 export default {
   name: 'wxUpload',
@@ -94,8 +98,12 @@ export default {
       this.itemData.localIds.splice(index, 1)
     },
     // 全屏显示图
-    showImgFn (src) {
-      console.log(src)
+    showImgFn (index) {
+      let arr = this.itemData.localIds.filter(i => i.startsWith('http'))
+      ImagePreview({
+        images: arr,
+        startPosition: index
+      })
     }
   },
   mounted () {
@@ -152,8 +160,8 @@ export default {
     height: $space * 2;
     width: $space * 2;
     right: -($space * .9);
-    top: -($space * .9);
-    z-index: 9999;
+    top: -($space * 1.8);
+    z-index: 999;
     > img {
       height: 100%;
       width: 100%;
@@ -162,8 +170,8 @@ export default {
 
   .upload_warp_img_div {
     position: relative;
-    width: $space * 10;
-    height: $space * 10;
+    width: $space * 9;
+    height: $space * 9;
     box-sizing: border-box;
     box-shadow: 0 ($space * .4) ($space * 1.6) 0 gainsboro;
     margin: $space;

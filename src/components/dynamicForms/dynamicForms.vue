@@ -248,7 +248,7 @@ export default {
     // 表单数据选中事件
     async formToggle (tmp, o, pIndex) {
       // 如果不等于-1则为级联组件
-      if (tmp.cascade !== '-1') {
+      if (tmp.cascade !== '-1' && tmp.cascade) {
         let res = await Model.getCascadeList({
           api: tmp.function,
           json: { parentId: o.id, cascadeFieldId: tmp.cascade }
