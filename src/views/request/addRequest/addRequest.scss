@@ -13,9 +13,12 @@
   bottom: $space * 5;
 }
 
+.form-popup {
+  width: 100%;
+}
+
 .item {
   box-sizing: border-box;
-  color: $color-black;
   padding: ($space * 2) ($space * 1.6) 0 ($space * 1.6);
   &-title {
     box-sizing: border-box;
@@ -51,4 +54,20 @@
   right: 0;
   left: 0;
   bottom: 0;
+}
+
+.record {
+  box-sizing: border-box;
+  padding: ($space * 1.8) $space 0 $space;
+  font-size: $font-size;
+  color: $color-blue;
+  display: flex;
+  @include right;
+}
+
+.record-popup {
+  height: 100%;
+  width: 80%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

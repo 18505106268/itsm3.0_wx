@@ -4,6 +4,13 @@
 
     <!-- Form Start -->
     <div class="form">
+
+      <!-- Record Start -->
+      <div class="record" v-if="form.list.length !== 0">
+        <span @click="record">处理记录</span>
+      </div>
+      <!-- Record End -->
+
       <!-- 主题 -->
       <div class="item">
         <div class="item-title">主题</div>
@@ -162,12 +169,51 @@
       </van-radio-group>
     </van-popup>
     <!-- 优先级弹框 End-->
+
+    <!-- 处理记录弹框 Start -->
+    <van-popup v-model="isShowRecord" position="right" class="record-popup">
+
+      <!-- Form Start -->
+      <div class="form-popup" v-for="l in form.list" :key="l.id">
+
+        <!-- 开始时间 -->
+        <div class="item">
+          <div class="item-title">开始时间</div>
+          <van-field v-model="l.startTime" disabled type="textarea" autosize/>
+        </div>
+        <!-- 完成时间 -->
+        <div class="item">
+          <div class="item-title">完成时间</div>
+          <van-field v-model="l.solveTime" disabled type="textarea" autosize/>
+        </div>
+        <!-- 处理人 -->
+        <div class="item">
+          <div class="item-title">处理人</div>
+          <van-field v-model="l.handlerName" disabled type="textarea" autosize/>
+        </div>
+        <!-- 原因 -->
+        <div class="item">
+          <div class="item-title">原因</div>
+          <van-field v-model="l.reason" disabled type="textarea" autosize/>
+        </div>
+        <!-- 处理方式 -->
+        <div class="item">
+          <div class="item-title">处理方式</div>
+          <van-field v-model="l.solution" disabled type="textarea" autosize/>
+        </div>
+
+      </div>
+      <!-- Form End -->
+
+    </van-popup>
+    <!-- 处理记录弹框 End-->
+
   </div>
 </template>
 
 <script>
 import { Field, DatetimePicker, Popup, Cell, CellGroup, RadioGroup, Radio, Button, Notify } from 'vant'
-import model from '@/model/client.model'
+import Model from '@/model/client.model'
 import color from '@/util/color'
 import { Mixin } from '@/util/mixin'
 import WxUpload from '@/components/wxUpload/wxUpload'
@@ -227,7 +273,9 @@ export default {
           serversDesc: '',
           // 照片上传路径
           imagesWX: ''
-        }
+        },
+        // 处理记录
+        list: []
       },
       // 客户名称数据
       custList: [],
@@ -245,6 +293,8 @@ export default {
       isShowLevel: false,
       // 是否显示类型上拉菜单
       isShowServersType: false,
+      // 是否显示处理记录菜单
+      isShowRecord: false,
       // 照片上传数据
       itemData: {
         localIds: [],
@@ -260,11 +310,11 @@ export default {
     async formDataInit () {
       let res = await Promise.all([
         // 获取类型
-        model.getServersTypeList(),
+        Model.getServersTypeList(),
         // 获取优先级
-        model.getServersLevelList(),
+        Model.getServersLevelList(),
         // 获取客户名称
-        model.getCustList()
+        Model.getCustList()
       ])
       // 类型
       this.serversTypeList = res[0].flag ? res[0].serversTypeList : []
@@ -325,7 +375,7 @@ export default {
         // 修改
         this.form.data.serversDeskId = this.id
         this.form.data.clientId = this.form.data.custId
-        let res = await model.updateServers(this.form.data)
+        let res = await Model.updateServers(this.form.data)
         if (res.keyId) {
           Notify({ message: '修改成功', background: color.success })
           setTimeout(() => {
@@ -336,7 +386,7 @@ export default {
         // 新增
         this.form.data.imagesWX = serverIds
         this.form.data.clientId = this.form.data.custId
-        let res = await model.saveServersDesk(this.form.data)
+        let res = await Model.saveServersDesk(this.form.data)
         this.isLoading = false
         if (res.keyId) {
           Notify({ message: '保存成功', background: color.success })
@@ -348,7 +398,8 @@ export default {
     },
     // 获取单个服务请求数据
     async getServersDeskInfoByDeskId () {
-      let res = await model.getServersDeskInfoByDeskId({ serversDeskId: this.id })
+      // 获取服务请求详情
+      let res = await Model.getServersDeskInfoByDeskId({ serversDeskId: this.id })
       if (res.flag) {
         // 回填数据
         for (let key of Object.keys(this.form.data)) {
@@ -366,6 +417,14 @@ export default {
           this.itemData.writable = false
         }
       }
+      // 获取处理记录
+      let sres = await Model.getSolutionList({
+        requestId: res.serversDesk.serversDeskId,
+        pcId: res.serversDesk.pcId
+      })
+      if (sres.flag) {
+        this.form.list = sres.solutionList
+      }
     },
     // 非空判断
     verify () {
@@ -377,6 +436,10 @@ export default {
         }
       }
       return { verify: false }
+    },
+    // 查看处理记录
+    record () {
+      this.isShowRecord = true
     }
   },
   mounted () {

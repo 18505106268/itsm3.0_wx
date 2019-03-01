@@ -10,11 +10,14 @@
 <script>
 import { Mixin } from '@/util/mixin'
 import CreateDynamicForms from '@/components/dynamicForms/createDynamicForms'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'add',
-  metaInfo: {
-    title: ''
+  metaInfo () {
+    return {
+      title: this['common/title']
+    }
   },
   props: ['ids'],
   mixins: [Mixin],
@@ -51,7 +54,12 @@ export default {
       }
     })
   },
-  computed: {}
+  computed: {
+    /**
+     * common/title Html Title
+     */
+    ...mapGetters(['common/title'])
+  }
 }
 </script>
 

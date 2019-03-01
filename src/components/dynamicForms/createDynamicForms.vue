@@ -74,9 +74,6 @@ import { FormsUtil } from '@/components/dynamicForms/formsUtil'
 
 export default {
   name: 'createDynamicForms',
-  metaInfo: {
-    title: '新增'
-  },
   mixins: [Mixin],
   components: {
     DynamicForms: DynamicForms,

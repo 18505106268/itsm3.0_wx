@@ -176,5 +176,9 @@ export default {
   // 处理结束
   finishDeal (data) {
     return handleRequest($http.post('servers-solution/finish-deal', data))
+  },
+  // 获取处理记录
+  getSolutionList (data) {
+    return handleRequest($http.post('servers-solution/getSolutionList', data))
   }
 }

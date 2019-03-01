@@ -30,7 +30,8 @@
 <script>
 import model from '@/model/client.model'
 import { Mixin } from '@/util/mixin'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { PATH, SET_TITLE } from '@/store/types/common'
 
 import { Collapse, CollapseItem, Actionsheet, Loading } from 'vant'
 
@@ -73,6 +74,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * common/SET_TITLE 设置HTML Title
+     */
+    ...mapMutations([
+      `${PATH}${SET_TITLE}`
+    ]),
     // 获取应用下模块列表
     async getFormListByApp () {
       let res = await model.getFromListByApp({ appId: this.id })
@@ -91,6 +98,9 @@ export default {
     },
     // 选中菜单
     onSelect (obj) {
+      // 设置HTML Title
+      this[`${PATH}${SET_TITLE}`](obj.item.name)
+      // 隐藏下拉菜单
       this.isShow = false
       // formId_appId_menuId_limitMenuId_triggerId_keyId
       let ids = `${obj.item.id}_${obj.item.appId}_${obj.item.menuId}_${obj.item.limitMenuId}_-1_-1`
