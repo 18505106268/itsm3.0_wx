@@ -6,7 +6,7 @@
     <div class="form">
 
       <!-- Record Start -->
-      <div class="record" v-if="form.list.length !== 0">
+      <div class="record">
         <span @click="record">处理记录</span>
       </div>
       <!-- Record End -->
@@ -173,6 +173,12 @@
     <!-- 处理记录弹框 Start -->
     <van-popup v-model="isShowRecord" position="right" class="record-popup">
 
+      <!-- Tip Start -->
+      <div class="record-tip" v-if="!form.list">
+        暂无记录
+      </div>
+      <!-- Tip End -->
+
       <!-- Form Start -->
       <div class="form-popup" v-for="l in form.list" :key="l.id">
 
@@ -275,7 +281,7 @@ export default {
           imagesWX: ''
         },
         // 处理记录
-        list: []
+        list: undefined
       },
       // 客户名称数据
       custList: [],
@@ -422,7 +428,7 @@ export default {
         requestId: res.serversDesk.serversDeskId,
         pcId: res.serversDesk.pcId
       })
-      if (sres.flag) {
+      if (sres.flag && sres.solutionList.length > 0) {
         this.form.list = sres.solutionList
       }
     },

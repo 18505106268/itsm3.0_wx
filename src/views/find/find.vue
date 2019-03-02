@@ -55,7 +55,7 @@ export default {
       // 按钮加载
       isLoading: false,
       // 用户名
-      loginName: '18505106268'
+      loginName: ''
     }
   },
   methods: {
@@ -67,7 +67,7 @@ export default {
     // 登录
     async next () {
       // 非空判断
-      if (!this.loginName) return Notify({ message: '平台账号不能为空', background: color.warning })
+      if (!this.loginName) return Notify({ message: '平台账号不能为空', background: color.error })
       // 阻止多次提交
       this.isLoading = true
       // 验证用户是否存在

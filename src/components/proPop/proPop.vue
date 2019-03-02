@@ -45,7 +45,7 @@
       <!-- List End -->
       <!-- Button Start -->
       <div class="role-button">
-        <van-button size="large" type="primary" @click="sub">确定</van-button>
+        <van-button size="large" type="primary" @click="sub" :loading="isLoading">确定</van-button>
       </div>
       <!-- Button End -->
     </div>
@@ -114,7 +114,9 @@ export default {
       // 是否显示组件
       showPopup: false,
       // 选中的对象
-      item: undefined
+      item: undefined,
+      // 提交按钮加载
+      isLoading: false
     }
   },
   methods: {
@@ -139,16 +141,22 @@ export default {
           })
         })
         if (arr.length === 0) return Notify({ message: '请至少选择一位', background: color.error })
+        this.isLoading = true
         this.$emit('popSub', arr)
       } else {
         if (!this.item) return Notify({ message: '请至少选择一位', background: color.error })
+        this.isLoading = true
         this.$emit('popSub', this.item)
       }
-      this.showPopup = false
     },
     // 显示组件
     show () {
       this.showPopup = true
+    },
+    // 隐藏组件
+    hide () {
+      this.isLoading = false
+      this.showPopup = false
     },
     // 设置多选框全部选中
     all () {

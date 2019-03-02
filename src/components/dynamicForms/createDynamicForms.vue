@@ -25,7 +25,7 @@
 
     <!-- 操作 Start -->
     <div class="handle-btn">
-      <van-button type="primary" size="large" @click="handle">操作</van-button>
+      <van-button type="primary" size="large" @click="handle" :disabled="!fieldList">操作</van-button>
     </div>
     <!-- 操作 End -->
 
@@ -171,9 +171,10 @@ export default {
       if (res.errMsg) {
         Notify({ message: res.errMsg, background: Color.success })
       }
+      this.$refs.nextProPop.hide()
       setTimeout(() => {
         this.$router.go(-1)
-      }, 500)
+      }, 300)
     },
     // 获取当前应用表单
     async getFromListByApp () {
@@ -296,45 +297,53 @@ export default {
       if (res.errMsg) {
         // 完成
         Notify({ message: res.errMsg, background: Color.success })
+        // 关闭按钮加载
+        item.loading = false
+        // 隐藏上拉菜单
         this.isShow = false
         setTimeout(() => {
           this.$router.go(-1)
         }, 200)
       } else {
+        // 关闭按钮加载
+        item.loading = false
+        // 隐藏上拉菜单
+        this.isShow = false
+        // 写入API参数
         this.processObj.pcId = res.pcId
         this.processObj.nodeId = res.nextNodeId
         this.processObj.pRecoId = res.recoId
-
-        if (res.signStart) {
-          // 会签
-          this.signStart = res.signStart
-          this.nextRoleList = res.userRoleList
-          // 判断是否是会签 listType
-          if (Number(this.signStart) === 1) {
-            // 会签默认选中，并且为多选
-            this.listType = 'checkbox'
-            // 显示弹框
-            this.$refs.nextProPop.show()
-            this.$nextTick(() => {
-              // 设置全部选中：下一节点人员选择
-              this.$refs.nextProPop.all()
-            })
-          } else {
-            // 显示弹框：下一节点人员选择
-            this.$refs.nextProPop.show()
+        // 等待上拉菜单关闭后执行
+        setTimeout(() => {
+          // 判断是否存在会签
+          if (res.signStart) {
+            // 会签
+            this.signStart = res.signStart
+            this.nextRoleList = res.userRoleList
+            // 判断是否是会签 listType
+            if (Number(this.signStart) === 1) {
+              // 会签默认选中，并且为多选
+              this.listType = 'checkbox'
+              // 显示弹框
+              this.$refs.nextProPop.show()
+              this.$nextTick(() => {
+                // 设置全部选中：下一节点人员选择
+                this.$refs.nextProPop.all()
+              })
+            } else {
+              // 显示弹框：下一节点人员选择
+              this.$refs.nextProPop.show()
+            }
           }
-        }
-
-        if (Number(res.isAppoint) === 1) {
-          // 分派
-          this.goAssignData = res
-          this.goAssignData.result = item.result
-          this.goAssignData.flag = item.flag
-          this.itemData.showPopup = true
-        }
-
-        item.loading = false
-        this.isShow = false
+          // 判断是否存在分派
+          if (Number(res.isAppoint) === 1) {
+            // 分派
+            this.goAssignData = res
+            this.goAssignData.result = item.result
+            this.goAssignData.flag = item.flag
+            this.itemData.showPopup = true
+          }
+        }, 400)
       }
     },
     // 上拉菜单事件监听 按钮操作
@@ -401,34 +410,36 @@ export default {
       let res = await Model.dynamicSubmit(data)
       item.loading = false
       this.isShow = false
-      if (item.buttonCode === 'ACCEPT') {
-        // 接受
-        if (!res.errMsg) {
-          // 表单列表 数据处理
-          this.fieldList = FormsUtil.getInstance().init(res.fieldList)
+      setTimeout(() => {
+        if (item.buttonCode === 'ACCEPT') {
+          // 接受
+          if (!res.errMsg) {
+            // 表单列表 数据处理
+            this.fieldList = FormsUtil.getInstance().init(res.fieldList)
 
-          // 按钮列表
-          this.buttonList = res.buttonList
-          // 按钮列表
-          this.buttonList = res.buttonList.map(item => {
-            item.name = item.buttonName
-            item.loading = false
-            return item
-          })
-          // 设置相关服务请求为可用
-          this.serveData.isServiceEdit = res.isServiceEdit
-          // 设置list为可操作状态
-          if (this.$refs.serves) {
-            this.$refs.serves.checkboxEvent()
+            // 按钮列表
+            this.buttonList = res.buttonList
+            // 按钮列表
+            this.buttonList = res.buttonList.map(item => {
+              item.name = item.buttonName
+              item.loading = false
+              return item
+            })
+            // 设置相关服务请求为可用
+            this.serveData.isServiceEdit = res.isServiceEdit
+            // 设置list为可操作状态
+            if (this.$refs.serves) {
+              this.$refs.serves.checkboxEvent()
+            }
+          } else {
+            Notify({ message: res.errMsg, background: Color.error })
           }
-        } else {
-          Notify({ message: res.errMsg, background: Color.error })
+        } else if (item.buttonCode === 'REJECT') {
+          // 拒绝
+          Notify({ message: res.errMsg, background: Color.success })
+          this.$router.go(-1)
         }
-      } else if (item.buttonCode === 'REJECT') {
-        // 拒绝
-        Notify({ message: res.errMsg, background: Color.success })
-        this.$router.go(-1)
-      }
+      }, 300)
     },
     // 开启上拉菜单
     handle () {

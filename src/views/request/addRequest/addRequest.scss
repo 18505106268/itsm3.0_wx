@@ -71,3 +71,11 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.record-tip {
+  margin-top: 50%;
+  color: $color-grey-plus;
+  width: 100%;
+  text-align: center;
+  font-size: $font-size * 1.5;
+}
