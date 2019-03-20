@@ -33,6 +33,7 @@
     span {
       display: inline-block;
       margin-top: $space;
+      line-height: $space * 2;
     }
   }
   > div:nth-child(3) {

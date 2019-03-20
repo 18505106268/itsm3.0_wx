@@ -28,7 +28,7 @@
     <!-- 信息 End-->
 
     <!-- 固定表应用 Start-->
-    <div class="container">
+    <div class="container" v-if="false">
       <div class="child">
         <!-- Title Start-->
         <div class="title">常用应用</div>
@@ -57,7 +57,7 @@
     <div class="container">
       <div class="child">
         <!-- Title Start-->
-        <div class="title">项目管理</div>
+        <div class="title">应用列表</div>
         <!-- Title End-->
 
         <!-- List Start-->
