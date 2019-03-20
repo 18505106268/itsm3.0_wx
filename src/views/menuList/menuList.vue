@@ -88,7 +88,6 @@ export default {
         return item.menuName
       })
       this.formList = res.formList
-      console.log(this.formList)
     },
     // 查看或者新增
     see (item) {

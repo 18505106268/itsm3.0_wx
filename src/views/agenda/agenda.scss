@@ -18,7 +18,7 @@
   box-shadow: $shadow-layer;
   > div {
     box-sizing: border-box;
-    padding: $space;
+    padding: ($space * .5) $space;
   }
   > div:nth-child(1) {
     display: flex;
@@ -30,6 +30,10 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    span {
+      display: inline-block;
+      margin-top: $space;
+    }
   }
   > div:nth-child(3) {
     text-align: end;

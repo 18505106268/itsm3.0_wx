@@ -5,6 +5,7 @@
     <div class="see-request" @click="setRequest" v-if="isShowRequest" :style="{'margin-top': `${marginTop}rem`}">
       相关服务请求
     </div>
+    <div v-else :style="{'margin-top': `${marginTop}rem`}"></div>
     <!-- 相关服务请求 End -->
 
     <!-- 动态表单 Start -->
@@ -25,7 +26,7 @@
 
     <!-- 操作 Start -->
     <div class="handle-btn">
-      <van-button type="primary" size="large" @click="handle" :disabled="!fieldList">操作</van-button>
+      <van-button type="primary" size="large" @click="handle" :disabled="!fieldList || buttonList.length === 0">操作</van-button>
     </div>
     <!-- 操作 End -->
 

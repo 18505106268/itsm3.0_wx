@@ -8,7 +8,7 @@
 }
 
 .progress-query-item {
-  background-color: $color-list-bg;
+  background-color: $color-white;
   box-sizing: border-box;
   padding: 0 ($space * 1.2);
   font-size: $space * 1.5;
@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
-    padding-top: $space * 1.8;
+    padding-top: $space * 2;
   }
   > div:nth-child(1) {
     color: $color-grey-plus;
