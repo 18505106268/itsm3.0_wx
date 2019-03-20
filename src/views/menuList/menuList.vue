@@ -5,7 +5,7 @@
     <transition-group tag="div" name="van-fade" v-show="formList">
       <div class="item" v-for="fl in formList" :key="fl.menuName">
         <van-collapse v-model="activeNames">
-          <van-collapse-item :title="fl.menuName" :name="fl.menuName">
+          <van-collapse-item :title="fl.menuName" :name="fl.menuName" class="collapse">
             <div class="c-item">
               <span v-for="cfl in fl.formList" :key="cfl.id" @click="see(cfl)">{{cfl.name}}</span>
             </div>

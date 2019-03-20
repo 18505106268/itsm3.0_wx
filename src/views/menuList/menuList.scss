@@ -6,17 +6,6 @@
 .item {
   box-sizing: border-box;
   padding: $space 0;
-}
-
-.item {
-  span {
-    padding: ($space * .6) ($space * 1.2);
-    color: $color-black;
-    margin-right: $space;
-    border-radius: $border-radius * .5;
-    font-size: $font-size;
-    white-space: nowrap;
-  }
   $color: (
           $color-0,
           $color-1,
@@ -39,5 +28,15 @@
   .c-item {
     height: 100%;
     width: 100%;
+    span {
+      color: $color-black;
+      border-radius: $border-radius * .5;
+      font-size: $font-size;
+      margin-right: $space;
+      margin-bottom: $space;
+      box-sizing: border-box;
+      display: inline-block;
+      padding: ($space * .5) ($space * 1.2);
+    }
   }
 }
