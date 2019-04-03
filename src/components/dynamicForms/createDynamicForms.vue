@@ -26,7 +26,8 @@
 
     <!-- 操作 Start -->
     <div class="handle-btn">
-      <van-button type="primary" size="large" @click="handle" :disabled="!fieldList || buttonList.length === 0">操作</van-button>
+      <van-button type="primary" size="large" @click="handle" :disabled="!fieldList || buttonList.length === 0">操作
+      </van-button>
     </div>
     <!-- 操作 End -->
 
@@ -153,11 +154,12 @@ export default {
   },
   methods: {
     // 弹框数据确认
-    popSub (item) {
+    async popSub (item) {
       this.processObj.roleId = item.roleId
       // 设置fieldList为undefined开启loading
       this.fieldList = undefined
-      this.getFieldsInNode()
+      await this.getFieldsInNode()
+      this.$refs.proPop.hide()
     },
     // 下一节点人员弹框数据确认
     async nextPopSub (obj) {
