@@ -1,5 +1,5 @@
 export default {
-  axiosPath: '/ITSM3.0',
+  axiosPath: '/ITSM4.0_YY',
   basePath: 'http://0.0.0.0:8000',
   imgPath: 'http://itss-china.cn'
 

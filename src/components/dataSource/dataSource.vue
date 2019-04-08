@@ -198,7 +198,6 @@ export default {
       this.isShow = false
     },
     onCancel () {
-      console.log('onCancel')
       this.isShow = true
     },
     // 选择下一个节点
@@ -212,11 +211,6 @@ export default {
       // 判断是否是审批元素
       if (this.itemData.isApproval) {
         // 审批元素
-        // if (Number(this.itemData.maxlength) <= this.itemData.value.length) return this.showToast(`最多只能选择${this.itemData.maxlength}人`)
-        // let index = this.itemData.value.findIndex(val => {
-        //   return val.id === item.id
-        // })
-        // if (index !== -1) return this.showToast('该审批人已在列表中')
         item.surname = item.userName.substr(0, 1)
         this.itemData.value.push(item)
         this.itemData.showPopup = false
@@ -234,9 +228,9 @@ export default {
         // 数据源
         if (Number(this.itemData.isMulti) === 0) {
           // 单选
-          this.itemData.showValue = []
+          this.itemData.showValue = null
           this.itemData.value = []
-          this.itemData.showValue.push(item.userName)
+          this.itemData.showValue = item.userName
           this.itemData.value.push(item)
           this.itemData.showPopup = false
         } else {
@@ -266,7 +260,6 @@ export default {
         this.breadCrumbs.splice(index + 1, this.breadCrumbs.length - index + 1)
         this.breadCrumbs[this.breadCrumbs.length - 1].isActive = true
       }
-      console.log(this.breadCrumbs)
     },
     // 面包屑导航
     breadSelected (item) {
@@ -304,9 +297,6 @@ export default {
         return item.userName
       }).join(',')
       this.itemData.showPopup = false
-    },
-    // 父组件删除元素触发事件
-    parentDel (item) {
     }
   },
   mounted () {

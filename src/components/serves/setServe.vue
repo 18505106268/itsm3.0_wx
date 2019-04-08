@@ -108,15 +108,25 @@
             autosize
           />
         </div>
+        <div class="item">
+          <div class="item-title">问题类型</div>
+          <van-radio-group v-model="issue.value">
+            <van-cell-group :border="false">
+              <van-cell class="van-cell-padding" :border="false" :title="i.typeName" clickable
+                        @click="issue.value = i.id" v-for="(i,index) in issue.option" :key="index">
+                <van-radio :name="i.id"/>
+              </van-cell>
+            </van-cell-group>
+          </van-radio-group>
+        </div>
       </div>
     </van-dialog>
     <!-- 处理结束 End -->
-
   </div>
 </template>
 
 <script>
-import { Button, Popup, Picker, List, Checkbox, CheckboxGroup, Notify, Field } from 'vant'
+import { Button, Popup, Picker, List, Notify, Field, RadioGroup, Radio, Cell, CellGroup, Checkbox } from 'vant'
 import { Mixin } from '@/util/mixin'
 import Color from '@/util/color'
 import Model from '@/model/client.model'
@@ -131,8 +141,11 @@ export default {
     [Popup.name]: Popup,
     [Picker.name]: Picker,
     [List.name]: List,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
+    [RadioGroup.name]: RadioGroup,
+    [Radio.name]: Radio,
     [Checkbox.name]: Checkbox,
-    [CheckboxGroup.name]: CheckboxGroup,
     [Field.name]: Field,
     [Notify.name]: Notify
   },
@@ -179,6 +192,11 @@ export default {
       reason: '',
       // 处理方式
       mth: '',
+      // 问题类型
+      issue: {
+        value: [],
+        option: []
+      },
       //  处理结束数据暂存
       handleData: {
         data: undefined,
@@ -227,6 +245,11 @@ export default {
           this.custName = this.custList[index].custName
         }
       })
+    },
+    // 获取问题类型
+    async getProblemTypeList () {
+      let res = await Model.getProblemTypeList()
+      this.issue.option = res.typeList
     },
     // 确定
     async sub () {
@@ -318,11 +341,16 @@ export default {
           Notify({ message: '请填写处理方式', background: Color.error })
           return done(false)
         }
+        if (!this.issue.value) {
+          Notify({ message: '请选择问题类型', background: Color.error })
+          return done(false)
+        }
         let json = {
           requestId: this.handleData.data.serversDeskId,
           pcId: this.handleData.data.pcId,
           solution: this.mth,
           reason: this.reason,
+          typeId: this.issue.value,
           requestIds: JSON.stringify(this.list.filter(item => item.selected).map(function (item) {
             return { id: item.serversDeskId, solve: item.solution }
           }))
@@ -362,6 +390,7 @@ export default {
   mounted () {
     this.getServes()
     this.getCustList()
+    this.getProblemTypeList()
   },
   computed: {}
 }
@@ -479,6 +508,18 @@ export default {
   .van-cell {
     font: initial;
     font-size: $font-size;
+  }
+
+  .van-cell, .item-bottom {
+    border-bottom: $border-width solid $solid-color;
+  }
+
+  .van-cell-padding {
+    padding: $space;
+  }
+
+  .van-field-padding {
+    padding-bottom: $space * 1.8;
   }
 
   .item {

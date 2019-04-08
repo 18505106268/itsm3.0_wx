@@ -116,6 +116,8 @@ export class FormsUtil {
             item.showValue = item.value.map(item => {
               return item.userName
             }).join(',')
+          } else {
+            item.value = []
           }
           break
         case 8:

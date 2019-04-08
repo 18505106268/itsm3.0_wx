@@ -180,5 +180,9 @@ export default {
   // 获取处理记录
   getSolutionList (data) {
     return handleRequest($http.post('servers-solution/getSolutionList', data))
+  },
+  // 获取问题类型
+  getProblemTypeList (data) {
+    return handleRequest($http.post('problemType/getProblemTypeList', data))
   }
 }
