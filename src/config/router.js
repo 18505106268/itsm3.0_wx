@@ -1,5 +1,8 @@
+import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routes'
+
+Vue.use(Router)
 
 // import bus from '../util/bus'
 // 后期登录拦截使用,如果用户token过期需要登录调用

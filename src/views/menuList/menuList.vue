@@ -15,6 +15,12 @@
     </transition-group>
     <!-- 列表 End-->
 
+    <!-- 提示 开始 -->
+    <div class="list-point" v-show="formList && formList.length === 0">
+      暂无数据
+    </div>
+    <!-- 提示 结束 -->
+
     <!-- Loading Start-->
     <div class="mask" v-show="!formList">
       <van-loading/>
@@ -83,7 +89,9 @@ export default {
     // 获取应用下模块列表
     async getFormListByApp () {
       let res = await model.getFromListByApp({ appId: this.id })
-      if (res.formList.length === 0) return
+      if (res.formList.length === 0) {
+        res.formList = []
+      }
       this.activeNames = res.formList.map(item => {
         return item.menuName
       })

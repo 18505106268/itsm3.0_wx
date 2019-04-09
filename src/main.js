@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Meta from 'vue-meta'
 import store from './store'
-import VueRouter from 'vue-router'
 import parameters from './util/parameters'
 
 import router from './config/router'
@@ -17,7 +16,6 @@ Vue.config.productionTip = false
 
 Vue.use(Lazyload)
 Vue.use(Dialog)
-Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Meta, {
   keyName: 'metaInfo',
