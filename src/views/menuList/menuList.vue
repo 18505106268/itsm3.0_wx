@@ -109,8 +109,8 @@ export default {
       this[`${PATH}${SET_TITLE}`](obj.item.name)
       // 隐藏下拉菜单
       this.isShow = false
-      // formId_appId_menuId_limitMenuId_triggerId_keyId
-      let ids = `${obj.item.id}_${obj.item.appId}_${obj.item.menuId}_${obj.item.limitMenuId}_-1_-1`
+      // formId_appId_menuId_limitMenuId_triggerId_keyId_masterId
+      let ids = `${obj.item.id}_${obj.item.appId}_${obj.item.menuId}_${obj.item.limitMenuId}_-1_-1_-1`
       this.$router.push(`${obj.to}${ids}`)
     }
   },

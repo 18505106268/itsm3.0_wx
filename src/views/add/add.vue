@@ -34,7 +34,7 @@ export default {
   },
   methods: {},
   mounted () {
-    // formId_appId_menuId_limitMenuId_triggerId_keyId
+    // formId_appId_menuId_limitMenuId_triggerId_keyId_masterId
     let ids = this.ids.split('_')
     this.processJson.formId = ids[0]
     this.processJson.appId = ids[1]
@@ -42,9 +42,10 @@ export default {
     this.processJson.limitMenuId = ids[3]
     this.processJson.triggerId = ids[4]
     this.processJson.keyId = ids[5]
+    this.processJson.masterId = ids[6]
     this.$nextTick(() => {
       /*
-      * formId如果为-1则表示是触发器出发了该组件，需要调用 getFromListByApp 来获取表单列表
+      * formId如果为-1则表示是触发器触发了该组件，需要调用 getFromListByApp 来获取表单列表
       * */
       if (this.processJson.triggerId === '-1') {
         if (this.processJson.formId !== '-1') return this.$refs.createDynamicForms.checkProcessLimitMenu()

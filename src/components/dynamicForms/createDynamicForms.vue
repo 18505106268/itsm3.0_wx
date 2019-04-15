@@ -207,6 +207,7 @@ export default {
       this.processObj.processId = res.processId
       this.processObj.triggerId = this.processJson.triggerId
       this.processObj.keyId = this.processJson.keyId
+      this.processObj.masterId = this.processJson.masterId
       if (res.roleTotal > 1) {
         // 多个角色
         this.roleList = res.roleList
@@ -218,6 +219,7 @@ export default {
       } else {
         // 单个角色
         this.processObj.roleId = res.roleId
+        console.log(this.processObj)
         this.getFieldsInNode()
       }
     },
@@ -236,6 +238,8 @@ export default {
       // 表单列表 数据处理
       if (res.errMsg) return Notify({ message: res.errMsg, background: Color.error })
       this.fieldList = FormsUtil.getInstance().init(res.fieldList)
+      // 写入masterId(触发器)
+      this.processObj.masterId = res.id
       // 按钮列表
       this.buttonList = res.buttonList.map(item => {
         // 判断按钮是否含有接受或者拒绝
@@ -377,8 +381,8 @@ export default {
         }
       } else {
         // 触发器
-        // formId_appId_menuId_limitMenuId_triggerId_keyId
-        let ids = `-1_-1_-1_-1_${item.buttonCode}_${this.processJson.keyId}`
+        // formId_appId_menuId_limitMenuId_triggerId_keyId_masterId
+        let ids = `-1_-1_-1_-1_${item.buttonCode}_${this.processJson.keyId}_${this.processObj.masterId}`
         this.$router.push(`/add/${ids}`)
       }
     },
