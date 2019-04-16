@@ -102,11 +102,7 @@ export default {
   data () {
     return {
       // 轮播图
-      images: [
-        'https://img1.mukewang.com/szimg/5c33228b0884a96609000300.jpg',
-        'https://img2.mukewang.com/szimg/5c34030108968e3609000300.jpg',
-        'https://img2.mukewang.com/szimg/5c34030108968e3609000300.jpg'
-      ],
+      images: [require('@/assets/imgs/banner.png')],
       // 工作台
       menuList: undefined,
       // 应用列表
