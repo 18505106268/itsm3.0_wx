@@ -149,9 +149,15 @@ export class FormsUtil {
           break
         case 11:
           // 审批元素
+          if (!item.value) {
+            item.value = []
+          }
           break
         case 12:
           // 抄送元素
+          if (!item.value) {
+            item.value = []
+          }
           break
         case 13:
           // 照片上传

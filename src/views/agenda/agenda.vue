@@ -13,7 +13,9 @@
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getUndoOrDone()">
 
       <!-- List Start -->
-      <div class="agenda-list" v-for="al in agendaList" :key="al.recoId" @click="goAgendaDetail(al)">
+      <div class="agenda-list"
+           style="background-color: #fff;box-sizing: border-box;padding: 10px 10px 5px 10px;width: 100%;margin-bottom: 10px;font-size: 14px;box-shadow: 3px 3px 3px rgba(217, 217, 217, 0.31);"
+           v-for="al in agendaList" :key="al.recoId" @click="goAgendaDetail(al)">
         <div>
           <span class="font-grey">{{al.menuName}}</span>
           <span class="font-grey">{{al.createTime}}</span>
