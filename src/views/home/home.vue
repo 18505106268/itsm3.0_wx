@@ -14,15 +14,16 @@
     <!-- 待办，已办，抄送 Start-->
     <div class="msg">
       <div>
-        <transition-group tag="div" name="van-fade" v-show="menuList">
+        <transition-group tag="div" name="van-fade" v-if="menuList && menuList.length > 0">
           <div v-for="ml in menuList" :key="ml.id" @click="goList(ml)">
             <span>{{ml.count}}</span>
             <span>{{ml.name}}</span>
           </div>
         </transition-group>
-        <span class="loading" v-show="!menuList">
+        <span class="loading" v-if="!menuList">
           <van-loading/>
         </span>
+        <span class="tip" v-if="menuList && menuList.length === 0">暂无数据</span>
       </div>
     </div>
     <!-- 信息 End-->
@@ -62,7 +63,7 @@
 
         <!-- List Start-->
         <div class="list">
-          <transition-group tag="div" name="van-fade" v-show="appList">
+          <transition-group tag="div" name="van-fade" v-show="appList && appList.length > 0">
             <div v-for="al in appList" :key="al.id" @click="goAppList(al)">
             <span>
               <img :src="al.icon"/>
@@ -73,6 +74,7 @@
           <span class="loading" v-show="!appList">
             <van-loading/>
           </span>
+          <span class="tip" v-if="appList && appList.length === 0">暂无数据</span>
         </div>
         <!-- List End-->
       </div>
@@ -108,11 +110,13 @@ export default {
       // 应用列表
       appList: undefined,
       // 固定表应用列
-      fixedAppList: [{
-        appName: '服务请求',
-        icon: `${this.imgPath}/views/main/images/infermationdesk.png`,
-        id: -1
-      }]
+      fixedAppList: [
+        {
+          appName: '服务请求',
+          icon: `${this.imgPath}/views/main/images/infermationdesk.png`,
+          id: -1
+        }
+      ]
     }
   },
   methods: {
@@ -125,7 +129,11 @@ export default {
     // 获取用户待办，处理，抄送
     async getLeftMenu () {
       let res = await model.getLeftMenu({ appId: -1 })
-      this.menuList = res.menuList
+      if (!res.errMsg) {
+        this.menuList = res.menuList
+      } else {
+        this.menuList = []
+      }
     },
     // 获取应用列表
     async getApplicationList () {

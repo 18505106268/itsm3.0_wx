@@ -7,9 +7,9 @@ export default {
   // basePath: 'http://iyunware.com:8085/ITSM4.0',
   // imgPath: 'http://iyunware.com:8085/ITSM4.0'
 
-  // axiosPath: 'http://itss-china.cn',
-  // basePath: 'http://itss-china.cn',
-  // imgPath: 'http://itss-china.cn'
+  //  axiosPath: 'http://itss-china.cn',
+  //  basePath: 'http://itss-china.cn',
+  //  imgPath: 'http://itss-china.cn'
 
   // axiosPath: 'http://y5dtcy.natappfree.cc/ITSM4.0',
   // basePath: 'http://y5dtcy.natappfree.cc/ITSM4.0',

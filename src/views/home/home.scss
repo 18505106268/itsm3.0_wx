@@ -3,6 +3,15 @@
   padding-bottom: $space * 6;
 }
 
+.tip {
+  font-size: $font-size * 1.2;
+  color: $color-grey-plus;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .swipe {
   width: 100%;
 }
